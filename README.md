@@ -10,11 +10,11 @@
 ***
 ## Team Members
 
-* []()
-* []()
-* []()
-* []()
-* []()
+* []() Dr. Stephanie Blackmon 
+* []() Dr. Dylan Wittkower
+* []() Dr. Saikou Diallo
+* []() Dr. Krzysztof Rechowicz
+* []() John Shull
 
 ## Version Control and Project Repository Structure
 

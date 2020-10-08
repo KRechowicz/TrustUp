@@ -15,6 +15,10 @@
 * []() Dr. Saikou Diallo
 * []() Dr. Krzysztof Rechowicz
 * []() John Shull
+* Alex Nielsen
+* Tobin Zhang
+* Brandon Felhaus
+* Russell Moore
 
 ## Version Control and Project Repository Structure
 

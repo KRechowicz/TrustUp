@@ -22,11 +22,6 @@
 
 ## Version Control and Project Repository Structure
 
-* Setup Video for Cloning the template and utilizing the Wiki Template
-* In order to utilize this template with the Wiki you need to go through a relatively simple process
-  * This requires you to already have setup and configured [GitHub Desktop](https://desktop.github.com/) with [git-scm](https://git-scm.com/downloads).
-  * Please see this [helpful Video](ProjectSetupDemo.mp4) for instructions on this process!
-
 ## Large File Formats
 
 * We use git Large File Storage: [git lfs](https://git-lfs.github.com/)

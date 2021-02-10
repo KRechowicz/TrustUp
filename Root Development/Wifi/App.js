@@ -174,6 +174,7 @@ const HelloWorldApp = () => {
 export default HelloWorldApp;
 */
 
+
 import { NetworkInfo as SubnetmaskModule, NetworkInfo } from "react-native-network-info";
 import React, {Component} from 'react';
 import {Platform, StyleSheet, Text, TextInput, View, AppRegistry, ScrollView, FlatList, Button, TouchableOpacity, Dimensions, AppState, SectionList, Switch, Linking, Image} from 'react-native';
@@ -206,6 +207,7 @@ var scanResult = [];
 var scan = [];
 var test_var = null;
 var scanPorts = [ "21" , "22" , "25" , "80", "443" , "3389" ];
+var ipv4Address = null;
 
 // Function to ensure array items are unique
 Array.prototype.unique = function() {
@@ -217,6 +219,13 @@ Array.prototype.unique = function() {
     }
   }
   return a;
+};
+
+// Function to add delay
+var sleeper = function (ms) {
+  return new Promise(function (resolve, reject) {
+    setTimeout(() => resolve(), ms);
+  });
 };
 
 // Function to scan hosts
@@ -286,7 +295,7 @@ export default class App extends Component<Props> {
     this.state = {
       progress: 0,
       listContent: [],
-      showScan: true,
+      showScan: false,
       cancelScan: false,
       index: 0,
       routes: [
@@ -379,17 +388,14 @@ export default class App extends Component<Props> {
     console.log("Scan triggered...")
     var network_promise = new Promise(function(resolve, reject) {
       console.log("I am in network promise")
-      local_ip = NetworkInfo.getIPV4Address()
-      NetworkInfo.getIPAddress(ip => {
-        local_ip = ip;
-        console.log(local_ip)
-        //NetworkInfo.getBroadcast(address => {
-        //local_broadcast = address;
-        SubnetmaskModule.getSubnet((sb) => {
-          local_netmask = sb;
-          subconv = ipaddr.IPv4.parse(local_netmask).prefixLengthFromSubnetMask();
-          firstHost = ipaddr.IPv4.networkAddressFromCIDR(local_ip + "/" + subconv);
-          lastHost = ipaddr.IPv4.broadcastAddressFromCIDR(local_ip + "/" + subconv);
+      local_ip = NetworkInfo.getIPAddress()
+      // Get IPv4 IP (priority: WiFi first, cellular second)
+      NetworkInfo.getIPV4Address().then(ipv4Address => {
+        NetworkInfo.getSubnet().then(subnet => {
+          console.log(subnet);
+          subconv = ipaddr.IPv4.parse(subnet).prefixLengthFromSubnetMask();
+          firstHost = ipaddr.IPv4.networkAddressFromCIDR(ipv4Address + "/" + subconv);
+          lastHost = ipaddr.IPv4.broadcastAddressFromCIDR(ipv4Address + "/" + subconv);
           firstHostHex = sip.convertIPtoHex(firstHost);
           lastHostHex = sip.convertIPtoHex(lastHost);
           ipRange = sip.getIPRange(firstHostHex, lastHostHex);
@@ -406,10 +412,70 @@ export default class App extends Component<Props> {
             last_host_hex: lastHostHex,
             ip_range: ipRange
           });
+      });
+    });
+
+    });
+
+    // Get variables and use them
+    network_promise.then((response) => {
+      var portScan = this.state.portScan;
+      console.log('HERE I AM');
+      // Nested for-loops to iterate across ips and ports
+      for (let i = 0, p = Promise.resolve(); i < response["ip_range"].length; i++) {
+        var total_ips = response["ip_range"].length;
+        // Exit the loop and reset if cancelled
+        p = p.then(_ => new Promise(resolve_1 =>
+          setTimeout(function() {
+            // nested start
+            for (let j = 0, q = Promise.resolve(); j < portScan.length; j++) {
+              q = q.then(_ => new Promise(resolve_2 =>
+                setTimeout(function() {
+                  Promise.resolve()
+                    .then(scanHost(response["ip_range"][i], portScan[j])
+                      .then(ok => {
+                        // Prepare object to push
+                        var scanPush = {};
+                        scanPush["ip"] = ok.ip;
+                        scanPush["ports"] = [ok.port];
+
+                        // Check if IP exists in array yet
+                        var arr_check = scanResult.findIndex(x => x.ip == scanPush["ip"]);
+                        if (arr_check === -1) {
+                          scanResult.push(scanPush);
+                        } else {
+                          // If ip exists, merge ports old and new and remove duplicates
+                          scanPush["ports"] = scanResult[arr_check].ports.concat(scanPush["ports"]).unique();
+                          scanResult[arr_check] = scanPush;
+                        }
+                      }))
+                    .then(
+                      resolve_2(scanResult)
+                    )
+                }, 10)
+              ));
+            }
+            // nested end
+            resolve_1(scanResult);
+          }, 1)
+        ));
+        // With results , set states to display and update progress bar
+        p.then(response => {
+          if (scanResult && scanResult.length > 0) {
+            this.setState({ listContent: [...this.state.listContent, scanResult] });
+            this.setState({ listContent: scanResult });
+            console.log('SCAN RESULT : ' + JSON.stringify(scanResult));
+            console.log('IP Address : ' + i + ' out of total : ' + total_ips);
+            var current_progress = i / total_ips;
+            this.setState({ progress: current_progress });
+          }
         });
-        //});
-      }).then(r => console.log("IP", local_netmask));
-    }).then(r => console.log("IP 2", local_ip));
+      }
+    })
+      .catch(err => {
+        console.error(err);
+        return err;
+      })
   }
 
 
@@ -422,7 +488,7 @@ export default class App extends Component<Props> {
       local_ip = NetworkInfo.getIPV4Address()
       NetworkInfo.getIPAddress(ip => {
         local_ip = ip;
-        console.log(local_ip)
+        console.log(ip)
         //NetworkInfo.getBroadcast(address => {
         //local_broadcast = address;
         SubnetmaskModule.getSubnet((sb) => {
@@ -448,7 +514,7 @@ export default class App extends Component<Props> {
           });
         });
         //});
-      }).then(r => console.log("IP", local_ip));
+      }).then(r => console.log(ipRange));
     });
 
     // Get variables and use them
@@ -517,7 +583,7 @@ export default class App extends Component<Props> {
       return (
         <View style={styles.scanContainer}>
           <TouchableOpacity
-            onPress={this.triggerScan()}
+            onPress={this.testScanPromise()}
             accessibilityRole="link"
             {...this.props}
           >

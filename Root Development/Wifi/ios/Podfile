@@ -3,17 +3,18 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-target 'Wifi' do
+pod 'MMLanScan'
+
+target 'Wifi_TrustUp' do
   config = use_native_modules!
 
   use_react_native!(:path => config["reactNativePath"])
 
-  pod 'TcpSockets', :path => '../node_modules/react-native-tcp'
 
-  target 'WifiTests' do
-    inherit! :complete
-    # Pods for testing
-  end
+  #target 'Wifi_TrustUpTests' do
+  #  inherit! :complete
+  #  # Pods for testing
+  # end
 
   # Enables Flipper.
   #
@@ -25,11 +26,11 @@ target 'Wifi' do
   end
 end
 
-target 'Wifi-tvOS' do
-  # Pods for Wifi-tvOS
+#target 'Wifi-tvOS' do
+#  # Pods for Wifi-tvOS
 
-  target 'Wifi-tvOSTests' do
-    inherit! :search_paths
-    # Pods for testing
-  end
-end
+#  target 'Wifi-tvOSTests' do
+#    inherit! :search_paths
+#    # Pods for testing
+#  end
+#end

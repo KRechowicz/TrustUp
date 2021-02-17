@@ -175,9 +175,10 @@ export default HelloWorldApp;
 */
 
 
+
 import { NetworkInfo as SubnetmaskModule, NetworkInfo } from "react-native-network-info";
-import React, {Component} from 'react';
-import {Platform, StyleSheet, Text, TextInput, View, AppRegistry, ScrollView, FlatList, Button, TouchableOpacity, Dimensions, AppState, SectionList, Switch, Linking, Image} from 'react-native';
+import React, {Component, useState} from 'react';
+import {Platform, StyleSheet, Text, TextInput, View, AppRegistry, ScrollView, FlatList, Button, TouchableOpacity, Dimensions, AppState, SectionList, Switch, Linking, Image, NativeModules, NativeEventEmitter} from 'react-native';
 import { TabView, TabViewPage, TabBar, TabBarTop, SceneMap } from 'react-native-tab-view';
 import { List, ListItem, Badge, Icon, Avatar, withBadge } from 'react-native-elements';
 import NetInfo from '@react-native-community/netinfo'
@@ -185,9 +186,9 @@ import AsyncStorage from '@react-native-community/async-storage'
 import Animated from 'react-native-reanimated';
 import ToggleSwitch from 'toggle-switch-react-native';
 import * as Progress from 'react-native-progress';
+import TcpSocket from 'react-native-tcp-socket';
 
 var sip = require ('shift8-ip-func');
-var net = require('react-native-tcp');
 var async = require("async");
 var ipaddr = require('ipaddr.js');
 
@@ -202,12 +203,21 @@ var lastHost = null;
 var firstHostHex = null;
 var lastHostHex = null;
 var ipRange = null;
-var ipRange = null;
 var scanResult = [];
 var scan = [];
 var test_var = null;
 var scanPorts = [ "21" , "22" , "25" , "80", "443" , "3389" ];
 var ipv4Address = null;
+
+const { CalendarModuleFoo } = NativeModules;
+const myModuleEvt = new NativeEventEmitter(CalendarModuleFoo);
+
+
+import Zeroconf from 'react-native-zeroconf'
+const zeroconf = new Zeroconf()
+
+
+
 
 // Function to ensure array items are unique
 Array.prototype.unique = function() {
@@ -228,15 +238,33 @@ var sleeper = function (ms) {
   });
 };
 
+
+
+function scanTCPHost(my_ip, my_port) {
+    var client = TcpSocket.createConnection(port, host);
+    console.log('Socket created.');
+    client.on('data', function(data) {
+        // Log the response from the HTTP server.
+        console.log('RESPONSE: ' + data);
+    }).on('connect', function() {
+        // Manually write an HTTP request.
+        client.write("GET / HTTP/1.0\r\n\r\n");
+        console.log('CONNECTED : ' + host + ' ' + port);
+    }).on('end', function() {
+        console.log('DONE');
+        client.close();
+    });
+}
+
 // Function to scan hosts
 var scanHost = function(hostIP, hostPort) {
   return new Promise(function (resolve,reject) {
-    var client = net.connect({
-        host: hostIP,
-        port: hostPort
-      },
-      function() { //'connect' listener
-        //console.log('Connected');
+      const client = TcpSocket.createConnection({
+          port: hostPort,
+          host: hostIP,
+          tls: false,
+          // tlsCheckValidity: false, // Disable validity checking
+          // tlsCert: require('./selfmade.pem') // Self-signed certificate
       });
 
     client.setTimeout(2000,function(){
@@ -256,6 +284,7 @@ var scanHost = function(hostIP, hostPort) {
         port:hostPort
       };
       resolve(scan_result);
+      console.log("HELLO THIS IS RESULTS:", scan_result)
     })
 
     client.on('timeout',function(){
@@ -285,17 +314,54 @@ var scanHost = function(hostIP, hostPort) {
     },4000);
   });
 }
+/*
+const client = TcpSocket.createConnection(80, '192.168.1.36', () => {
+    // Write on the socket
+    client.write("GET / HTTP/1.0\\r\\n\\r\\n");
 
+    // Close socket
+    client.destroy();
+});
+
+client.on('data', function(data) {
+    console.log('message was received', data);
+});
+
+client.on('error', function(error) {
+    console.log(error);
+});
+
+client.on('close', function(){
+    console.log('Connection closed!');
+});
+
+
+const client = TcpSocket.createConnection(80, '192.168.1.36');
+client.on('data', function(data) {
+    // Log the response from the HTTP server.
+    console.log('RESPONSE: ' + data);
+}).on('connect', function() {
+    console.log('Socket created.');
+    // Manually write an HTTP request.
+    client.write("GET / HTTP/1.0\r\n\r\n");
+    console.log('CONNECTED : ' + '192.168.1.36' + ' ' + '80');
+}).on('end', function() {
+    console.log('DONE');
+    client.close();
+}).on('error', error => console.log(error));
+*/
 type Props = {};
 
+
 export default class App extends Component<Props> {
+
 
   constructor(props) {
     super(props);
     this.state = {
       progress: 0,
       listContent: [],
-      showScan: false,
+      showScan: true,
       cancelScan: false,
       index: 0,
       routes: [
@@ -304,16 +370,31 @@ export default class App extends Component<Props> {
         { key: 'about', title: 'About' },
       ],
       portScan: [],
-      isOnPort21ToggleSwitch: true,
-      isOnPort22ToggleSwitch: true,
-      isOnPort25ToggleSwitch: true,
+      isOnPort21ToggleSwitch: false,
+      isOnPort22ToggleSwitch: false,
+      isOnPort25ToggleSwitch: false,
       isOnPort80ToggleSwitch: true,
       isOnPort443ToggleSwitch: true,
-      isOnPort3389ToggleSwitch: true,
+      isOnPort3389ToggleSwitch: false,
+      isScanning: false,
+      selectedService: null,
+      services: {},
     }
   }
 
+
   componentDidMount() {
+
+    ///Stuff for ios native modules
+    //CalendarModuleFoo.createCalendarEvent('WOAH NELLLY', 'testLocation');
+    //myModuleEvt.addListener('scanStarted', (data) => console.log(data));
+    //myModuleEvt.addListener('scanStopped', (data) => console.log(data));
+    //myModuleEvt.addListener('scanComplete', (data) => console.log(data));
+    //myModuleEvt.addListener('scanDeviceFound', (data) => console.log(data));
+    //myModuleEvt.addListener('scanFailed', (data) => console.log(data));
+    //this.refreshData()
+    /*
+
     // Set default settings if no settings exist, or pull existing settings and apply them to the state
     AsyncStorage.getItem('@portScan').then((item) => {
       if (item) {
@@ -338,7 +419,8 @@ export default class App extends Component<Props> {
         AsyncStorage.setItem('@portScan', JSON.stringify(scanPorts));
       }
 
-    });
+    });*/
+
 
 
     NetInfo.fetch().then(state => {
@@ -347,7 +429,22 @@ export default class App extends Component<Props> {
     });
   }
 
+  refreshData = () => {
+    const { isScanning } = this.state
+    if (isScanning) {
+      return
+    }
 
+    this.setState({ services: [] })
+
+    zeroconf.scan('http', 'tcp', 'local.')
+
+    clearTimeout(this.timeout)
+    this.timeout = setTimeout(() => {
+      zeroconf.stop()
+    }, 5000)
+    console.log("we are refreshing the data");
+  }
   // Function to reset progress and scan result states if the reset button is tapped
   resetEverything = () => {
     this.setState({ progress: 0 });
@@ -379,20 +476,20 @@ export default class App extends Component<Props> {
 
     //console.log('Port array : ' + JSON.stringify(port_array));
     this.setState({ portScan: port_array });
-    AsyncStorage.setItem('@portScan', JSON.stringify(port_array));
+    //AsyncStorage.setItem('@portScan', JSON.stringify(port_array));
   }
+
+
 
 /// Brandon Testing the Scan promise function
   testScanPromise = () => {
     // Gather Network Info
     console.log("Scan triggered...")
     var network_promise = new Promise(function(resolve, reject) {
-      console.log("I am in network promise")
       local_ip = NetworkInfo.getIPAddress()
       // Get IPv4 IP (priority: WiFi first, cellular second)
       NetworkInfo.getIPV4Address().then(ipv4Address => {
         NetworkInfo.getSubnet().then(subnet => {
-          console.log(subnet);
           subconv = ipaddr.IPv4.parse(subnet).prefixLengthFromSubnetMask();
           firstHost = ipaddr.IPv4.networkAddressFromCIDR(ipv4Address + "/" + subconv);
           lastHost = ipaddr.IPv4.broadcastAddressFromCIDR(ipv4Address + "/" + subconv);
@@ -400,7 +497,7 @@ export default class App extends Component<Props> {
           lastHostHex = sip.convertIPtoHex(lastHost);
           ipRange = sip.getIPRange(firstHostHex, lastHostHex);
           ipRange = ipRange.slice(1); // Remove the first ip in the array
-          console.log("IP Range:", ipRange);
+          //console.log("IP Range:", ipRange);
           resolve({
             local_ip: local_ip,
             //local_broadcast: local_broadcast,
@@ -424,52 +521,12 @@ export default class App extends Component<Props> {
       // Nested for-loops to iterate across ips and ports
       for (let i = 0, p = Promise.resolve(); i < response["ip_range"].length; i++) {
         var total_ips = response["ip_range"].length;
+        for (let j =0, q = Promise.resolve(); j < portScan.length; j++){
+            scanHost(ipRange[i], portScan[j]).then(r => console.log("We just Scanned : ", ipRange[i]), " On port ", portScan[j])
+        }
         // Exit the loop and reset if cancelled
-        p = p.then(_ => new Promise(resolve_1 =>
-          setTimeout(function() {
-            // nested start
-            for (let j = 0, q = Promise.resolve(); j < portScan.length; j++) {
-              q = q.then(_ => new Promise(resolve_2 =>
-                setTimeout(function() {
-                  Promise.resolve()
-                    .then(scanHost(response["ip_range"][i], portScan[j])
-                      .then(ok => {
-                        // Prepare object to push
-                        var scanPush = {};
-                        scanPush["ip"] = ok.ip;
-                        scanPush["ports"] = [ok.port];
 
-                        // Check if IP exists in array yet
-                        var arr_check = scanResult.findIndex(x => x.ip == scanPush["ip"]);
-                        if (arr_check === -1) {
-                          scanResult.push(scanPush);
-                        } else {
-                          // If ip exists, merge ports old and new and remove duplicates
-                          scanPush["ports"] = scanResult[arr_check].ports.concat(scanPush["ports"]).unique();
-                          scanResult[arr_check] = scanPush;
-                        }
-                      }))
-                    .then(
-                      resolve_2(scanResult)
-                    )
-                }, 10)
-              ));
-            }
-            // nested end
-            resolve_1(scanResult);
-          }, 1)
-        ));
         // With results , set states to display and update progress bar
-        p.then(response => {
-          if (scanResult && scanResult.length > 0) {
-            this.setState({ listContent: [...this.state.listContent, scanResult] });
-            this.setState({ listContent: scanResult });
-            console.log('SCAN RESULT : ' + JSON.stringify(scanResult));
-            console.log('IP Address : ' + i + ' out of total : ' + total_ips);
-            var current_progress = i / total_ips;
-            this.setState({ progress: current_progress });
-          }
-        });
       }
     })
       .catch(err => {
@@ -479,6 +536,11 @@ export default class App extends Component<Props> {
   }
 
 
+
+
+
+
+/*
   // Function to start a scan of your LAN based on detected IP, subnet, gateway and other info
   triggerScan = () => {
     // Gather Network Info
@@ -576,6 +638,13 @@ export default class App extends Component<Props> {
         console.error(err);
         return err;
       })
+  }*/
+
+  calender = () => {
+    console.log("Clicked....");
+    //CalendarModuleFoo.createCalendarEvent('WOAH NELLLY', 'testLocation');
+    //myModuleEvt.addListener('scanStarted', (data) => console.log(data));
+
   }
   // Render the scan area
   _renderScan = () => {
@@ -583,14 +652,14 @@ export default class App extends Component<Props> {
       return (
         <View style={styles.scanContainer}>
           <TouchableOpacity
-            onPress={this.testScanPromise()}
+            onPress={this.calender()}
             accessibilityRole="link"
             {...this.props}
           >
             <Text style={styles.button} accessibilityRole="link">Scan Your Network</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={this.resetEverything}
+            onPress={this.calender}
             accessibilityRole="link"
             {...this.props}
           >

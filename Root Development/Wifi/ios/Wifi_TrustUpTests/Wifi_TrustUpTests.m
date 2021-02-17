@@ -7,11 +7,11 @@
 #define TIMEOUT_SECONDS 600
 #define TEXT_TO_LOOK_FOR @"Welcome to React"
 
-@interface WifiTests : XCTestCase
+@interface Wifi_TrustUpTests : XCTestCase
 
 @end
 
-@implementation WifiTests
+@implementation Wifi_TrustUpTests
 
 - (BOOL)findSubviewInView:(UIView *)view matching:(BOOL(^)(UIView *view))test
 {

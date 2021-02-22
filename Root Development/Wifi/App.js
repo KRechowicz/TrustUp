@@ -135,8 +135,6 @@ export default HelloWorldApp;
 */
 
 
-
-import { NetworkInfo as SubnetmaskModule, NetworkInfo } from "react-native-network-info";
 import React, {Component, useState} from 'react';
 import {Platform, StyleSheet, Text, TextInput, View, AppRegistry, ScrollView, FlatList, Button, TouchableOpacity, Dimensions, AppState, SectionList, Switch, Linking, Image, NativeModules, NativeEventEmitter} from 'react-native';
 import { TabView, TabViewPage, TabBar, TabBarTop, SceneMap } from 'react-native-tab-view';

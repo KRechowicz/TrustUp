@@ -10,94 +10,62 @@
 #import "LANProperties.h"
 
 #import "MMLANScanner.h"
+#import "YLTCPBroadcaster.h"
+#import "MainPresenter.h"
 
-@interface RCTScanModule()<MMLANScannerDelegate>
-@property(nonatomic,strong)MMLANScanner *lanScanner;
-@property(nonatomic,assign,readwrite)BOOL isScanRunning;
+@interface RCTScanModule()<MainPresenterDelegate>
+@property (strong, nonatomic) MainPresenter *presenter;
 @end
 
 
-@implementation RCTScanModule{
-  NSMutableArray *connectedDevicesMutable;
-}
+@implementation RCTScanModule
+
 
 - (NSArray<NSString *> *)supportedEvents {
-  return @[@"scanComplete", @"scanDeviceFound", @"scanStarted", @"scanStopped", @"scanFailed"];
+  return @[@"scanDone", @"scanCancelled", @"scanFailed"];
 }
 
-RCT_EXPORT_MODULE(CalendarModuleFoo);
-RCT_EXPORT_METHOD(createCalendarEvent:(NSString *)name location:(NSString *)location)
+RCT_EXPORT_MODULE(RCTScanModule);
+RCT_EXPORT_METHOD(startScan)
 {
-  RCTLogInfo(@"Pretending to create an event %@ at %@",name, location);
+  //self.presenter = [[MainPresenter alloc]initWithDelegate:self];
   
-  [self startNetworkScan];
-  
+  //[self.presenter scanButtonClicked];
+
 }
 
--(void)startNetworkScan {
+
+#pragma mark - KVO Observers
+-(void)addObserversForKVO {
     
-    self.isScanRunning=YES;
+    [self.presenter addObserver:self forKeyPath:@"connectedDevices" options:NSKeyValueObservingOptionNew context:nil];
+    [self.presenter addObserver:self forKeyPath:@"progressValue" options:NSKeyValueObservingOptionNew context:nil];
+    [self.presenter addObserver:self forKeyPath:@"isScanRunning" options:NSKeyValueObservingOptionNew context:nil];
+}
+
+-(void)removeObserversForKVO {
     
-    connectedDevicesMutable = [[NSMutableArray alloc] init];
-    
-    [self.lanScanner start];
-  
-    [self sendEventWithName:@"scanStarted" body:@"The scan has started..."];
-    
+    [self.presenter removeObserver:self forKeyPath:@"connectedDevices"];
+    [self.presenter removeObserver:self forKeyPath:@"progressValue"];
+    [self.presenter removeObserver:self forKeyPath:@"isScanRunning"];
+}
+
+
+
+#pragma mark - Presenter Delegates
+//The delegates methods from Presenters.These methods help the MainPresenter to notify the MainVC for any kind of changes
+-(void)mainPresenterIPSearchFinished {
+  [self sendEventWithName:@"scanDone" body:@"OMG THE SCAN IS DONE YAYAY"];
 };
 
--(void)stopNetworkScan {
-    
-    [self.lanScanner stop];
-    
-    self.isScanRunning=NO;
-  
-    [self sendEventWithName:@"scanStopped" body:@"The scan has stopped..."];
-  
-}
-
-//Getting the SSID string using LANProperties
--(NSString*)ssidName {
-
-    return [NSString stringWithFormat:@"SSID: %@",[LANProperties fetchSSIDInfo]];
+-(void)mainPresenterIPSearchFailed {
+  [self sendEventWithName:@"scanFailed" body:@"OMG THE SCAN FAILED BOOOO"];
 };
 
-- (void)lanScanDidFailedToScan {
-  self.isScanRunning=NO;
-  [self sendEventWithName:@"scanFailed" body:@"The scan has failed..."];
-  
-}
+-(void)mainPresenterIPSearchCancelled {
+  [self sendEventWithName:@"scanCancelled" body:@"OMG THE SCAN WAS CANCELLED???"];
+};
 
-- (void)lanScanDidFindNewDevice:(MMDevice *)device {
-  //Check if the Device is already added
-  if (![connectedDevicesMutable containsObject:device]) {
 
-      [connectedDevicesMutable addObject:device];
-  }
-  
-  NSSortDescriptor *valueDescriptor = [[NSSortDescriptor alloc] initWithKey:@"ipAddress" ascending:YES];
-  
-  //Updating the array that holds the data. MainVC will be notified by KVO
-  self.connectedDevices = [connectedDevicesMutable sortedArrayUsingDescriptors:@[valueDescriptor]];
-  
-  [self sendEventWithName:@"scanDeviceFound" body:@"The scan has found a device..."];
-  
-}
-
-- (void)lanScanDidFinishScanningWithStatus:(MMLanScannerStatus)status {
-  self.isScanRunning=NO;
-  
-  //Checks the status of finished. Then call the appropriate method
-  if (status == MMLanScannerStatusFinished) {
-      
-    [self sendEventWithName:@"scanComplete" body:self.connectedDevices];
-    
-  }
-  else if (status==MMLanScannerStatusCancelled) {
-     
-    RCTLogInfo(@"Scan Cancelled");
-    
-  }
-}
 
 @end

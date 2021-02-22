@@ -38,7 +38,3 @@ iOS simulator will launch with this command
 ```shell
 npx react-native run-ios
 ```
-
-##Issues
-If you run into any issues with Android or iOS after pulling from GitHub,
-clean your build folders in either Android Studio or X-Code.

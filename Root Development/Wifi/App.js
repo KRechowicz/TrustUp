@@ -161,6 +161,7 @@ const scanEvent = eventStuff.addListener("EventReminder", function (data) {
       console.log(results);
     }
   }
+
   if(data['name'] === 'Finish'){
     console.log("Scan is finished");
   }
@@ -243,7 +244,8 @@ export default class App extends Component<Props> {
       //console.log("Connection type", state.type);
       //console.log("Is connected?", state.isConnected);
     });
-
+/*
+    ///iOS
     RNRnLanScan.getModuleList((error, someData) => {
       if (error) {
         console.error(error)
@@ -251,6 +253,18 @@ export default class App extends Component<Props> {
         //console.log(someData)
       }
     })
+*/
+    ///Android
+
+    RNRnLanScan.scan(
+        (msg) => {
+          console.error(msg)
+        },
+        (someData) => {
+          console.log(someData)
+        }
+    )
+
   }
 
   // Render the scan area

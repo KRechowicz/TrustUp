@@ -1,0 +1,29 @@
+version: "2.1"
+
+services:  
+  file-classifier:
+    ports: 
+      - 4000:4000
+    build:
+      context: ./text-classification-cci
+      dockerfile: ./Dockerfile-file-classifier
+    image: file-classifier-test:1.0
+    networks:
+      - net
+    volumes:
+      - shared-file-store:/home/app/input
+  python-env:
+    build:
+      context: ./python-code-cci
+      dockerfile: ./Dockerfile-python-env
+    image: python-env-test:1.0
+    environment:
+      - TEST_STATUS=${TEST_STATUS}
+    networks:
+      - net
+    volumes:
+      - shared-file-store:/home/app/input
+volumes:
+  shared-file-store:
+networks:
+  net:

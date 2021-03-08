@@ -17,6 +17,7 @@ target 'Wifi_TrustUp' do
 
   pod 'RNRnLanScan', :path => '../node_modules/react-native-rn-lan-scan'
 
+
   #target 'Wifi_TrustUpTests' do
   #  inherit! :complete
   #  # Pods for testing

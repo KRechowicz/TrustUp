@@ -1,139 +1,3 @@
-/*/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
-
-
-import React from 'react';
-import {
-  SafeAreaView,
-  StyleSheet,
-  ScrollView,
-  View,
-  Text,
-  StatusBar,
-} from 'react-native';
-
-import {
-  Header,
-  LearnMoreLinks,
-  Colors,
-  DebugInstructions,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const App: () => React$Node = () => {
-  return (
-    <>
-      <StatusBar barStyle="dark-content" />
-      <SafeAreaView>
-        <ScrollView
-          contentInsetAdjustmentBehavior="automatic"
-          style={styles.scrollView}>
-          <Header />
-          {global.HermesInternal == null ? null : (
-            <View style={styles.engine}>
-              <Text style={styles.footer}>Engine: Hermes</Text>
-            </View>
-          )}
-          <View style={styles.body}>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Step One</Text>
-              <Text style={styles.sectionDescription}>
-                Edit <Text style={styles.highlight}>App.js</Text> to change this
-                screen and then come back to see your edits.
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>See Your Changes</Text>
-              <Text style={styles.sectionDescription}>
-                <ReloadInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Debug</Text>
-              <Text style={styles.sectionDescription}>
-                <DebugInstructions />
-              </Text>
-            </View>
-            <View style={styles.sectionContainer}>
-              <Text style={styles.sectionTitle}>Learn More</Text>
-              <Text style={styles.sectionDescription}>
-                Read the docs to discover what to do next:
-              </Text>
-            </View>
-            <LearnMoreLinks />
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </>
-  );
-};
-
-const styles = StyleSheet.create({
-  scrollView: {
-    backgroundColor: Colors.lighter,
-  },
-  engine: {
-    position: 'absolute',
-    right: 0,
-  },
-  body: {
-    backgroundColor: Colors.white,
-  },
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-    color: Colors.black,
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-    color: Colors.dark,
-  },
-  highlight: {
-    fontWeight: '700',
-  },
-  footer: {
-    color: Colors.dark,
-    fontSize: 12,
-    fontWeight: '600',
-    padding: 4,
-    paddingRight: 12,
-    textAlign: 'right',
-  },
-});
-
-export default App;
-
-
-import React from 'react';
-import { Text, View } from 'react-native';
-import {NetworkInfo} from 'react-native-network-info';
-
-
-const HelloWorldApp = () => {
-  return (
-    <View
-      style={{
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: "center"
-      }}>
-      <Text>Hello, world!</Text>
-    </View>
-  )
-}
-export default HelloWorldApp;
-*/
-
 
 import React, {Component, useState} from 'react';
 import {Platform, StyleSheet, Text, TextInput, View, AppRegistry, ScrollView, FlatList, Button, TouchableOpacity, Dimensions, AppState, SectionList, Switch, Linking, Image, NativeModules, NativeEventEmitter} from 'react-native';
@@ -145,11 +9,10 @@ import ToggleSwitch from 'toggle-switch-react-native';
 import * as Progress from 'react-native-progress';
 
 import {RNLanScanEvent, RNRnLanScan} from 'react-native-rn-lan-scan';
-
 import ScanResults from './Objects/ScanResult';
+import UnknownVendorPage from "./pages/UnknownVendor";
 
 
-var oui = require('oui');
 var results = [];
 
 
@@ -157,20 +20,38 @@ const eventStuff = new NativeEventEmitter(RNLanScanEvent);
 const scanEvent = eventStuff.addListener("EventReminder", function (data) {
   if(data['type'] === 'devices'){
     if(data['name'][2] != null){
-      results = new ScanResults(data['name'][0], data['name'][2]);
-      console.log(results);
+      results.push(new ScanResults("T",data['name'][0], data['name'][2]));
     }
   }
-  if(data['name'] === 'Finish'){
-    console.log("Scan is finished");
-  }
+  if(data['name'] === 'Finish') {
 
+    fetch('http://127.0.0.1:3000/users/T/scan')
+        .then(res => res.json())
+        .then(res => {
+          console.log(res[0].ip);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+    fetch('http://127.0.0.1:3000/users/T/scan', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(results)
+    });
+
+
+    console.log("Scan is finished");
+
+  }
   if(data['name'] === 'Started'){
     console.log("Scan started");
   }
 });
 
-//RNLanScanEvent.addListener((data) => console.log(data));
 
 type Props = {};
 
@@ -192,21 +73,51 @@ export default class App extends Component<Props> {
         { key: 'about', title: 'About' },
       ],
       portScan: [],
+      users: []
     }
   }
 
 
   componentDidMount() {
 
+  /*
+    fetch("https://tosdr.org/api/1/service/apple.json")
+        .then(function(res){
+          res.json().then(function(data) {
+            console.log('request succeeded with JSON response', data);
+            /*
+            for(var item in data){
+              console.log(data[item].name)
+            }
+            //data.pointsData[10701].title
+          }).catch(function(error) {
+            console.log('Data failed', error)
+          });
+        }).catch(function(error){
+      console.log('request failed', error)
+    })
+    */
+
+    fetch('http://127.0.0.1:3000/users', {
+      method: 'POST',
+      headers: {
+        Accept: 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({
+        name: 'Brandon',
+        userId: '2'
+      })
+    });
+
+
 
   }
-
 
   componentWillUnmount(): * {
     scanEvent.remove();
 
   }
-
 
   // Function to handle changing the ports to scan on the settings page
   toggleSwitch = () => {
@@ -236,7 +147,6 @@ export default class App extends Component<Props> {
   }
 
 
-
   startScanButton = () => {
     console.log("Clicked....");
     NetInfo.fetch().then(state => {
@@ -251,7 +161,23 @@ export default class App extends Component<Props> {
         //console.log(someData)
       }
     })
+
+    console.log(this.users);
   }
+
+  resetButton = () => {
+
+    fetch('http://127.0.0.1:3000/users/T/scan')
+        .then(res => res.json())
+        .then(res => {
+          console.log(res[0].ip);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+
+  }
+
 
   // Render the scan area
   _renderScan = () => {
@@ -266,7 +192,7 @@ export default class App extends Component<Props> {
             <Text style={styles.button} accessibilityRole="link">Scan Your Network</Text>
           </TouchableOpacity>
           <TouchableOpacity
-            onPress={this.calender}
+            onPress={this.resetButton}
             accessibilityRole="link"
             {...this.props}
           >
@@ -323,95 +249,7 @@ export default class App extends Component<Props> {
         }
       case 'settings':
         return (
-          <View style={styles.container}>
-            <Text>Choose which ports to scan</Text>
-            <ToggleSwitch
-              isOn={this.state.isOnPort21ToggleSwitch}
-              onColor='#55E662'
-              offColor='#dddddd'
-              label='TCP Port 21'
-              labelStyle={{color: 'black', fontWeight: '900', margin:10}}
-              size='small'
-              onToggle={isOnPort21ToggleSwitch => {
-                this.setState({
-                  isOnPort21ToggleSwitch }, () => {
-                  this.toggleSwitch();
-                });
-              }}
-            />
-
-            <ToggleSwitch
-              isOn={this.state.isOnPort22ToggleSwitch}
-              onColor='#55E662'
-              offColor='#dddddd'
-              label='TCP Port 22'
-              labelStyle={{color: 'black', fontWeight: '900', margin:10}}
-              size='small'
-              onToggle={isOnPort22ToggleSwitch => {
-                this.setState({
-                  isOnPort22ToggleSwitch }, () => {
-                  this.toggleSwitch();
-                });
-              }}
-            />
-            <ToggleSwitch
-              isOn={this.state.isOnPort25ToggleSwitch}
-              onColor='#55E662'
-              offColor='#dddddd'
-              label='TCP Port 25'
-              labelStyle={{color: 'black', fontWeight: '900', margin:10}}
-              size='small'
-              onToggle={isOnPort25ToggleSwitch => {
-                this.setState({
-                  isOnPort25ToggleSwitch }, () => {
-                  this.toggleSwitch();
-                });
-              }}
-            />
-            <ToggleSwitch
-              isOn={this.state.isOnPort80ToggleSwitch}
-              onColor='#55E662'
-              offColor='#dddddd'
-              label='TCP Port 80'
-              labelStyle={{color: 'black', fontWeight: '900', margin:10}}
-              size='small'
-              onToggle={isOnPort80ToggleSwitch => {
-                this.setState({
-                  isOnPort80ToggleSwitch }, () => {
-                  this.toggleSwitch();
-                });
-              }}
-            />
-            <ToggleSwitch
-              isOn={this.state.isOnPort443ToggleSwitch}
-              onColor='#55E662'
-              offColor='#dddddd'
-              label='TCP Port 443'
-              labelStyle={{color: 'black', fontWeight: '900', margin:10}}
-              size='small'
-              onToggle={isOnPort443ToggleSwitch => {
-                this.setState({
-                  isOnPort443ToggleSwitch }, () => {
-                  this.toggleSwitch();
-                });
-              }}
-            />
-            <ToggleSwitch
-              isOn={this.state.isOnPort3389ToggleSwitch}
-              onColor='#55E662'
-              offColor='#dddddd'
-              label='TCP Port 3389'
-              labelStyle={{color: 'black', fontWeight: '900', margin:10}}
-              size='small'
-              value='3389'
-              onToggle={isOnPort3389ToggleSwitch => {
-                this.setState({
-                  isOnPort3389ToggleSwitch }, () => {
-                  this.toggleSwitch();
-                });
-              }}
-            />
-          </View>
+            <UnknownVendorPage></UnknownVendorPage>
         );
       case 'about':
         return (
@@ -452,6 +290,7 @@ export default class App extends Component<Props> {
       />
     );
   }
+
 
   renderRow ({ item }) {
     return (

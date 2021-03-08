@@ -1,11 +1,13 @@
 var oui = require('oui');
 
 export default class myClass {
+    userID: string;
     ip: string;
     mac: string;
     vendor: string;
     lastScanned: string;
-    constructor(ip, mac) {
+    constructor(id,ip, mac) {
+        this.userID = id;
         this.ip = ip;
         this.mac = mac;
         this.getVendor();
@@ -15,8 +17,8 @@ export default class myClass {
     getScannedTime(){
         var today  = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
-        var time = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
-        this.lastScanned = date + ' ' + time;
+        var time = today.getHours() + ":" + today.getMinutes();
+        this.lastScanned = date + '-' + time;
     }
 
     getVendor(){
@@ -28,5 +30,7 @@ export default class myClass {
             this.vendor = vendor;
         }
     }
+
+
 
 }

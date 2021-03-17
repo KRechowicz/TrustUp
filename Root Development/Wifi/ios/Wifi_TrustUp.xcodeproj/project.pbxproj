@@ -122,6 +122,13 @@
 			name = Wifi_TrustUp;
 			sourceTree = "<group>";
 		};
+		25B55C4D427945429F538D2F /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = Resources;
+			sourceTree = "<group>";
+		};
 		2D16E6871FA4F8E400B85C8A /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
@@ -172,6 +179,7 @@
 				83CBBA001A601CBA00E9B192 /* Products */,
 				2D16E6871FA4F8E400B85C8A /* Frameworks */,
 				679FD3DC86A741AE04E538DA /* Pods */,
+				25B55C4D427945429F538D2F /* Resources */,
 			);
 			indentWidth = 2;
 			sourceTree = "<group>";

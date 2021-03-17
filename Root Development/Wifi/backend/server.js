@@ -14,7 +14,7 @@ import * as url from "url";
 var AWS = require('aws-sdk');
 var bodyParser = require('body-parser');
 
-var userID = 'T';
+//var userID = 'T';
 
 // Initialize http server
 const app = express();
@@ -40,7 +40,7 @@ app.get('/users/:userId', function (req, res) {
                 }
           if (result.Item) {
                   const {userId, name} = result.Item;
-                  res.json({ userID, name });
+                  res.json({ userId, name });
                 } else {
                   res.status(404).json({ error: "User not found" });
                 }
@@ -56,7 +56,11 @@ app.post('/users', (req, res) => {
 
 
       const params = {
-          TableName: config.aws_table_name
+          TableName: config.aws_table_name,
+          Item: {
+              userID: userId,
+              name: name,
+          },
       };
 
 
@@ -65,8 +69,10 @@ app.post('/users', (req, res) => {
                   console.log(error);
                  //res.status(400).json({ error: 'Could not create user' });
                 }
-            res.json({ userID, name });
-            console.log("user created", name, userID);
+            var name;
+            var id;
+            res.json({ name, id });
+            console.log("user createdL:" + name + id );
           });
 
 
@@ -129,6 +135,43 @@ app.get('/users/:userId/scan', function (req, res) {
         }
     });
 })
+
+
+
+app.get('/vendorReferenceSheet', function (req, res) {
+    AWS.config.update(config.aws_remote_config);
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    const params = {
+        TableName: config.aws_table_name_vendors,
+        Key: {
+            ID: "vendors",
+        },
+    }
+    docClient.get(params, (error, result) => {
+        if (error) {
+            console.log(error);
+            res.status(400).json({ error: 'Could not get sheet' });
+        }
+        if (result.Item) {
+
+            res.json(result.Item.vendorList);
+        } else {
+            res.status(404).json({ error: "Sheet not found" });
+        }
+    });
+})
+
+
+//Send users scan info to database
+app.post('/users/:userID/sendToNLP', (req, res) => {
+
+
+
+})
+
+
+
+
 
 
 

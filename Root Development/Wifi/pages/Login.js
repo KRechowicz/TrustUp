@@ -20,11 +20,37 @@ var credentials = require('../configs/auth0-configuration');
 import App from '../App';
 const auth0 = new Auth0(credentials);
 
+var auth0Domain = 'https://dev-awc6c4u1.us.auth0.com/'
+
+
 class Login extends Component {
     constructor(props) {
         super(props);
-        this.state = { accessToken: null };
+        this.state = {
+            accessToken: null,
+            userID: null,
+        };
     }
+
+    getObject = () => {
+            var getObject = {
+                method: "GET",
+                headers: {
+                    'token': 'Bearer '+ this.accessToken
+                }
+            }
+
+            fetch( auth0Domain + "userinfo", getObject)
+                .then(res => res.json())
+                .then(res => {
+                    console.log(res);
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+
+
+}
 
     _onLogin = () => {
         auth0.webAuth
@@ -32,8 +58,10 @@ class Login extends Component {
                 scope: 'openid profile email'
             })
             .then(credentials => {
-                //Alert.alert('AccessToken: ' + credentials.accessToken);
-                this.setState({ accessToken: credentials.accessToken });
+                auth0.webAuth.client.userInfo(credentials.accessToken, function(err, user){
+                    console.log(user)
+                })
+                this.setState({ accessToken: credentials.accessToken});
             })
             .catch(error => console.log(error));
 

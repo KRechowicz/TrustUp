@@ -317,9 +317,8 @@ PODS:
     - React-Core
   - RNRnLanScan (1.0.27):
     - React
-  - RNVectorIcons (8.0.0):
+  - RNVectorIcons (8.1.0):
     - React-Core
-  - YLTCPBroadcaster (2.0.1)
   - Yoga (1.14.0)
   - YogaKit (1.18.1):
     - Yoga (~> 1.14)
@@ -382,7 +381,6 @@ DEPENDENCIES:
   - RNReanimated (from `../node_modules/react-native-reanimated`)
   - RNRnLanScan (from `../node_modules/react-native-rn-lan-scan`)
   - RNVectorIcons (from `../node_modules/react-native-vector-icons`)
-  - YLTCPBroadcaster (~> 2.0.1)
   - Yoga (from `../node_modules/react-native/ReactCommon/yoga`)
 
 SPEC REPOS:
@@ -398,7 +396,6 @@ SPEC REPOS:
     - Flipper-RSocket
     - FlipperKit
     - OpenSSL-Universal
-    - YLTCPBroadcaster
     - YogaKit
 
 EXTERNAL SOURCES:
@@ -524,11 +521,10 @@ SPEC CHECKSUMS:
   RNPermissions: 99dd8d4a30ff13509b949ca63cd1f69edc461775
   RNReanimated: e03f7425cb7a38dcf1b644d680d1bfc91c3337ad
   RNRnLanScan: 24987b32b83eb74b3f348b69112fa6eaa09fa7b7
-  RNVectorIcons: f67a1abce2ec73e62fe4606e8110e95a832bc859
-  YLTCPBroadcaster: c9dce3088f6b113385c6d46804ad28e931cd146e
+  RNVectorIcons: 31cebfcf94e8cf8686eb5303ae0357da64d7a5a4
   Yoga: 7d2edc5b410474191962e6dee88ee67f9b328b6b
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a
 
-PODFILE CHECKSUM: 53688872f12f112d6e2da56b698bd826fba66007
+PODFILE CHECKSUM: 5610942f1f31313421b05ea9b87a2d74e4876b49
 
 COCOAPODS: 1.10.1

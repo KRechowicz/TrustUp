@@ -10,7 +10,6 @@
 #import "LANProperties.h"
 
 #import "MMLANScanner.h"
-#import "YLTCPBroadcaster.h"
 #import "MainPresenter.h"
 
 @interface RCTScanModule()<MainPresenterDelegate>

@@ -1,13 +1,17 @@
 var oui = require('oui');
+import Review from './Reviews';
 
 export default class myClass {
-    userID: string;
     ip: string;
     mac: string;
-    vendor: string;
+    tosdr_vendor: string;
+    wifi_vendor: string;
     lastScanned: string;
-    constructor(id,ip, mac) {
-        this.userID = id;
+    reviews: [];
+    docURL: string;
+    docType: string;
+    grade: string;
+    constructor(ip, mac) {
         this.ip = ip;
         this.mac = mac;
         this.getVendor();
@@ -24,12 +28,23 @@ export default class myClass {
     getVendor(){
         var vendor = oui(this.mac);
         if(vendor == null){
-            this.vendor = "Unknown_Vendor";
+            this.wifi_vendor = "Unknown_Vendor";
         }
         else{
-            this.vendor = vendor;
+            this.wifi_vendor = vendor;
         }
     }
+
+    addTOSDRVendor(vendor){
+        this.tosdr_vendor = vendor;
+    }
+
+    addGradeReviews(grade, reviews){
+        this.grade = grade;
+        this.reviews = reviews;
+    }
+
+
 
 
 

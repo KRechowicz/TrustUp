@@ -3,8 +3,6 @@ require_relative '../node_modules/@react-native-community/cli-platform-ios/nativ
 
 platform :ios, '10.0'
 
-# pod 'MMLanScan'
-pod 'YLTCPBroadcaster', '~> 2.0.1'
 
 target 'Wifi_TrustUp' do
   config = use_native_modules!
@@ -16,6 +14,8 @@ target 'Wifi_TrustUp' do
 
 
   pod 'RNRnLanScan', :path => '../node_modules/react-native-rn-lan-scan'
+
+
 
 
   #target 'Wifi_TrustUpTests' do

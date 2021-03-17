@@ -15,7 +15,7 @@ import UnknownVendorPage from "./pages/UnknownVendor";
 
 var results = [];
 
-
+/*
 const eventStuff = new NativeEventEmitter(RNLanScanEvent);
 const scanEvent = eventStuff.addListener("EventReminder", function (data) {
   if(data['type'] === 'devices'){
@@ -52,6 +52,8 @@ const scanEvent = eventStuff.addListener("EventReminder", function (data) {
   }
 });
 
+ */
+
 
 type Props = {};
 
@@ -85,7 +87,7 @@ export default class App extends Component<Props> {
         .then(function(res){
           res.json().then(function(data) {
             console.log('request succeeded with JSON response', data);
-            /*
+
             for(var item in data){
               console.log(data[item].name)
             }
@@ -114,7 +116,7 @@ export default class App extends Component<Props> {
 
   }
 
-  componentWillUnmount(): * {
+  componentWillUnmount(){
     scanEvent.remove();
 
   }
@@ -384,3 +386,4 @@ const styles = StyleSheet.create({
     margin: 10,
   },
 });
+

@@ -204,7 +204,7 @@ export default class Scan extends Component {
 
 
     testing = () => {
-        fetch('http://127.0.0.1:3000/users', {
+        fetch('http://127.0.0.1:3000/sendToNLP', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',

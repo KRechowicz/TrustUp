@@ -167,9 +167,10 @@ app.get('/vendorReferenceSheet', function (req, res) {
 
 //Send users scan info to database
 app.post('/sendToNLP', (req, res) => {
+    console.log(req.body.url);
     var dataToSend;
     // spawn new child process to call the python script
-    const python = spawn('python3', ['/Users/bgeldhau/GitHub/CoVA_CCI/Root Development/Backend/Python/grade_and_vendor.py']);
+    const python = spawn('python3', ['/Users/bgeldhau/GitHub/CoVA_CCI/Root Development/Backend/Python/grade_and_vendor.py', req.body.url]);
     // collect data from script
     python.stdout.on('data', function (data) {
         console.log('Pipe data from python script ...');
@@ -179,7 +180,7 @@ app.post('/sendToNLP', (req, res) => {
     python.on('close', (code) => {
         console.log(`child process close all stdio with code ${code}`);
         // send data to browser
-        //res.send(dataToSend)
+        res.send(JSON.parse(dataToSend))
         console.log(dataToSend);
     });
 

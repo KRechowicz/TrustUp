@@ -7,6 +7,8 @@ from urllib.parse import urlparse
 # from urllib.request import Request
 # from lxml import etree
 
+import pathlib
+
 class Scrape:
     def __init__(self, argv):
         super().__init__()
@@ -24,9 +26,9 @@ class Scrape:
     def take_in(self):
         input_url = self.argv
 
-        print(f'Input url is: {input_url}')
+        #print(f'Input url is: {input_url}')
 
-        print('Parsing...')
+        #print('Parsing...')
 
         self.hostname(input_url)
 
@@ -51,7 +53,8 @@ class Scrape:
 
         self.Filename = self.Vendor + '.txt'
 
-        print('Output file is: ', self.Filename)
+
+        #print('Output file is: ', self.Filename)
 
     def parse(self, input_url: str):
         response = self.get_source(input_url)
@@ -72,14 +75,16 @@ class Scrape:
 
         # fout.write(str(htmlTree.xpath("//div[@class='content']")))
 
-        htmlData = BeautifulSoup(response.text, features='lxml')
+        htmlData = BeautifulSoup(response.text, 'lxml')
 
         self.prettify(htmlData)
 
     def prettify(self, htmlData):
         soup = htmlData
 
-        fout = open(self.Filename, 'w')
+        outputToFile = str(pathlib.Path(__file__).parent.absolute()) + "/ScraperOutput/" + self.Filename
+
+        fout = open(outputToFile, 'w')
 
         # TAG_LIST = ['p', 'ul', 'ol', 'h1', 'h2', 'h3', 'div']
         TAG_LIST = ['p', 'li', 'ul']    # ['strong', 'em', 'br', 'b']

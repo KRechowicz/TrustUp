@@ -1,26 +1,64 @@
 import * as React from 'react';
-import { StyleSheet, View, Image, Text } from 'react-native';
+import {Component} from "react";
+import { StyleSheet, View, Image, Text, Button} from 'react-native';
 import { FAB } from 'react-native-paper';
 
-const MyComponent = () => (
-    <View>
-        <View style={styles.box1}>
-            <Text style={styles.textStyle}>Box 1</Text>
-        </View>
-        <View style={styles.box2}>
-            <Text style={styles.textStyle}>Box 2</Text>
-        </View>
-        <View style={styles.box3}>
-            <Text style={styles.textStyle}>Box 3</Text>
-        </View>
-        <Image
-            style={styles.logo}
-            source={require('../Images/TrustUPLogo.png')}
-        />
+var userID = 'B';
+var URL = "http://127.0.0.1:3000";
 
-    </View>
+const getDeviceList = (userIDToCheck) => {
+    fetch(URL + "/users/" + userIDToCheck + "/scan").then(r  => {
+        r.json().then((data) => {
+            if(!data[0].ip){
+                console.log("You have no devices previously scanned...");
+            }
+            else{
+                console.log(data);
+            }
+        })
+    })
 
-);
+}
+
+
+class HomeScreen extends Component{
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            userID:"B",
+            deviceList:[]
+        }
+
+    }
+
+    componentDidMount() {
+        getDeviceList(this.state.userID);
+    }
+
+    render(){
+        return(
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <Text>Home Screen</Text>
+                <Button
+                    title="Go to Scanning Screen"
+                    onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:userID})}
+                />
+                <Button
+                    title="Go to Unknown Page"
+                    onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
+                />
+            </View>
+
+        );
+
+    }
+
+
+
+
+
+}
 
 const styles = StyleSheet.create({
     container: {
@@ -66,4 +104,4 @@ const styles = StyleSheet.create({
     },
 })
 
-export default MyComponent;
+export default HomeScreen;

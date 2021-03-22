@@ -1,7 +1,12 @@
 import React, { Component } from 'react';
-import { Text, StyleSheet, View, Dimensions, TextInput } from 'react-native';
+import {Text, StyleSheet, View, Dimensions, TextInput, Button} from 'react-native';
 
 const SCREENSIZE = Dimensions.get('screen');
+var userID = 'B';
+var url = 'https://www.hpe.com/us/en/legal/privacy.html#privacystatement';
+var vendor = "Hewlett-Packard Company";
+var docType = 'TOS';
+
 
 export default class App extends Component {
     render() {
@@ -29,6 +34,10 @@ export default class App extends Component {
                     <View style={styles.contentBox}>
                         <Text>Some text here</Text>
                     </View>
+                        <Button
+                            title="Go to Unknown Page"
+                            onPress={() => this.props.navigation.navigate('UnknownVendorDisplayScreen', {userID:userID, vendor:vendor, docType: docType, url:url })}
+                        />
                 </View>
             </View>
         <View style={styles.appFooter}>

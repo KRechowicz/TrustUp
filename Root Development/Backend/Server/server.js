@@ -42,10 +42,10 @@ app.get('/users/:userId', function (req, res) {
                   res.status(400).json({ error: 'Could not get user' });
                 }
           if (result.Item) {
-                  const {userId, name} = result.Item;
-                  res.json({ userId, name });
+                  const {userID, name} = result.Item;
+                  res.json({ userID, name });
                 } else {
-                  res.status(404).json({ error: "User not found" });
+                  res.json({userId: null, name: null});
                 }
           });
 })
@@ -112,6 +112,42 @@ app.post('/users/:userID/scan', (req, res) => {
 
 })
 
+
+//Send users scan info to database
+app.post('/users/:userID/scan', (req, res) => {
+    AWS.config.update(config.aws_remote_config);
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    const ip = req.body.ip;
+    const mac = req.body.mac;
+    const lastScanned = req.body.lastScanned;
+    const vendor = req.body.vendor;
+    const userID = req.body.userID;
+    console.log(req.body);
+    const params = {
+        TableName: config.aws_table_name,
+        Item: {
+            userID : req.params.userID,
+            scan: {
+                devices: req.body,
+            }
+        }
+    };
+
+    docClient.put(params, (error) => {
+        if (error) {
+            console.log(error);
+            //res.status(400).json({ error: 'Could not create user' });
+        }
+        res.json({ ip, mac,lastScanned, vendor });
+    });
+
+
+})
+
+
+
+
+
 ///Get users scan that was stored in database
 app.get('/users/:userId/scan', function (req, res) {
     AWS.config.update(config.aws_remote_config);
@@ -125,16 +161,22 @@ app.get('/users/:userId/scan', function (req, res) {
     docClient.get(params, (error, result) => {
         if (error) {
             console.log(error);
-            res.status(400).json({ error: 'Could not get user' });
+            res.status(400).json({ error: 'Could not get user list' });
         }
         if (result.Item) {
-            console.log(result.Item.scan.devices)
-            //const {ip, mac, lastScanned, vendor} = result.Item;
-            res.json(result.Item.scan.devices);
-            //console.log("IP", ip, mac, lastScanned, vendor);
+            try{
+                console.log(result.Item.scan.devices)
+                //const {ip, mac, lastScanned, vendor} = result.Item;
+                res.json(result.Item.scan.devices);
+                //console.log("IP", ip, mac, lastScanned, vendor);
+            }
+            catch (e) {
+                res.json([{ip: null}, {ip:null}]);
+            }
+
 
         } else {
-            res.status(404).json({ error: "User not found" });
+            res.status(404).json({ error: "User device list not found" });
         }
     });
 })
@@ -184,8 +226,10 @@ app.post('/sendToNLP', (req, res) => {
         console.log(dataToSend);
     });
 
-
 })
+
+
+
 
 
 

@@ -12,9 +12,15 @@ export default class myClass {
     docType: string;
     grade: string;
     constructor(ip, mac) {
-        this.ip = ip;
-        this.mac = mac;
-        this.getVendor();
+        if(ip){
+            this.ip = ip;
+            this.mac = mac;
+            this.getVendor();
+        }
+        else{
+            this.ip = "Manually Added";
+            this.mac = "Manually Added"
+        }
         this.getScannedTime();
     }
 
@@ -41,7 +47,13 @@ export default class myClass {
 
     addGradeReviews(grade, reviews){
         this.grade = grade;
-        this.reviews = reviews;
+        if(reviews){
+            this.reviews = reviews;
+        }
+        else{
+            this.reviews = "No Reviews";
+        }
+
     }
 
 

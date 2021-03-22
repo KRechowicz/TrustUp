@@ -17,10 +17,36 @@ import {
 import Auth0 from 'react-native-auth0';
 
 var credentials = require('../configs/auth0-configuration');
-import App from '../App';
 const auth0 = new Auth0(credentials);
 
 var auth0Domain = 'https://dev-awc6c4u1.us.auth0.com/'
+
+var URL = "http://127.0.0.1:3000"
+var userID = "4";
+
+const checkUsers = (userIDToCheck) =>{
+    fetch(URL + "/users/" + userIDToCheck).then(r  => {
+        r.json().then((data) => {
+            if(data.userID){
+                console.log("WOAH there, you're already a user. Getting your data!", data);
+            }
+            else{
+                console.log("WOAH there, you're not a user! Creating a spot for oyu in our database!");
+                fetch(URL+ '/users', {
+                    method: 'POST',
+                    headers: {
+                        Accept: 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        userId: userID
+                    })
+                });
+            }
+        })
+    })
+}
+
 
 
 class Login extends Component {
@@ -58,9 +84,17 @@ class Login extends Component {
                 scope: 'openid profile email'
             })
             .then(credentials => {
+                /*
                 auth0.webAuth.client.userInfo(credentials.accessToken, function(err, user){
                     console.log(user)
                 })
+
+                 */
+                checkUsers(userID);
+
+
+
+
                 this.setState({ accessToken: credentials.accessToken});
             })
             .catch(error => console.log(error));

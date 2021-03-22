@@ -3,15 +3,23 @@ import json
 from scraper import Scrape
 import pathlib
 import sys
+import os
+from os import path
 
+RootPath = str(pathlib.Path(__file__).parent.absolute())
 
 Object = Scrape(sys.argv[1])
 
-Object.take_in()
+Object.hostname(sys.argv[1])
+Object.generate_filename()
+
+if(not path.isfile(RootPath+ "/ScraperOutput/" +Object.Filename)):
+    Object.take_in()
+
 
 
 #change this file path to desired PP or ToS
-my_tos_filename = str(pathlib.Path(__file__).parent.absolute()) + "/ScraperOutput/" +Object.Filename
+my_tos_filename = RootPath+ "/ScraperOutput/" +Object.Filename
 
 temp = "/Users/bgeldhau/GitHub/CoVA_CCI/Root Development/Backend/Python/ScraperOutput/terms-of-service/cellartracker-tos.txt"
 

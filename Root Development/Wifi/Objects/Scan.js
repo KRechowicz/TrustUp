@@ -82,8 +82,6 @@ export default class Scan extends Component {
         }
 
 
-
-
     }
     componentWillUnmount() {
         this.eventStuff.removeAllListeners("EventReminder",);
@@ -249,17 +247,87 @@ export default class Scan extends Component {
         const amountOfReviews = 8;
         var reviews = [];
         var device = null;
+        var dataError = false;
         console.log("We are currently fetching information from TOSDR for ", vendor);
 
         fetch("https://tosdr.org/api/1/service/" + vendor +".json")
             .then(res => {
                 res.json().then((data) => {
-                    if(data.class){
-                        console.log(data.class);
+                    try {
+                        if (data.class) {
+                            var points = data.points;
+                            console.log("It has a grade of " + data.class);
+                            try {
+                                const newPointsArray = points.slice(0, amountOfReviews);
+
+                                for (var items in newPointsArray) {
+
+                                    reviews.push(new Reviews(data.pointsData[newPointsArray[items]].id, data.pointsData[newPointsArray[items]].title, data.pointsData[newPointsArray[items]].tosdr.case,
+                                        data.pointsData[newPointsArray[items]].tosdr.point, data.pointsData[newPointsArray[items]].tosdr.score, data.pointsData[newPointsArray[items]].tosdr.tldr));
+                                }
+                            } catch (TypeError) {
+                                console.log("Oh well item no found");
+                            }
+                            if (itemIndex || itemIndex === 0) {
+                                this.inTOSDRVendorList[itemIndex].addGradeReviews(data.class, reviews);
+                            } else {
+                                device = new ScanResults(null, null);
+                                device.addGradeReviews(data.class, reviews);
+                                device.addTOSDRVendor(vendor);
+                                console.log(device);
+                            }
+
+                            reviews = [];
+                        } else if (data.error) {
+                            console.log(data);
+                            dataError = true;
+
+                        } else if (!data.class && !dataError) {
+
+                            console.log("Uh Oh! No grade for ", vendor);
+                            console.log("We are retrieving their Privacy Policy and TOS from TOSDR....");
+                            var url;
+                            var docType;
+
+
+                            for (const items of data.links) {
+                                console.log(items);
+                            }
+
+                            if (data.links["Privacy Policy"]) {
+                                url = data.link['Privacy Policy'].url;
+                                docType = "Privacy Policy";
+                                console.log("Link for ", vendor, data.links['Privacy Policy']);
+                            } else if (data.links["Privacy Policy "]) {
+                                url = data.links['Privacy Policy '].url;
+                                docType = "Privacy Policy";
+                                console.log("Link for ", vendor, data.links['Privacy Policy ']);
+                            } else if (data.links["Terms of Use"]) {
+                                url = data.link['Terms of Use'].url;
+                                docType = "Terms Of Service";
+                                console.log("Link for ", vendor, data.links['Terms of Use']);
+                            } else if (data.links["Conditions of Use"]) {
+                                url = data.link['Conditions of Use'].url;
+                                docType = "Terms Of Service";
+                                console.log("Link for ", vendor, data.links['Conditions of Use']);
+                            } else {
+                                console.log("No links found for : ", vendor);
+                                console.log("Here is a list of types of links we currently have...");
+                                for (const items of data.links) {
+                                    console.log(items);
+                                }
+
+                            }
+
+
+                        }
+                    }
+                    catch(error){
+                        console.log(error);
                     }
 
-                    /*
-                    if(data){
+
+
                         if(data.class){
                             var points = data.points;
                             console.log("It has a grade of " + data.class);
@@ -336,8 +404,8 @@ export default class Scan extends Component {
 
 
                         }
-                    }
-                    */
+
+
 
 
 

@@ -3,6 +3,7 @@ import http from 'http';
 import base64 from 'base64-stream';
 //import * as url from "url";
 const $ = require( "jquery" )
+var path = require("path");
 //URL = 'https://api.tosdr.org/v1/service/facebook.json'
 
 ///AWS USer info
@@ -25,6 +26,24 @@ const config = require('./config');
 
 
 const {spawn} = require('child_process');
+var pathToScript = path.resolve("../Python/grade_and_vendor.py");
+var pythonCall = 'python3';
+
+var webSearchEndPoint = 'https://api.bing.microsoft.com/v7.0/search'
+
+var subscriptionID = '391f8532-e7ae-4c04-9815-c9c9d467f0ff';
+var key1 = '74607f33e76746e697066b7f05f8f48a';
+var key2 = 'adf40e1992b54b8288ca3fcd10e5c1af';
+
+const { WebSearchClient } = require("@azure/cognitiveservices-websearch");
+const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
+
+const cognitiveServiceCredentials = new CognitiveServicesCredentials(
+    key1
+);
+
+
+
 
 
 app.get('/users/:userId', function (req, res) {
@@ -209,10 +228,10 @@ app.get('/vendorReferenceSheet', function (req, res) {
 
 //Send users scan info to database
 app.post('/sendToNLP', (req, res) => {
-    console.log(req.body.url);
+    console.log(req.body.url)
     var dataToSend;
     // spawn new child process to call the python script
-    const python = spawn('python3', ['/Users/bgeldhau/GitHub/CoVA_CCI/Root Development/Backend/Python/grade_and_vendor.py', req.body.url]);
+    const python = spawn(pythonCall, [pathToScript, req.body.url]);
     // collect data from script
     python.stdout.on('data', function (data) {
         console.log('Pipe data from python script ...');
@@ -225,6 +244,37 @@ app.post('/sendToNLP', (req, res) => {
         res.send(JSON.parse(dataToSend))
         console.log(dataToSend);
     });
+
+})
+
+
+
+app.post('/getSearch', function (req, res) {
+    var queryToSearch = req.body.query;
+    var dataToString;
+    const client = new WebSearchClient(cognitiveServiceCredentials, {
+        endpoint: webSearchEndPoint
+    });
+    const query = queryToSearch;
+    const options = {
+        acceptLanguage: "en-US",
+        pragma: "no-cache",
+        location: "global"
+    };
+
+    client.web
+        .search(query, options)
+        .then(result => {
+            console.log("The result is: ");
+            console.log(result.webPages.value[0].url);
+            var dataToSend = {url: result.webPages.value[0].url, displayURL: result.webPages.value[0].displayUrl};
+            res.send(dataToSend);
+        })
+        .catch(err => {
+            console.log("An error occurred:");
+            console.error(err);
+        });
+
 
 })
 

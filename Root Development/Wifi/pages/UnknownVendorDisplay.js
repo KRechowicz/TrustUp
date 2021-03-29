@@ -3,49 +3,26 @@ import { StyleSheet, View, Image, Text, Button} from 'react-native';
 import { FAB } from 'react-native-paper';
 import Reviews from "../Objects/Reviews";
 import ScanResults from "../Objects/ScanResult";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-var URL = "http://127.0.0.1:3000";
+const config = require('../config');
 
-const sendInfoToNLP = (url, docType, vendor, userID) => {
-    console.log("Sending info to NLP...Waiting For grade...");
-    var device = null;
-    fetch(URL + '/sendToNLP', {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({
-            url: url,
-            docType: docType
-        })
-    }).then(res => {
-        res.json().then((data) => {
-                device = new ScanResults(null, null);
-                device.addGradeReviews(data.grade, null);
-                device.addTOSDRVendor(vendor);
-                console.log(device);
-
-        })
-    }).then(data => {
-        if(device){
-            sendToDB(userID,device);
+const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem(config.id_key)
+        if(value !== null) {
+            return value;
         }
-        else{
-            console.log("Error getting grade from NLP...");
-        }
-
-    })
-
-        .catch(function(error){
-        console.log('request failed', error)
-    })
+    } catch(e) {
+        console.log(e);
+    }
 }
 
-const sendToDB = (userID, device) => {
+const sendToDB = async(userID, device) => {
 
 ///Append to database list
-    fetch(URL + '/users/B/scan', {
+
+    const nlpInfo = await fetch(config.backend_endpoint + '/users/B/scan', {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -60,7 +37,31 @@ const sendToDB = (userID, device) => {
 
 const UnknownVendorDisplay = ({navigation, route}) => {
 
-    const {userID, vendor, docType, url} = route.params;
+    const {vendor, docType, url} = route.params;
+
+    console.log(vendor);
+
+    const sendInfoToNLP = async(url, docType, vendor) => {
+        console.log("Sending info to NLP...Waiting For grade...");
+        var device = null;
+        const response = await fetch(config.backend_endpoint + '/sendToNLP', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                url: url,
+                docType: docType
+            })
+        })
+        const data = await response.json();
+        device = new ScanResults(null, null);
+        device.addGradeReviews(data.grade, null);
+        device.addTOSDRVendor(vendor);
+        console.log(device);
+        navigation.navigate('HomeScreen')
+    }
 
 
     return (
@@ -69,7 +70,7 @@ const UnknownVendorDisplay = ({navigation, route}) => {
             <Text>Home Screen</Text>
             <Button
                 title="Trust Us"
-                onPress={() => {sendInfoToNLP(url, docType, vendor, userID); navigation.navigate('HomeScreen');}}
+                onPress={() => sendInfoToNLP(url, docType, vendor)}
             />
             <Button
                 title="Dont Trust Us"

@@ -28,7 +28,7 @@ export default class myClass {
         var today  = new Date();
         var date = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate();
         var time = today.getHours() + ":" + today.getMinutes();
-        this.lastScanned = date + '-' + time;
+        this.lastScanned = date + '/' + time;
     }
 
     getVendor(){

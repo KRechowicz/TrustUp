@@ -62,9 +62,9 @@ app.get('/users/:userId', function (req, res) {
                 }
           if (result.Item) {
                   const {userID, name} = result.Item;
-                  res.json({ userID, name });
+                  res.json({ userID});
                 } else {
-                  res.json({userId: null, name: null});
+                  res.json({userID: null});
                 }
           });
 })
@@ -74,14 +74,13 @@ app.post('/users', (req, res) => {
     AWS.config.update(config.aws_remote_config);
     const docClient = new AWS.DynamoDB.DocumentClient();
     const userId = req.body.userId;
-    const name = req.body.name;
+    console.log(userId);
 
 
       const params = {
           TableName: config.aws_table_name,
           Item: {
               userID: userId,
-              name: name,
           },
       };
 
@@ -91,14 +90,13 @@ app.post('/users', (req, res) => {
                   console.log(error);
                  //res.status(400).json({ error: 'Could not create user' });
                 }
-            var name;
-            var id;
-            res.json({ name, id });
-            console.log("user createdL:" + name + id );
+            res.json({userID});
           });
 
 
 })
+
+
 
 //Send users scan info to database
 app.post('/users/:userID/scan', (req, res) => {
@@ -180,7 +178,7 @@ app.get('/users/:userId/scan', function (req, res) {
     docClient.get(params, (error, result) => {
         if (error) {
             console.log(error);
-            res.status(400).json({ error: 'Could not get user list' });
+            res.status(400).json({ error: null });
         }
         if (result.Item) {
             try{
@@ -195,7 +193,7 @@ app.get('/users/:userId/scan', function (req, res) {
 
 
         } else {
-            res.status(404).json({ error: "User device list not found" });
+            res.status(404).json({ error: null });
         }
     });
 })

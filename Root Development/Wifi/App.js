@@ -7,18 +7,47 @@ import LoginScreen from './pages/Login'
 import UnknownVendorScreen from './pages/UnknownVendor';
 import UnknownVendorDisplayScreen from './pages/UnknownVendorDisplay';
 import Home from "./pages/Home";
+import {Component} from "react";
 
 const Stack = createStackNavigator();
 
-export default function App() {
+export default class App extends Component{
+    constructor() {
+        super();
+        this.state ={
+            isSignedIn: false,
+        }
+        this.setSignedIn = this.setSignedIn.bind(this)
+    }
+
+    setSignedIn() {
+        this.setState({
+            isSignedIn:true,
+        })
+    }
+    render() {
+        console.log(this.state.isSignedIn);
         return (
-            <NavigationContainer>
-                <Stack.Navigator>
-                    <Stack.Screen name="HomeScreen" component={Home} />
-                    <Stack.Screen name="ScanningScreen" component={ScanScreen} />
-                    <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} />
-                    <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} />
-                </Stack.Navigator>
-            </NavigationContainer>
+
+            this.state.isSignedIn ? (
+                    <NavigationContainer>
+                        <Stack.Navigator>
+                            <Stack.Screen name="HomeScreen" component={Home} />
+                            <Stack.Screen name="ScanningScreen" component={ScanScreen} />
+                            <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} />
+                            <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} />
+                        </Stack.Navigator>
+                    </NavigationContainer>
+
+                ) : (
+                    <LoginScreen handleState = {this.setSignedIn}>
+                    </LoginScreen>
+
+                )
+
+
         );
+    }
+
+
 }

@@ -15,41 +15,30 @@ import {
     View
 } from 'react-native';
 import Auth0 from 'react-native-auth0';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 var credentials = require('../configs/auth0-configuration');
 const auth0 = new Auth0(credentials);
 
 var auth0Domain = 'https://dev-awc6c4u1.us.auth0.com/'
 
-var URL = "http://127.0.0.1:3000"
+const config = require('../config');
+
 var userID = "4";
 
-const checkUsers = (userIDToCheck) =>{
-    fetch(URL + "/users/" + userIDToCheck).then(r  => {
-        r.json().then((data) => {
-            if(data.userID){
-                console.log("WOAH there, you're already a user. Getting your data!", data);
-            }
-            else{
-                console.log("WOAH there, you're not a user! Creating a spot for oyu in our database!");
-                fetch(URL+ '/users', {
-                    method: 'POST',
-                    headers: {
-                        Accept: 'application/json',
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify({
-                        userId: userID
-                    })
-                });
-            }
-        })
-    })
+
+const storeData = async (value) => {
+    try {
+        await AsyncStorage.setItem(config.id_key, value)
+    } catch (e) {
+        // saving error
+    }
 }
 
 
 
 class Login extends Component {
+    nickname: '';
     constructor(props) {
         super(props);
         this.state = {
@@ -57,6 +46,29 @@ class Login extends Component {
             userID: null,
         };
     }
+
+    checkUsers = async(userIDToCheck) =>{
+
+        const response = await fetch(config.backend_endpoint + '/users/' + userIDToCheck);
+        const json = await response.json();
+        if(!json.userID){
+            fetch(config.backend_endpoint+ '/users', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                userId: userIDToCheck
+            })
+        });
+
+        }
+
+        console.log(json);
+    }
+
+
 
     getObject = () => {
             var getObject = {
@@ -77,6 +89,44 @@ class Login extends Component {
 
 
 }
+
+    onSuccess = async(credentials) =>{
+        auth0.auth
+            .userInfo({ token: credentials.accessToken })
+            .then(async(profile)=> {
+                this.setState({nickname:profile.nickname});
+                const checkDB = await this.checkUsers(profile.nickname);
+                const response = await storeData(profile.nickname);
+                this.props.handleState();
+            })
+            .catch(error => this.alert('Error', error.json.error_description));
+    }
+
+    alert(title, message) {
+        Alert.alert(
+            title,
+            message,
+            [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+            { cancelable: false }
+        );
+    }
+
+    webAuth(connection) {
+        auth0.webAuth
+            .authorize({
+                scope: 'openid profile email',
+                connection: connection,
+                audience: 'https://' + credentials.domain + '/userinfo'
+            })
+            .then(credentials => {
+                //storeData(credentials.email).then(r => console.log("Email stored", credentials.email));
+                this.onSuccess(credentials);
+
+
+            })
+            .catch(error => this.alert('Error', error.error_description));
+    };
+
 
     _onLogin = () => {
         auth0.webAuth
@@ -120,7 +170,7 @@ class Login extends Component {
                 <Text style = { styles.header }> Auth0Sample - Login </Text>
                 <Text>
                     You are{ loggedIn ? ' ' : ' not ' }logged in . </Text>
-                <Button onPress = { loggedIn ? this._onLogout : this._onLogin }
+                <Button onPress = { () => this.webAuth('google-oauth2')}
                         title = { loggedIn ? 'Log Out' : 'Log In' }/>
             </View >
         );

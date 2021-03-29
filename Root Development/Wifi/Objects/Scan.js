@@ -18,13 +18,26 @@ import WifiScanButton from "../UI/components/WifiScanButton";
 import HomeButton from "../UI/components/HomeButton.js";
 import SearchBar from "../UI/components/SearchBar";
 import ModalButton from "../UI/components/ModalButton";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-var URL = "http://127.0.0.1:3000"
+const config = require('../config');
+
 var nlpPromise;
 var tosdrPromise;
 
 
 //var results = [];
+
+const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem(config.id_key)
+        if(value !== null) {
+            return value;
+        }
+    } catch(e) {
+        console.log(e);
+    }
+}
 
 export default class Scan extends Component {
     eventStuff = new NativeEventEmitter(RNLanScanEvent);
@@ -32,6 +45,9 @@ export default class Scan extends Component {
     knownVendorList = [];
     unknownVendorList = [];
     inTOSDRVendorList = [];
+    listToStore = [];
+
+    userIDFromHome = null;
     searchList = ['Sony','paypal','spotify','pure','netflix','apple','microsoft','vk','yahoo','icloud','ask','hulu','signal','pocket','nvidia','bitdefender','sync','medium','brave','huawei','xiaomi','facebook','adobe','Element','amazon','Cisco','google','Rumble','slack','bitdefender','tosdr_vendor','symantec','service','sprint','virgin','cnet','bing','quake','multiple','lorea','onlive','king','cox','rac','enjin','none','uber','ello','mega','wix','looki','toggle','vero','identica','fitbit','taco','centurylink','jawbone','nokia','npr','flow','tmobile','path','revolut','Current','restream','canary','verizon','vive','bethesda','razer','drop','comcast','Reuters','bit','nsa','visions','chip','genius','emp','nrc','dudle','alza','shadow','baidu','inspire','target','nintendo','aol','vox','notion','garmin','waterfall','chase','honey','myspace','forbes','niche','gmx','hq','ixl','finn','leo','nexon','leet','minds','brilliant','gab','Trakt','yr','parsec','yase','icann','anki','grab','geco','akamai','chegg','bose','deepl','alpha','wired','dra','sophos','overleaf','byte','ebird','intercom','August Home','etsy','Nebula','xing','sony','visible','discovery','[spamtobedeleted]','adafruit','loom','xero','mla','whirlpool','matrix','pandora','oculus','yandex','ebay','mimo','samsung','petco','wire','adk','Logitech','Briar','Lenovo','Asus','Netgear','Sony','Motorola','Linksys','Belkin','TomTom','LYKA','Sweet','ADT','Ring LLC','Vice','Dash','Unity','Affirm','LogMeIn','amazon'];
 
     constructor(props) {
@@ -43,17 +59,18 @@ export default class Scan extends Component {
             isCheckingVendors: false,
             currentUserID: null,
             checkingNLP: false,
-            userID:null,
+            userIDFromHome:null,
 
         };
     }
 
-    componentDidMount() {
+    async componentDidMount() {
 
-        const {userID} = this.props.route.params;
-        this.setState({userID:userID});
+        const getID = await getData();
+        console.log(getID);
+        this.userIDFromHome = getID;
 
-        //this.props.navigation.navigate('HomeScreen');
+
 
 
         this.eventStuff.addListener("EventReminder", (data) => {
@@ -77,10 +94,6 @@ export default class Scan extends Component {
         console.log("Listener Registered.")
 
         this.scan();
-        if(this.state.scanComplete){
-            this.props.navigation.navigate('HomeScreen');
-        }
-
 
     }
     componentWillUnmount() {
@@ -91,21 +104,29 @@ export default class Scan extends Component {
 
     storeToDB = () => {
 
-        fetch(URL + '/users/' +  this.state.userID +'/scan', {
+        this.listToStore = this.inTOSDRVendorList.concat(this.unknownVendorList);
+
+        fetch(config.backend_endpoint + '/users/' + this.userIDFromHome + '/scan', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(this.inTOSDRVendorList)
+            body: JSON.stringify(this.listToStore)
+        }).then(r =>  {
+            console.log("Stored to Database")
+            this.props.navigation.navigate('HomeScreen');
+            this.setState({scanComplete:true})
         });
 
-        console.log("Stored to Database");
-        this.setState({scanComplete:true});
+
+
+
+
     }
 
     storeOneDeviceToDB = (device) =>{
-        fetch(URL + '/users/'+ this.state.userID +'/scan', {
+        fetch(config.backend_endpoint + '/users/'+ this.state.userID +'/scan', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -142,7 +163,7 @@ export default class Scan extends Component {
     }
 
     checkVendorReferenceSheet = () => {
-        fetch(URL + '/vendorReferenceSheet')
+        fetch(config.backend_endpoint + '/vendorReferenceSheet')
             .then(res => res.json())
             .then(res => {
                 //console.log("\nThis is the known vendor list: \n", this.knownVendorList, "\n");
@@ -178,15 +199,15 @@ export default class Scan extends Component {
                 this.tosdrCheckForGrade();
             })
             .catch((error) => {
-                console.log(error);
+                console.log(error,"WTF");
             });
     }
 
 
-    sendInfoToNLP = (url, docType, tosdrData, vendor, itemIndex, isFromUnknownPage) =>{
+    sendInfoToNLP = async(url, docType, tosdrData, vendor, itemIndex) =>{
         console.log("Sending info to NLP...Waiting For grade...");
         this.setState({checkingNLP:true});
-        fetch(URL + '/sendToNLP', {
+        const response = await fetch(config.backend_endpoint + '/sendToNLP', {
             method: 'POST',
             headers: {
                 Accept: 'application/json',
@@ -196,247 +217,135 @@ export default class Scan extends Component {
                 url: url,
                 docType: docType
             })
-        }).then(res => {
-            res.json().then((data) => {
-                if(!isFromUnknownPage){
-                    const amountOfReviews = 8;
-                    var reviews = [];
-                    var points = tosdrData.points;
-                    var device = null;
-                    console.log("Recieved grade from NLP for " + vendor + " with grade of " + data.grade);
-                    try{
-                        const newPointsArray = points.slice(0, amountOfReviews);
+        })
+        const json = await response.json();
+        const amountOfReviews = 8;
+        var reviews = [];
+        var points = tosdrData.points;
+        var device = null;
+        console.log("Recieved grade from NLP for " + vendor + " with grade of " + json.grade);
+        try{
+            const newPointsArray = points.slice(0, amountOfReviews);
 
-                        for(var items in newPointsArray){
+            for(var items in newPointsArray){
 
-                            reviews.push(new Reviews(tosdrData.pointsData[newPointsArray[items]].id, tosdrData.pointsData[newPointsArray[items]].title, tosdrData.pointsData[newPointsArray[items]].tosdr.case,
-                                tosdrData.pointsData[newPointsArray[items]].tosdr.point, tosdrData.pointsData[newPointsArray[items]].tosdr.score, tosdrData.pointsData[newPointsArray[items]].tosdr.tldr));
-                        }
-                    }
-                    catch (TypeError) {
-                        console.log("Oh well item no found");
-                    }
+                reviews.push(new Reviews(tosdrData.pointsData[newPointsArray[items]].id, tosdrData.pointsData[newPointsArray[items]].title, tosdrData.pointsData[newPointsArray[items]].tosdr.case,
+                    tosdrData.pointsData[newPointsArray[items]].tosdr.point, tosdrData.pointsData[newPointsArray[items]].tosdr.score, tosdrData.pointsData[newPointsArray[items]].tosdr.tldr));
+            }
+        }
+        catch (TypeError) {
+            console.log("Oh well item no found");
+        }
 
-                    if(itemIndex && itemIndex === 0){
-                        this.inTOSDRVendorList[itemIndex].addGradeReviews(data.class, reviews);
-                    }
-                    else{
-                        device = new ScanResults(null, null);
-                        device.addGradeReviews(data.grade, reviews);
-                        device.addTOSDRVendor(vendor);
-                        console.log(device);
-                    }
-                }
-                else{
-                    device = new ScanResults(null, null);
-                    device.addGradeReviews(data.grade, null);
-                    device.addTOSDRVendor(vendor);
-                    console.log(device);
-                }
+        this.inTOSDRVendorList[itemIndex].addGradeReviews(json.class, reviews);
+        return(
+            console.log("Items added to list")
+        );
 
-                this.setState({checkingNLP:false});
-
-            })
-        }).catch(function(error){
-                console.log('request failed', error)
-            })
     }
 
 
-    fetchTOSDRInfo = (vendor, itemIndex) =>{
+    fetchTOSDRInfo = async(vendor, itemIndex) => {
         const amountOfReviews = 8;
         var reviews = [];
         var device = null;
         var dataError = false;
         console.log("We are currently fetching information from TOSDR for ", vendor);
 
-        fetch("https://tosdr.org/api/1/service/" + vendor +".json")
-            .then(res => {
-                res.json().then((data) => {
-                    try {
-                        if (data.class) {
-                            var points = data.points;
-                            console.log("It has a grade of " + data.class);
-                            try {
-                                const newPointsArray = points.slice(0, amountOfReviews);
+        if (vendor === 'Ring LLC') {
+            vendor = '2700';
+        }
 
-                                for (var items in newPointsArray) {
+        const response = await fetch("https://tosdr.org/api/1/service/" + vendor + ".json")
+        const data = await response.json();
+        try {
+            if (data.class) {
+                var points = data.points;
+                console.log("It has a grade of " + data.class);
+                try {
+                    const newPointsArray = points.slice(0, amountOfReviews);
 
-                                    reviews.push(new Reviews(data.pointsData[newPointsArray[items]].id, data.pointsData[newPointsArray[items]].title, data.pointsData[newPointsArray[items]].tosdr.case,
-                                        data.pointsData[newPointsArray[items]].tosdr.point, data.pointsData[newPointsArray[items]].tosdr.score, data.pointsData[newPointsArray[items]].tosdr.tldr));
-                                }
-                            } catch (TypeError) {
-                                console.log("Oh well item no found");
-                            }
-                            if (itemIndex || itemIndex === 0) {
-                                this.inTOSDRVendorList[itemIndex].addGradeReviews(data.class, reviews);
-                            } else {
-                                device = new ScanResults(null, null);
-                                device.addGradeReviews(data.class, reviews);
-                                device.addTOSDRVendor(vendor);
-                                console.log(device);
-                            }
+                    for (var items in newPointsArray) {
 
-                            reviews = [];
-                        } else if (data.error) {
-                            console.log(data);
-                            dataError = true;
-
-                        } else if (!data.class && !dataError) {
-
-                            console.log("Uh Oh! No grade for ", vendor);
-                            console.log("We are retrieving their Privacy Policy and TOS from TOSDR....");
-                            var url;
-                            var docType;
-
-
-                            for (const items of data.links) {
-                                console.log(items);
-                            }
-
-                            if (data.links["Privacy Policy"]) {
-                                url = data.link['Privacy Policy'].url;
-                                docType = "Privacy Policy";
-                                console.log("Link for ", vendor, data.links['Privacy Policy']);
-                            } else if (data.links["Privacy Policy "]) {
-                                url = data.links['Privacy Policy '].url;
-                                docType = "Privacy Policy";
-                                console.log("Link for ", vendor, data.links['Privacy Policy ']);
-                            } else if (data.links["Terms of Use"]) {
-                                url = data.link['Terms of Use'].url;
-                                docType = "Terms Of Service";
-                                console.log("Link for ", vendor, data.links['Terms of Use']);
-                            } else if (data.links["Conditions of Use"]) {
-                                url = data.link['Conditions of Use'].url;
-                                docType = "Terms Of Service";
-                                console.log("Link for ", vendor, data.links['Conditions of Use']);
-                            } else {
-                                console.log("No links found for : ", vendor);
-                                console.log("Here is a list of types of links we currently have...");
-                                for (const items of data.links) {
-                                    console.log(items);
-                                }
-
-                            }
-
-
-                        }
+                        reviews.push(new Reviews(data.pointsData[newPointsArray[items]].id, data.pointsData[newPointsArray[items]].title, data.pointsData[newPointsArray[items]].tosdr.case,
+                            data.pointsData[newPointsArray[items]].tosdr.point, data.pointsData[newPointsArray[items]].tosdr.score, data.pointsData[newPointsArray[items]].tosdr.tldr));
                     }
-                    catch(error){
-                        console.log(error);
+                } catch (TypeError) {
+                    console.log("Oh well item no found");
+                }
+                if (itemIndex || itemIndex === 0) {
+                    this.inTOSDRVendorList[itemIndex].addGradeReviews(data.class, reviews);
+                    return(
+                        console.log("Items added to list")
+                    );
+                } else {
+                    device = new ScanResults(null, null);
+                    device.addGradeReviews(data.class, reviews);
+                    device.addTOSDRVendor(vendor);
+                    return(
+                        device
+                    );
+                }
+
+            } else if (data.error) {
+                console.log(data);
+                dataError = true;
+
+            } else if (!data.class && !dataError) {
+
+                console.log("Uh Oh! No grade for ", vendor);
+                console.log("We are retrieving their Privacy Policy and TOS from TOSDR....");
+                var url;
+                var docType;
+
+                if (data.links) {
+                    for (var key in data.links) {
+                        if (key === 'Privacy Policy') {
+                            url = data.links[key].url;
+                            docType = key;
+                            console.log(data.links[key].url);
+                            break;
+                        } else if (key === 'Terms of Service') {
+                            url = data.links[key].url;
+                            docType = key;
+                            console.log(data.links[key].url);
+                            break;
+                        } else if (key === 'Terms of Use') {
+                            url = data.links[key].url;
+                            docType = key;
+                            console.log(data.links[key].url);
+                            break;
+                        }
                     }
 
 
+                    const response = await this.sendInfoToNLP(url, docType, data, vendor, itemIndex)
+                    return(
+                        response
+                    );
+                }
 
-                        if(data.class){
-                            var points = data.points;
-                            console.log("It has a grade of " + data.class);
-                            try{
-                                const newPointsArray = points.slice(0, amountOfReviews);
+            }
+        } catch (error) {
+            console.log(error);
+        }
 
-                                for(var items in newPointsArray){
-
-                                    reviews.push(new Reviews(data.pointsData[newPointsArray[items]].id, data.pointsData[newPointsArray[items]].title, data.pointsData[newPointsArray[items]].tosdr.case,
-                                        data.pointsData[newPointsArray[items]].tosdr.point, data.pointsData[newPointsArray[items]].tosdr.score, data.pointsData[newPointsArray[items]].tosdr.tldr));
-                                }
-                            }
-                            catch (TypeError) {
-                                console.log("Oh well item no found");
-                            }
-                            if(itemIndex || itemIndex === 0){
-                                this.inTOSDRVendorList[itemIndex].addGradeReviews(data.class, reviews);
-                            }
-                            else{
-                                device = new ScanResults(null, null);
-                                device.addGradeReviews(data.class, reviews);
-                                device.addTOSDRVendor(vendor);
-                                console.log(device);
-                            }
-
-                            reviews = [];
-                        }
-                        else{
-
-                            console.log("Uh Oh! No grade for ", vendor);
-                            console.log("We are retrieving their Privacy Policy and TOS from TOSDR....");
-                            var url;
-                            var docType;
-
-
-                            for(const items of data.links){
-                                console.log(items);
-                            }
-
-                            if(data.links["Privacy Policy"]){
-                                url = data.link['Privacy Policy'].url;
-                                docType = "Privacy Policy";
-                                console.log("Link for ", vendor,  data.links['Privacy Policy']);
-                            }
-                            else if(data.links["Privacy Policy "]){
-                                url = data.links['Privacy Policy '].url;
-                                docType = "Privacy Policy";
-                                console.log("Link for ", vendor,  data.links['Privacy Policy ']);
-                            }
-                            else if(data.links["Terms of Use"]){
-                                url = data.link['Terms of Use'].url;
-                                docType = "Terms Of Service";
-                                console.log("Link for ", vendor,  data.links['Terms of Use']);
-                            }
-                            else if(data.links["Conditions of Use"]){
-                                url = data.link['Conditions of Use'].url;
-                                docType = "Terms Of Service";
-                                console.log("Link for ", vendor,  data.links['Conditions of Use']);
-                            }else{
-                                console.log("No links found for : ", vendor);
-                                console.log("Here is a list of types of links we currently have...");
-                                for(const items of data.links){
-                                    console.log(items);
-                                }
-
-                            }
-
-
-
-                            //this.sendInfoToNLP(url, docType, data, vendor, itemIndex, false).finally(() =>{
-                            //  console.log("InfoRetrieved.. On to the next one..");
-                            //});
-
-
-
-                        }
-
-
-
-
-
-                })
-            })
-            .catch(function(error){
-                console.log('request failed', error)
-            })
     }
 
 
 
-    tosdrCheckForGrade = () => {
+    tosdrCheckForGrade = async () => {
         console.log("Checking TOSDR API....");
         var stringToCheck = "Ring LLC"
         const amountOfReviews = 8;
 
-        const scanComplete = new Promise((resolve,reject) => {
-            for(const [index,result] of this.inTOSDRVendorList.entries()){
-                this.fetchTOSDRInfo(result.tosdr_vendor, index);
-
-            }
+        for(const [index,result] of this.inTOSDRVendorList.entries()){
+            const response = await this.fetchTOSDRInfo(result.tosdr_vendor, index)
+        }
 
 
-        }).then(console.log("scan complete..."))
-            .catch(function (error) {
-                console.log('request failed', error);
-            })
-
-
-
+        console.log("Scan Complete!!!!");
+        this.storeToDB();
 
     }
 

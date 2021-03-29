@@ -2,38 +2,66 @@ import * as React from 'react';
 import {Component} from "react";
 import { StyleSheet, View, Image, Text, Button, TouchableOpacity, ListView} from 'react-native';
 import { FAB } from 'react-native-paper';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
-var userID = 'T';
-var URL = "http://127.0.0.1:3000";
+const config = require('../config');
 
-const getDeviceList = (userIDToCheck) => {
-    fetch(URL + "/users/" + userIDToCheck + "/scan").then(r  => {
-        r.json().then((data) => {
-            console.log(data);
-            if(!data[0].ip){
-                console.log("You have no devices previously scanned...");
-            }
-            else{
-                console.log(data);
-            }
-        })
-    })
+
+const getData = async () => {
+    try {
+        const value = await AsyncStorage.getItem(config.id_key)
+        if(value !== null) {
+            return value;
+        }
+    } catch(e) {
+        console.log(e);
+    }
 }
 
 
 class HomeScreen extends Component{
+    deviceList= [];
 
     constructor(props) {
         super(props);
         this.state = {
-            userID:"T",
-            deviceList:[{wifi_vendor:"apple", grade:'D'},{wifi_vendor:"hp", grade:'A'},{wifi_vendor:"samsung", grade:'F'},{wifi_vendor:"amazon", grade:'D'}]
+            userID:null,
         }
 
     }
 
-    componentDidMount() {
-        //getDeviceList(this.state.userID);
+    async componentDidMount() {
+        const testing = this.props.navigation.addListener('focus', async() => {
+            const getUser = await getData();
+            this.setState({userID:getUser});
+            this.deviceList = [];
+            console.log(this.state.userID);
+            if(this.state.userID){
+                const response = await fetch(config.backend_endpoint + "/users/" + this.state.userID + "/scan");
+                const json = await response.json();
+                try{
+                    for(const items of json){
+                        this.deviceList.push(items);
+                    }
+                }
+                catch{
+                    if(!json.error){
+                        console.log("No devices currently in database");
+                    }
+
+                }
+
+                console.log(this.deviceList);
+            }
+
+
+        })
+
+    }
+
+    componentWillUnmount() {
+
     }
 
     alertItemName = (item) => {
@@ -47,7 +75,7 @@ class HomeScreen extends Component{
                 <Text>Home Screen</Text>
                 <Button
                     title="Go to Scanning Screen"
-                    onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:userID})}
+                    onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}
                 />
 
                 <Button

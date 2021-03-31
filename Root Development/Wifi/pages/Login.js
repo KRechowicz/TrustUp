@@ -9,13 +9,17 @@
 import React, { Component } from 'react';
 import {
     Alert,
-    Button,
+    // Button,
     StyleSheet,
-    Text,
-    View
+    // Text
+    View,
+    Image, Dimensions
 } from 'react-native';
 import Auth0 from 'react-native-auth0';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {DefaultTheme, Provider as PaperProvider, Title, Button, Paragraph} from "react-native-paper";
+
+const SCREENSIZE = Dimensions.get('screen');
 
 var credentials = require('../configs/auth0-configuration');
 const auth0 = new Auth0(credentials);
@@ -164,19 +168,29 @@ class Login extends Component {
     };
 
     render() {
-        let loggedIn = this.state.accessToken === null ? false : true;
+        // let loggedIn = this.state.accessToken === null ? false : true;
         return (
-            <View style = { styles.container }>
-                <Text style = { styles.header }> Auth0Sample - Login </Text>
-                <Text>
-                    You are{ loggedIn ? ' ' : ' not ' }logged in . </Text>
-                <Button onPress = { () => this.webAuth('google-oauth2')}
-                        title = { loggedIn ? 'Log Out' : 'Log In' }/>
-            </View >
+            <PaperProvider>
+                <View style = { styles.container }>
+                    <Image source={require('../Images/TrustUPLogo.png')} style={styles.image} />
+                    <Title style = { styles.header }> Welcome to our App! </Title>
+                    <Paragraph style={styles.text}> Apple Login </Paragraph>
+                    <Button mode="contained" style={styles.button}
+                            onPress = { () => this.webAuth('google-oauth2')}>
+                        Log In
+                    </Button>
+                </View>
+            </PaperProvider>
         );
     }
 }
+//title = { loggedIn ? 'Log Out' : 'Log In' }
 
+/*
+<Text> You are currently{ loggedIn ? ' ' : ' not ' }logged in . </Text>
+ */
+
+/*
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -190,5 +204,52 @@ const styles = StyleSheet.create({
         margin: 10
     }
 });
+*/
+
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#0060a9',
+        accent: '#f3cd1f',
+    },
+};
+
+const styles = StyleSheet.create({
+    header: {
+        fontSize: 26,
+        color: theme.colors.primary,
+        fontWeight: 'bold',
+        paddingVertical: 14,
+    },
+    image: {
+        width: 256,
+        height: 128,
+        marginBottom: 12,
+        marginLeft: SCREENSIZE.width * .020,
+        // alignItems: 'center',
+        // alignContent: 'center',
+    },
+    container: {
+        flex: 1,
+        //padding: 20,
+        //width: '100%',
+        //maxWidth: 340,
+        alignSelf: 'center',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    button:{
+        marginVertical: 20,
+        backgroundColor: theme.colors.primary,
+        //fontColor: '#000000'
+        //textColor: '#000000'
+    },
+    text:{
+        fontSize: 20
+    }
+});
+
 
 export default Login;

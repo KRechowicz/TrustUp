@@ -22,11 +22,9 @@ const getData = async () => {
     }
 }
 
-const sendToDB = async(userID, device) => {
-
-///Append to database list
-
-    const nlpInfo = await fetch(config.backend_endpoint + '/users/B/scan', {
+const addDevice = async (device, navigation) => {
+    const getID = await getData();
+    const response = await fetch(config.backend_endpoint + "/users/" + getID + "/scan/addDevice", {
         method: 'POST',
         headers: {
             Accept: 'application/json',
@@ -34,8 +32,7 @@ const sendToDB = async(userID, device) => {
         },
         body: JSON.stringify(device)
     });
-
-    console.log("Stored to Database");
+    navigation.navigate('HomeScreen');
 }
 
 const UnknownVendorDisplay = ({navigation, route}) => {
@@ -46,7 +43,7 @@ const UnknownVendorDisplay = ({navigation, route}) => {
 
     // console.log(vendorObject);
 
-    const sendInfoToNLP = async(url, docType, vendor) => {
+    const sendInfoToNLP = async() => {
         console.log("Sending info to NLP...Waiting For grade...");
         var device = null;
         const response = await fetch(config.backend_endpoint + '/sendToNLP', {
@@ -57,15 +54,15 @@ const UnknownVendorDisplay = ({navigation, route}) => {
             },
             body: JSON.stringify({
                 url: url,
-                docType: docType
+                docType: "Privacy Policy"
             })
         })
         const data = await response.json();
         device = new ScanResults(null, null);
         device.addGradeReviews(data.grade, null);
-        device.addTOSDRVendor(vendor);
+        device.addTOSDRVendor(companyName);
         console.log(device);
-        navigation.navigate('HomeScreen')
+        addDevice(device, navigation);
     }
 
 
@@ -82,8 +79,7 @@ const UnknownVendorDisplay = ({navigation, route}) => {
                 </Text>
 
                 <List.Section style={styles.row}>
-                    <Button mode="contained" style={styles.button} onPress={() => {sendInfoToNLP(url, docType, vendor, userID);
-                        navigation.navigate('HomeScreen');}}>
+                    <Button mode="contained" style={styles.button} onPress={() => {sendInfoToNLP()}}>
                         Trust Us
                     </Button>
 

@@ -219,8 +219,8 @@ app.post('/users/:userId/scan/deleteDevice', function (req, res) {
         }
         if (result.Item) {
             try{
-                console.log("Ip we are removing is", ipToRemove);
-                if(indexToRemove){
+                console.log("Ip we are removing is", indexToRemove);
+                if(indexToRemove || indexToRemove === '0'){
                     indexDeviceToRemove = indexToRemove;
                 }
                 else{
@@ -231,8 +231,6 @@ app.post('/users/:userId/scan/deleteDevice', function (req, res) {
                     }
                     console.log(result.Item.scan.devices[indexDeviceToRemove]);
                 }
-
-
 
                 if(indexDeviceToRemove){
                     const newParams = {
@@ -282,7 +280,12 @@ app.post('/users/:userId/scan/addDevice', function (req, res) {
             ':devVal': list
         },
     }
-    docClient.update(params).promise().then(r => console.log("Item added"));
+    docClient.update(params).promise().then(r => {
+        res.json(req.body);
+        console.log("Item added")
+    });
+
+
 })
 
 

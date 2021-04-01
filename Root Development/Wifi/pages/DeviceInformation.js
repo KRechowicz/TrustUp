@@ -1,11 +1,12 @@
 import * as React from 'react';
-import { Image, View, Text, StyleSheet } from "react-native";
-import { DefaultTheme, Provider as PaperProvider, Button } from "react-native-paper";
+import {Image, View, Text, StyleSheet, Dimensions} from "react-native";
+import {DefaultTheme, Provider as PaperProvider, Button, Subheading, TextInput} from "react-native-paper";
 import HomeScreen from '../pages/Home'
 import ScanResults from "../Objects/ScanResult";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const config = require('../config');
+const SCREENSIZE = Dimensions.get('screen');
 
 const getData = async () => {
     try {
@@ -38,9 +39,10 @@ const deleteDevice = async (ip, index, navigation) => {
 const DeviceModal = ({ navigation, route}) => {
     let isIndex = true;
     let isGrade = true;
+    let isManuallyAdded = false;
     const {item, index} = route.params;
 
-    if(!index){
+    if(!index && index !== 0){
         isIndex = false;
     }
 
@@ -48,33 +50,53 @@ const DeviceModal = ({ navigation, route}) => {
         isGrade = false
     }
 
+    if(item.ip === "Manually Added"){
+        isManuallyAdded = true;
+    }
+
+
     console.log(index);
     return (
         <PaperProvider theme={theme}>
-            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-                <Text>{item.wifi_vendor}</Text>
-                <Text>Grade: { isGrade ? item.grade: 'Unknown'}</Text>
-                <Button mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
-                    { isIndex ? 'Remove from List' : 'Add to List' }
-                </Button>
-            </View>
+            <>
+                <View style={styles.innerBody}>
+                    <Subheading>
+                        Vendor Name : { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
+                    </Subheading>
+
+                    <Subheading>
+                        Grade: { isGrade ? item.grade: 'Unknown'}
+                    </Subheading>
+
+                    <Button mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
+                        { isIndex ? 'Remove from List' : 'Add to List' }
+                    </Button>
+                </View>
+            </>
         </PaperProvider>
+
     );
 }
 
 const styles = StyleSheet.create({
-    scanButton: {
-        padding: 10,
-        marginTop: 30,
-        marginBottom: 30,
-        marginLeft: 50,
-        marginRight: 50,
-        borderColor: "#111",
-        borderRadius: 10,
-        backgroundColor: '#0060A9',
-
+    innerBody: {
+        //alignItems: 'center',
+        //position: 'absolute',
+        flex: 0.4,
+        paddingVertical: SCREENSIZE.height * .05,
+        paddingHorizontal: SCREENSIZE.width * .05,
+    },
+    paddingStyle:{
+        padding: 10
+    },
+    input:{
+        margin: 4,
+    },
+    button:{
+        margin: 4,
     }
 })
+
 const theme = {
     ...DefaultTheme,
     roundness: 2,
@@ -82,9 +104,8 @@ const theme = {
         ...DefaultTheme.colors,
         primary: '#0060a9',
         accent: '#f3cd1f',
-
     },
-}
+};
 
 
 export default DeviceModal;

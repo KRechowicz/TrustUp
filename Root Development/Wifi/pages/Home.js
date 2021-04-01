@@ -1,12 +1,26 @@
 import * as React from 'react';
 import {Component} from "react";
-import {StyleSheet, View, Image, Text, TouchableOpacity, ListView, FlatList, SafeAreaView, ScrollView, TextInput} from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Image,
+    Text,
+    TouchableOpacity,
+    ListView,
+    FlatList,
+    SafeAreaView,
+    ScrollView,
+    TextInput,
+    Dimensions
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import { FAB, DefaultTheme, Provider as PaperProvider, Button, List } from 'react-native-paper';
 import { SearchBar, ListItem } from "react-native-elements";
 
 const config = require('../config');
+
+const SCREENSIZE = Dimensions.get('screen');
 
 
 
@@ -142,14 +156,19 @@ class HomeScreen extends Component{
 
     renderItem = ({ item, index }) => {
         let isGrade = true;
+        let isManuallyAdded = false;
 
         if(!item.grade){
             isGrade = false;
         }
+
+        if(item.ip === "Manually Added"){
+            isManuallyAdded = true;
+        }
         return(
             <TouchableOpacity onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})}>
                 <List.Item
-                    title={"Vendor Name : " + item.wifi_vendor}
+                    title={ isManuallyAdded ? "Vendor Name: " + item.tosdr_vendor: "Vendor Name: " + item.wifi_vendor}
                     description={isGrade? "Grade : "+ item.grade : "Grade : Unknown"}
                     theme={styles.theme}
                 />
@@ -167,7 +186,7 @@ class HomeScreen extends Component{
             <View style={styles.container}>
                 {/*<TextInput placeholder="Search" style={{padding:5}}*/}
                 {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
-                           <View style={styles.buttonContainer}>
+                           <View style={styles.paddingStyle}>
                                <Button mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
                                Scan for my Devices
                                 </Button>
@@ -180,7 +199,7 @@ class HomeScreen extends Component{
                     />
                 </View>
 
-                <View style={styles.buttonContainer}>
+                <View style={styles.paddingStyle}>
                     <Button mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
                         Submit Unknown Vendor for Grading
                     </Button>
@@ -290,19 +309,16 @@ class HomeScreen extends Component{
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#EBEBEB',
-        padding: 10,
-        marginTop: 3,
+        flex: 0.2,
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .02,
+        paddingHorizontal: SCREENSIZE.width * .05
     },
-    buttonContainer:{
-        flex: 1,
-        backgroundColor: '#EBEBEB',
-        padding: 10,
-        marginTop: 3,
+    paddingStyle:{
+        padding: 10
     },
     listContainer: {
-        height:500,
+        height:600,
         flexGrow: 1,
         padding: 10,
         backgroundColor: '#EBEBEB',

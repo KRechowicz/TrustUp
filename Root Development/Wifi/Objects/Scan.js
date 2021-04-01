@@ -94,6 +94,7 @@ export default class Scan extends Component {
         console.log("Listener Registered.")
 
         this.scan();
+        //this.searchButton();
 
     }
     componentWillUnmount() {
@@ -120,22 +121,6 @@ export default class Scan extends Component {
         });
 
 
-
-
-
-    }
-
-    storeOneDeviceToDB = (device) =>{
-        fetch(config.backend_endpoint + '/users/'+ this.state.userID +'/scan', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(device)
-        });
-
-        console.log("Stored to Database");
     }
 
     scan = () => {
@@ -236,6 +221,7 @@ export default class Scan extends Component {
         catch (TypeError) {
             console.log("Oh well item no found");
         }
+
 
         this.inTOSDRVendorList[itemIndex].addGradeReviews(json.class, reviews);
         return(
@@ -376,7 +362,7 @@ export default class Scan extends Component {
 
     searchButton = () => {
         console.log("User search for Samsung....");
-        this.fetchTOSDRInfo("samsung", null);
+        this.fetchTOSDRInfo("amazon", null);
     }
 
     unknownVendorButton = (url, doctype, vendor, product) => {

@@ -8,6 +8,7 @@ import UnknownVendorScreen from './pages/UnknownVendor';
 import UnknownVendorDisplayScreen from './pages/UnknownVendorDisplay';
 import Home from "./pages/Home";
 import {Component} from "react";
+import DeviceModal from "./pages/DeviceInformation"
 
 const Stack = createStackNavigator();
 
@@ -36,6 +37,7 @@ export default class App extends Component{
                             <Stack.Screen name="ScanningScreen" component={ScanScreen} />
                             <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} />
                             <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} />
+                            <Stack.Screen name="DeviceModal" component={DeviceModal} />
                         </Stack.Navigator>
                     </NavigationContainer>
 

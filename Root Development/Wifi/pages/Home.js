@@ -1,11 +1,14 @@
 import * as React from 'react';
 import {Component} from "react";
-import { StyleSheet, View, Image, Text, Button, TouchableOpacity, ListView} from 'react-native';
-import { FAB } from 'react-native-paper';
+import {StyleSheet, View, Image, Text, TouchableOpacity, ListView, FlatList, SafeAreaView, ScrollView, TextInput} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
+import { FAB, DefaultTheme, Provider as PaperProvider, Button, List } from 'react-native-paper';
+import { SearchBar, ListItem } from "react-native-elements";
 
 const config = require('../config');
+
+
 
 
 const getData = async () => {
@@ -19,30 +22,88 @@ const getData = async () => {
     }
 }
 
+const deleteDevice = async (userID, ip, index) => {
+    console.log("WHAT the fuck", userID);
+    const response = await fetch(config.backend_endpoint + "/users/" + userID + "/scan/deleteDevice", {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ip: ip, index:index})
+    });
+    //console.log(response.json());
+}
+
+const addDevice = async (userID, device) => {
+    const response = await fetch(config.backend_endpoint + "/users/" + userID + "/scan/addDevice", {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(device)
+    });
+    //console.log(response.json());
+}
+
 
 class HomeScreen extends Component{
-    deviceList= [];
+    SearchList = ['Sony','paypal','spotify','pure','netflix','apple','microsoft','vk','yahoo','icloud','ask','hulu','signal','pocket','nvidia','bitdefender','sync','medium','brave','huawei','xiaomi','facebook','adobe','Element','amazon','Cisco','google','Rumble','slack','bitdefender','tosdr_vendor','symantec','service','sprint','virgin','cnet','bing','quake','multiple','lorea','onlive','king','cox','rac','enjin','none','uber','ello','mega','wix','looki','toggle','vero','identica','fitbit','taco','centurylink','jawbone','nokia','npr','flow','tmobile','path','revolut','Current','restream','canary','verizon','vive','bethesda','razer','drop','comcast','Reuters','bit','nsa','visions','chip','genius','emp','nrc','dudle','alza','shadow','baidu','inspire','target','nintendo','aol','vox','notion','garmin','waterfall','chase','honey','myspace','forbes','niche','gmx','hq','ixl','finn','leo','nexon','leet','minds','brilliant','gab','Trakt','yr','parsec','yase','icann','anki','grab','geco','akamai','chegg','bose','deepl','alpha','wired','dra','sophos','overleaf','byte','ebird','intercom','August Home','etsy','Nebula','xing','sony','visible','discovery','[spamtobedeleted]','adafruit','loom','xero','mla','whirlpool','matrix','pandora','oculus','yandex','ebay','mimo','samsung','petco','wire','adk','Logitech','Briar','Lenovo','Asus','Netgear','Sony','Motorola','Linksys','Belkin','TomTom','LYKA','Sweet','ADT','Ring LLC','Vice','Dash','Unity','Affirm','LogMeIn','amazon'];
+    //deviceList:[];
 
     constructor(props) {
         super(props);
         this.state = {
             userID:null,
+            searchText: "",
+            selectedId: -1,
+            data: [],
+            filteredData: [],
+            deviceList:[]
+
         }
 
     }
 
     async componentDidMount() {
-        const testing = this.props.navigation.addListener('focus', async() => {
-            const getUser = await getData();
-            this.setState({userID:getUser});
-            this.deviceList = [];
+
+        const getUser = await getData();
+        this.setState({userID:getUser});
+
+        // Need to call this twice because focus listener is not called on initial mount for some reason
+        const list = [];
+        console.log(this.state.userID);
+        if(this.state.userID){
+            const response = await fetch(config.backend_endpoint + "/users/" + this.state.userID + "/scan");
+            const json = await response.json();
+            try{
+                for(const items of json){
+                    list.push(items);
+                }
+            }
+            catch{
+                if(!json.error){
+                    console.log("No devices currently in database");
+                }
+
+            }
+
+            this.setState({deviceList:list});
+
+            //console.log(this.deviceList);
+        }
+
+
+        const listener = await this.props.navigation.addListener('focus', async() => {
+            const list = [];
             console.log(this.state.userID);
             if(this.state.userID){
                 const response = await fetch(config.backend_endpoint + "/users/" + this.state.userID + "/scan");
                 const json = await response.json();
                 try{
                     for(const items of json){
-                        this.deviceList.push(items);
+                        list.push(items);
                     }
                 }
                 catch{
@@ -52,17 +113,276 @@ class HomeScreen extends Component{
 
                 }
 
-                console.log(this.deviceList);
+                this.setState({deviceList:list});
             }
 
 
         })
 
+        console.log(this.state.deviceList);
     }
 
     componentWillUnmount() {
+        this.props.navigation.removeListener('focus');
+        console.log('Removed');
+    }
+    alertItemName = (item) => {
+        alert(item.grade)
+    }
+    search = (searchText) => {
+        this.setState({searchText: searchText});
+
+        let filteredData = this.state.data.filter(function (item) {
+            return item.SearchList.includes(searchText);
+        });
+
+        this.setState({filteredData: filteredData});
+    };
+
+
+    renderItem = ({ item, index }) => {
+        let isGrade = true;
+
+        if(!item.grade){
+            isGrade = false;
+        }
+        return(
+            <TouchableOpacity onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})}>
+                <List.Item
+                    title={"Vendor Name : " + item.wifi_vendor}
+                    description={isGrade? "Grade : "+ item.grade : "Grade : Unknown"}
+                    theme={styles.theme}
+                />
+            </TouchableOpacity>
+
+        );
+
 
     }
+
+    render(){
+
+        return(
+            <PaperProvider theme={theme}>
+            <View style={styles.container}>
+                {/*<TextInput placeholder="Search" style={{padding:5}}*/}
+                {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
+                           <View style={styles.buttonContainer}>
+                               <Button mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
+                               Scan for my Devices
+                                </Button>
+                           </View>
+                <View style={styles.listContainer}>
+                <FlatList
+                    data={this.state.deviceList}
+                    keyExtractor= {(item, index) => index.toString()}
+                    renderItem={this.renderItem}
+                    />
+                </View>
+
+                <View style={styles.buttonContainer}>
+                    <Button mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
+                        Submit Unknown Vendor for Grading
+                    </Button>
+                </View>
+            </View>
+            </PaperProvider>
+/*
+            <SafeAreaView style={styles.container}>
+                <FlatList
+                    data={this.state.deviceList}
+                    renderItem={this.renderItem}
+                    keyExtractor={(item, index) => index.toString()}
+
+                />
+            </SafeAreaView>
+
+
+
+ */
+
+            // <PaperProvider theme={theme}>
+            //     <SafeAreaView style={styles.container}>
+            //         <FlatList data={this.state.deviceList} renderItem={this.renderItem}
+            //         />
+            //
+            //         <View style={styles.search}>
+            //             <SearchBar
+            //                 round={true}
+            //                 lightTheme={true}
+            //                 placeholder="Search for Devices..."
+            //                 autoCapitalize='none'
+            //                 autoCorrect={false}
+            //                 onChangeText={this.search}
+            //                 value={this.state.searchText}
+            //                 style={styles.searchInput}
+            //             />
+            //             <FlatList
+            //                 data={this.state.filteredData && this.state.filteredData.length > 0 ? this.state.filteredData : this.state.data}
+            //                 keyExtractor={(item) => `item-${item}`}
+            //                 renderItem={({item}) => <searchList
+            //                     id={item}
+            //
+            //                 />}
+            //                 ItemSeparatorComponent={() => <View style={styles.separator}/>}
+            //             />
+            //         </View>
+            //
+            //         <Button mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}
+            //                 style = {styles.scanButton}
+            //                 icon = 'camera'>
+            //             <Text style = {styles.scanText}>
+            //                 Scan for my Devices
+            //             </Text>
+            //         </Button>
+            //         <Text style = {styles.homeText}>
+            //             Your Devices:
+            //         </Text>
+            //
+            //         <FlatList data={this.state.deviceList} renderItem={this.renderItem}
+            //                   />
+            //
+            //         {/*{*/}
+            //         {/*    this.state.deviceList.map((item, index) => (*/}
+            //
+            //         {/*        <Button*/}
+            //         {/*            accessible={true}*/}
+            //         {/*            accessibilityLabel="Go to device information screen"*/}
+            //         {/*            accessibilityHint="Navigates to device information screen"*/}
+            //         {/*            mode="contained"*/}
+            //         {/*            key = {item.wifi_vendor}*/}
+            //         {/*            //style = {styles.container}*/}
+            //         {/*            onPress={() => this.props.navigation.navigate('DeviceModal')}*/}
+            //         {/*            style = {styles.modalButton}>*/}
+            //         {/*            <Text style = {styles.buttonText}>*/}
+            //         {/*                {item.wifi_vendor}*/}
+            //         {/*            </Text>*/}
+            //         {/*        </Button>*/}
+            //         {/*    ))*/}
+            //         {/*}*/}
+            //         <Button mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')} style = {styles.scanButton}>
+            //             <Text style = {styles.scanText}>
+            //                 Go to Unknown Page
+            //             </Text>
+            //         </Button>
+            //     </SafeAreaView>
+            // </PaperProvider>
+            //
+            // //     <Button
+            // //         title="Go to Scanning Screen"
+            // //         onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}
+            // //     />
+            // //
+            // //     <Button
+            // //         title = "Go to Unknown Page"
+            // //         onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
+            // //     />
+            // // </View>
+
+
+
+
+        );
+
+    }
+
+}
+
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: '#EBEBEB',
+        padding: 10,
+        marginTop: 3,
+    },
+    buttonContainer:{
+        flex: 1,
+        backgroundColor: '#EBEBEB',
+        padding: 10,
+        marginTop: 3,
+    },
+    listContainer: {
+        height:500,
+        flexGrow: 1,
+        padding: 10,
+        backgroundColor: '#EBEBEB',
+    },
+    icon:{
+        width:30,
+        height:30,
+    },
+    iconBtnSearch:{
+        alignSelf:'center'
+    },
+    inputs:{
+        height:45,
+        marginLeft:16,
+        borderBottomColor: '#FFFFFF',
+        flex:1,
+    },
+    inputIcon:{
+        marginLeft:15,
+        justifyContent: 'center'
+    },
+    notificationList:{
+        marginTop:20,
+        padding:10,
+    },
+    card: {
+        height:null,
+        paddingTop:10,
+        paddingBottom:10,
+        marginTop:5,
+        backgroundColor: '#FFFFFF',
+        flexDirection: 'column',
+        borderTopWidth:40,
+        marginBottom:20,
+    },
+    cardContent:{
+        flexDirection:'row',
+        marginLeft:10,
+    },
+    imageContent:{
+        marginTop:-40,
+    },
+    tagsContent:{
+        marginTop:10,
+        flexWrap:'wrap'
+    },
+    image:{
+        width:60,
+        height:60,
+        borderRadius:30,
+    },
+    name:{
+        fontSize:20,
+        fontWeight: 'bold',
+        marginLeft:10,
+        alignSelf: 'center'
+    },
+    btnColor: {
+        padding:10,
+        borderRadius:40,
+        marginHorizontal:3,
+        backgroundColor: "#eee",
+        marginTop:5,
+    },
+});
+
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    fontSize:90,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#0060a9',
+        accent: '#f3cd1f',
+
+    },
+}
+
+export default HomeScreen;
+    /*
 
     alertItemName = (item) => {
         alert(item.grade)
@@ -83,9 +403,6 @@ class HomeScreen extends Component{
                     onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
                 />
             </View>
-
-
-
 
         );
 
@@ -139,3 +456,5 @@ const styles = StyleSheet.create({
 })
 
 export default HomeScreen;
+
+     */

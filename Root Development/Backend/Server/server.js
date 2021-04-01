@@ -150,7 +150,7 @@ app.post('/users/:userID/scan', (req, res) => {
         }
     };
 
-    docClient.put(params, (error) => {
+    docClient.update(params, (error) => {
         if (error) {
             console.log(error);
             //res.status(400).json({ error: 'Could not create user' });
@@ -196,6 +196,93 @@ app.get('/users/:userId/scan', function (req, res) {
             res.status(404).json({ error: null });
         }
     });
+})
+
+///Deleting a device from a users stored device list
+app.post('/users/:userId/scan/deleteDevice', function (req, res) {
+    AWS.config.update(config.aws_remote_config);
+    console.log("HELLO");
+    const docClient = new AWS.DynamoDB.DocumentClient();
+    const ipToRemove = req.body.ip;
+    const indexToRemove = req.body.index;
+    let indexDeviceToRemove = null;
+    const params = {
+        TableName: config.aws_table_name,
+        Key: {
+            userID: req.params.userId,
+        },
+    }
+    docClient.get(params, (error, result) => {
+        if (error) {
+            console.log(error);
+            res.status(400).json({ error: null });
+        }
+        if (result.Item) {
+            try{
+                console.log("Ip we are removing is", ipToRemove);
+                if(indexToRemove){
+                    indexDeviceToRemove = indexToRemove;
+                }
+                else{
+                    for(const [index,item] of result.Item.scan.devices.entries()){
+                        if(ipToRemove === item.ip){
+                            indexDeviceToRemove = index;
+                        }
+                    }
+                    console.log(result.Item.scan.devices[indexDeviceToRemove]);
+                }
+
+
+
+                if(indexDeviceToRemove){
+                    const newParams = {
+                        TableName: config.aws_table_name,
+                        Key: {
+                            userID: req.params.userId,
+                        },
+                        UpdateExpression: `REMOVE #scn.#dev[${indexDeviceToRemove}]`,
+                        ExpressionAttributeNames:{
+                            '#scn': 'scan',
+                            '#dev': 'devices'
+                        }
+                    }
+
+                    docClient.update(newParams).promise().then(r => console.log("Item deleted"));
+                }
+
+
+                res.json(result.Item.scan.devices);
+            }
+            catch (e) {
+                res.json([{ip: null}, {ip:null}]);
+            }
+        } else {
+            res.status(404).json({ error: null });
+        }
+    });
+})
+
+///Adding a device from a users stored device list
+app.post('/users/:userId/scan/addDevice', function (req, res) {
+    AWS.config.update(config.aws_remote_config);
+    const docClient = new AWS.DynamoDB.DocumentClient();
+
+    const list = [req.body];
+    const params = {
+        TableName: config.aws_table_name,
+        Key: {
+            userID: req.params.userId,
+        },
+        UpdateExpression: `SET #scn.#dev = list_append(:devVal, #scn.#dev)`,
+        ExpressionAttributeNames:{
+            '#scn': 'scan',
+            '#dev': 'devices'
+        },
+        ExpressionAttributeValues:{
+            ':devVal': list
+        },
+    }
+    docClient.update(params).promise().then(r => console.log("Item added"));
 })
 
 

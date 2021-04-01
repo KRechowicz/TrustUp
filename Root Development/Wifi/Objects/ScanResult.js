@@ -34,7 +34,7 @@ export default class myClass {
     getVendor(){
         var vendor = oui(this.mac);
         if(vendor == null){
-            this.wifi_vendor = "Unknown_Vendor";
+            this.wifi_vendor = "Unknown Vendor";
         }
         else{
             this.wifi_vendor = vendor;

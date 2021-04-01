@@ -11,9 +11,10 @@ target 'Wifi_TrustUp' do
   permissions_path = '../node_modules/react-native-permissions/ios'
   pod 'Permission-Siri', :path => "#{permissions_path}/Siri"
 
-
-
   pod 'RNRnLanScan', :path => '../node_modules/react-native-rn-lan-scan'
+
+  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
+
 
 
 

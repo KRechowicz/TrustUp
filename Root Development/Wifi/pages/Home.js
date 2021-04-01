@@ -318,7 +318,7 @@ const styles = StyleSheet.create({
         padding: 10
     },
     listContainer: {
-        height:600,
+        height:SCREENSIZE.height * 0.7,
         flexGrow: 1,
         padding: 10,
         backgroundColor: '#EBEBEB',

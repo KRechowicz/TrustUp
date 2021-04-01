@@ -19,7 +19,12 @@ import Auth0 from 'react-native-auth0';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {DefaultTheme, Provider as PaperProvider, Title, Button, Paragraph} from "react-native-paper";
 
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+
+
 const SCREENSIZE = Dimensions.get('screen');
+
+import { Logo } from '../Images';
 
 var credentials = require('../configs/auth0-configuration');
 const auth0 = new Auth0(credentials);
@@ -172,12 +177,12 @@ class Login extends Component {
         return (
             <PaperProvider>
                 <View style = { styles.container }>
-                    <Image source={require('../Images/TrustUPLogo.png')} style={styles.image} />
+                    <Image source={Logo} style={styles.image}  />
                     <Title style = { styles.header }> Welcome to our App! </Title>
                     <Paragraph style={styles.text}> Apple Login </Paragraph>
-                    <Button mode="contained" style={styles.button}
+                    <Button mode="contained" style={styles.button} icon='google'
                             onPress = { () => this.webAuth('google-oauth2')}>
-                        Log In
+                        Sign in with Google
                     </Button>
                 </View>
             </PaperProvider>
@@ -224,8 +229,8 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
     },
     image: {
-        width: 256,
-        height: 128,
+        width: 100,
+        height: 100,
         marginBottom: 12,
         marginLeft: SCREENSIZE.width * .020,
         // alignItems: 'center',

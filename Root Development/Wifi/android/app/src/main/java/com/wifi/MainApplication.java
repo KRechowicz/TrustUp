@@ -6,6 +6,7 @@ import com.facebook.react.PackageList;
 import com.facebook.react.ReactApplication;
 import com.oblador.vectoricons.VectorIconsPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 //import com.rnfs.RNFSPackage;
 import com.rnlanscan.RNRnLanScanPackage;
 //import com.peel.react.TcpSocketsModule;

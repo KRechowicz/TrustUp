@@ -1,9 +1,13 @@
 import * as React from 'react';
-import { StyleSheet, View, Image, Text, Button} from 'react-native';
+import { Appbar, Subheading, Button, DefaultTheme, List, Text, Provider as PaperProvider } from 'react-native-paper'
+import { StyleSheet, View, Dimensions, Linking } from "react-native";
+
 import { FAB } from 'react-native-paper';
 import Reviews from "../Objects/Reviews";
 import ScanResults from "../Objects/ScanResult";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const SCREENSIZE = Dimensions.get('screen');
 
 const config = require('../config');
 
@@ -32,14 +36,15 @@ const sendToDB = async(userID, device) => {
     });
 
     console.log("Stored to Database");
-
 }
 
 const UnknownVendorDisplay = ({navigation, route}) => {
 
-    const {vendor, docType, url} = route.params;
+    const {companyName, url, displayURL} = route.params;
 
-    console.log(vendor);
+    // const vendorObject = JSON.parse(vendor);
+
+    // console.log(vendorObject);
 
     const sendInfoToNLP = async(url, docType, vendor) => {
         console.log("Sending info to NLP...Waiting For grade...");
@@ -65,18 +70,30 @@ const UnknownVendorDisplay = ({navigation, route}) => {
 
 
     return (
+        <PaperProvider theme={theme}>
+            <View style={styles.innerBody}>
+                <Subheading>
+                    We believe that this is the correct document to process:
+                </Subheading>
 
-        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-            <Text>Home Screen</Text>
-            <Button
-                title="Trust Us"
-                onPress={() => sendInfoToNLP(url, docType, vendor)}
-            />
-            <Button
-                title="Dont Trust Us"
-                onPress={() => navigation.navigate('HomeScreen')}
-            />
-        </View>
+                <Text style={styles.link}
+                      onPress={() => Linking.openURL(url)}>
+                    {displayURL}
+                </Text>
+
+                <List.Section style={styles.row}>
+                    <Button mode="contained" style={styles.button} onPress={() => {sendInfoToNLP(url, docType, vendor, userID);
+                        navigation.navigate('HomeScreen');}}>
+                        Trust Us
+                    </Button>
+
+                    <Button mode="contained" style={styles.button} onPress={() => {navigation.navigate('HomeScreen')}}>
+                        Don't Trust Us
+                    </Button>
+                </List.Section>
+            </View>
+        </PaperProvider>
+
         /*
     <View style = { styles.container }>
 
@@ -92,53 +109,55 @@ const UnknownVendorDisplay = ({navigation, route}) => {
         onPress={() => navigation.navigate('UnknownVendorScreen')}
     />
     </View >
-
          */
     );
 }
 
+/*
+<Text style={styles.link}>
+    {vendor.TOS}
+</Text>
+*/
+
 const styles = StyleSheet.create({
-    container: {
-        paddingTop: 200,
-        flex: 1,
+    innerBody: {
+        flex: 0.2,
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .02,
+        paddingHorizontal: SCREENSIZE.width * .05
+    },
+    /*
+    subheading:{
+        fontSize: 20
+    },
+    */
+    row: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .01,
+        paddingHorizontal: SCREENSIZE.width * .05
     },
-    box1: {
-        width: 75,
-        height: 75,
-        // Uncomment the following style to see flex effects
-        //flex: 1,
-        backgroundColor: 'steelblue'
+    button: {
+        margin: 4
     },
-    box2: {
-        width: 75,
-        height: 75,
-        // Uncomment the following style to see flex effects
-        //flex: 2,
-        backgroundColor: 'pink'
+    link: {
+        paddingVertical: SCREENSIZE.height * .02,
+        paddingHorizontal: SCREENSIZE.width * .05,
+        margin: 3,
+        fontSize: 18,
+        color: '#0060a9'
+    }
+});
+
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#0060a9',
+        accent: '#f3cd1f',
     },
-    box3: {
-        width: 75,
-        height: 75,
-        // Uncomment the following style to see flex effects
-        //flex: 3,
-        backgroundColor: 'orange'
-    },
-    textStyle: {
-        color: 'black',
-        alignSelf: 'center',
-        margin: 25,
-    },
-    fab: {
-        position: 'absolute',
-        margin: 16,
-        right: 0,
-        bottom: 0,
-    },
-    logo: {
-        width: 66,
-        height: 58,
-    },
-})
+};
 
 export default UnknownVendorDisplay;

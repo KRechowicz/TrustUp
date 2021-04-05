@@ -1,6 +1,6 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet, Dimensions} from "react-native";
-import {DefaultTheme, Provider as PaperProvider, Button, Subheading, TextInput} from "react-native-paper";
+import {Image, View, Text, StyleSheet, Dimensions, FlatList, ListView} from "react-native";
+import {DefaultTheme, Provider as PaperProvider, Button, Subheading, List, DataTable} from "react-native-paper";
 import HomeScreen from '../pages/Home'
 import ScanResults from "../Objects/ScanResult";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -34,7 +34,9 @@ const deleteDevice = async (ip, index, navigation) => {
     //console.log(response.json());
 }
 
-
+const renderItem = (rowData) => {
+    return (<Text>{rowData.title}</Text>);
+}
 
 const DeviceModal = ({ navigation, route}) => {
     let isIndex = true;
@@ -54,21 +56,65 @@ const DeviceModal = ({ navigation, route}) => {
         isManuallyAdded = true;
     }
 
+    /*
+    <Text>
+        {item.reviews[0].title}
+    </Text>
+
+    <FlatList
+        data={item.reviews}
+        keyExtractor= {(reviews, index) => index.toString()}
+        renderItem={renderItems}
+    />
+
+    {
+        item.reviews.map(function(reviews, index){
+            return <Text key={index}>{reviews.title}</Text>
+        })
+    }
+     */
+
+    const renderItems = ({item}) => {
+        return (
+            <Text theme={styles.theme} style={styles.text}>
+                - {item.title.toString()}
+            </Text>
+        )
+    }
 
     console.log(index);
     return (
         <PaperProvider theme={theme}>
             <>
                 <View style={styles.innerBody}>
-                    <Subheading>
-                        Vendor Name : { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
+                    <Subheading style={styles.paddingStyle}>
+                        Company Name - { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
                     </Subheading>
 
-                    <Subheading>
-                        Grade: { isGrade ? item.grade: 'Unknown'}
+                    <Subheading style={styles.paddingStyle}>
+                        IP - {item.ip}
                     </Subheading>
 
-                    <Button mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
+                    <Subheading style={styles.paddingStyle}>
+                        MAC - {item.mac}
+                    </Subheading>
+
+                    <Subheading style={styles.paddingStyle}>
+                        Grade - { isGrade ? item.grade: 'Unknown'}
+                    </Subheading>
+
+                    <Subheading style={styles.paddingStyle}>
+                        Reviews:
+                    </Subheading>
+
+                    <View style={styles.listContainer}>
+                            <FlatList
+                            data={item.reviews}
+                            renderItem={renderItems}
+                            />
+                    </View>
+
+                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
                         { isIndex ? 'Remove from List' : 'Add to List' }
                     </Button>
                 </View>
@@ -83,17 +129,26 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         //position: 'absolute',
         flex: 0.4,
-        paddingVertical: SCREENSIZE.height * .05,
+        paddingVertical: SCREENSIZE.height * .02,
         paddingHorizontal: SCREENSIZE.width * .05,
     },
     paddingStyle:{
-        padding: 10
-    },
-    input:{
+        padding: 4,
         margin: 4,
+        fontWeight: "bold"
     },
     button:{
-        margin: 4,
+        margin: 10,
+    },
+    listContainer: {
+        height:SCREENSIZE.height * 0.45,
+        flexGrow: 1,
+        padding: 10,
+        backgroundColor: '#ffffff',
+    },
+    text:{
+        padding: 1,
+        margin: 1
     }
 })
 

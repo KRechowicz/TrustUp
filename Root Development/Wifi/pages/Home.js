@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import { FAB, DefaultTheme, Provider as PaperProvider, Button, List } from 'react-native-paper';
+import { FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, IconButton } from 'react-native-paper';
 import { SearchBar, ListItem } from "react-native-elements";
 
 const config = require('../config');
@@ -62,9 +62,11 @@ const addDevice = async (userID, device) => {
 }
 
 
+
 class HomeScreen extends Component{
     SearchList = ['Sony','paypal','spotify','pure','netflix','apple','microsoft','vk','yahoo','icloud','ask','hulu','signal','pocket','nvidia','bitdefender','sync','medium','brave','huawei','xiaomi','facebook','adobe','Element','amazon','Cisco','google','Rumble','slack','bitdefender','tosdr_vendor','symantec','service','sprint','virgin','cnet','bing','quake','multiple','lorea','onlive','king','cox','rac','enjin','none','uber','ello','mega','wix','looki','toggle','vero','identica','fitbit','taco','centurylink','jawbone','nokia','npr','flow','tmobile','path','revolut','Current','restream','canary','verizon','vive','bethesda','razer','drop','comcast','Reuters','bit','nsa','visions','chip','genius','emp','nrc','dudle','alza','shadow','baidu','inspire','target','nintendo','aol','vox','notion','garmin','waterfall','chase','honey','myspace','forbes','niche','gmx','hq','ixl','finn','leo','nexon','leet','minds','brilliant','gab','Trakt','yr','parsec','yase','icann','anki','grab','geco','akamai','chegg','bose','deepl','alpha','wired','dra','sophos','overleaf','byte','ebird','intercom','August Home','etsy','Nebula','xing','sony','visible','discovery','[spamtobedeleted]','adafruit','loom','xero','mla','whirlpool','matrix','pandora','oculus','yandex','ebay','mimo','samsung','petco','wire','adk','Logitech','Briar','Lenovo','Asus','Netgear','Sony','Motorola','Linksys','Belkin','TomTom','LYKA','Sweet','ADT','Ring LLC','Vice','Dash','Unity','Affirm','LogMeIn','amazon'];
     //deviceList:[];
+
 
     constructor(props) {
         super(props);
@@ -74,8 +76,7 @@ class HomeScreen extends Component{
             selectedId: -1,
             data: [],
             filteredData: [],
-            deviceList:[]
-
+            deviceList:[],
         }
 
     }
@@ -166,45 +167,75 @@ class HomeScreen extends Component{
             isManuallyAdded = true;
         }
         return(
-            <TouchableOpacity onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})}>
-                <List.Item
+            <DataTable.Row onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})}>
+                <DataTable.Cell>
+                    { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
+                </DataTable.Cell>
+
+                <DataTable.Cell>
+                    {isGrade? item.grade : "Unknown"}
+                </DataTable.Cell>
+            </DataTable.Row>
+        );
+    }
+
+    /*
+                <FlatList
+                data={this.state.deviceList}
+                keyExtractor= {(item, index) => index.toString()}
+                renderItem={this.renderItem}
+                />
+
+                 <List.Item
                     title={ isManuallyAdded ? "Vendor Name: " + item.tosdr_vendor: "Vendor Name: " + item.wifi_vendor}
                     description={isGrade? "Grade : "+ item.grade : "Grade : Unknown"}
                     theme={styles.theme}
                 />
-            </TouchableOpacity>
 
-        );
+                        <DataTable>
+                            <DataTable.Header>
+                                <DataTable.Title>Company</DataTable.Title>
+                                <DataTable.Title>Grade</DataTable.Title>
+                            </DataTable.Header>
+                        </DataTable>
 
-
-    }
+                        <IconButton
+                           icon="wifi-plus"
+                           color={DefaultTheme.primaryColor}
+                           size={20}
+                           onPress={() => console.log('Pressed')}
+                       />
+     */
 
     render(){
-
         return(
             <PaperProvider theme={theme}>
             <View style={styles.container}>
                 {/*<TextInput placeholder="Search" style={{padding:5}}*/}
                 {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
-                           <View style={styles.paddingStyle}>
-                               <Button mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
-                               Scan for my Devices
-                                </Button>
-                           </View>
-                <View style={styles.listContainer}>
-                <FlatList
-                    data={this.state.deviceList}
-                    keyExtractor= {(item, index) => index.toString()}
-                    renderItem={this.renderItem}
-                    />
-                </View>
+                   <View style={styles.paddingStyle}>
+                       <Button mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
+                           Scan for my Devices
+                       </Button>
+                   </View>
+                    <View style={styles.listContainer}>
+                        <DataTable.Header>
+                            <DataTable.Title style={styles.name}>Company</DataTable.Title>
+                            <DataTable.Title>Grade</DataTable.Title>
+                        </DataTable.Header>
+                        <FlatList
+                            data={this.state.deviceList}
+                            keyExtractor= {(item, index) => index.toString()}
+                            renderItem={this.renderItem}
+                        />
+                    </View>
 
-                <View style={styles.paddingStyle}>
-                    <Button mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
-                        Submit Unknown Vendor for Grading
-                    </Button>
+                    <View style={styles.paddingStyle}>
+                        <Button mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
+                            Submit Unknown Company for Grading
+                        </Button>
+                    </View>
                 </View>
-            </View>
             </PaperProvider>
 /*
             <SafeAreaView style={styles.container}>
@@ -315,10 +346,10 @@ const styles = StyleSheet.create({
         paddingHorizontal: SCREENSIZE.width * .05
     },
     paddingStyle:{
-        padding: 10
+        padding: 5
     },
     listContainer: {
-        height:SCREENSIZE.height * 0.7,
+        height:SCREENSIZE.height * 0.6,
         flexGrow: 1,
         padding: 10,
         backgroundColor: '#EBEBEB',

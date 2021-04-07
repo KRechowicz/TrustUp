@@ -15,8 +15,8 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import { FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, IconButton } from 'react-native-paper';
-import { SearchBar, ListItem } from "react-native-elements";
+import { FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List } from 'react-native-paper';
+import {SearchBar, ListItem, Icon} from "react-native-elements";
 
 const config = require('../config');
 
@@ -726,32 +726,40 @@ class HomeScreen extends Component{
     render(){
         return(
             <PaperProvider theme={theme}>
-            <View style={styles.container}>
-                {/*<TextInput placeholder="Search" style={{padding:5}}*/}
-                {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
-                   <View style={styles.paddingStyle}>
-                       <Button mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
-                           Scan for my Devices
-                       </Button>
-                   </View>
-                    <View style={styles.listContainer}>
-                        <DataTable.Header>
-                            <DataTable.Title style={styles.name}>Company</DataTable.Title>
-                            <DataTable.Title>Grade</DataTable.Title>
-                        </DataTable.Header>
-                        <FlatList
-                            data={this.state.deviceList}
-                            keyExtractor= {(item, index) => index.toString()}
-                            renderItem={this.renderItem}
-                        />
-                    </View>
+                        <View style={styles.container}>
+                            {/*<TextInput placeholder="Search" style={{padding:5}}*/}
+                            {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
+                            <View style={styles.information}>
+                                <Icon name="information-outline" type="material-community" size={24} />
+                                <Text style={styles.row}>Scan your network to identify connected devices and view their associated Trust levels </Text>
+                            </View>
 
-                    <View style={styles.paddingStyle}>
-                        <Button mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
-                            Submit Unknown Company for Grading
-                        </Button>
-                    </View>
-                </View>
+                            <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
+                                Grade Unknown Company
+                            </Button>
+
+                            <View style={styles.information}>
+                                <Icon name="information-outline" type="material-community" size={24} />
+                                <Text style={styles.row}>Each company is a device on your network, tap on a device for more information  </Text>
+                            </View>
+
+                            <View style={styles.listContainer}>
+                                <DataTable.Header>
+                                    <DataTable.Title style={styles.name}>Company</DataTable.Title>
+                                    <DataTable.Title>Grade</DataTable.Title>
+                                </DataTable.Header>
+                                <FlatList
+                                    data={this.state.deviceList}
+                                    keyExtractor= {(item, index) => index.toString()}
+                                    renderItem={this.renderItem}
+                                />
+                            </View>
+
+                            <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
+                                Scan for my Devices
+                            </Button>
+
+                        </View>
             </PaperProvider>
 /*
             <SafeAreaView style={styles.container}>
@@ -858,16 +866,18 @@ const styles = StyleSheet.create({
     container: {
         flex: 0.2,
         justifyContent: 'space-between',
-        paddingVertical: SCREENSIZE.height * .02,
+        paddingVertical: SCREENSIZE.height * .01,
         paddingHorizontal: SCREENSIZE.width * .05
     },
     paddingStyle:{
         padding: 5
     },
     listContainer: {
-        height:SCREENSIZE.height * 0.6,
-        flexGrow: 1,
-        padding: 10,
+        height:SCREENSIZE.height * 0.55,
+        paddingHorizontal: SCREENSIZE.width * .05,
+        //flexGrow: 1,
+        //padding: 5,
+        margin: 5,
         backgroundColor: '#ffffff',
     },
     icon:{
@@ -929,6 +939,23 @@ const styles = StyleSheet.create({
         marginHorizontal:3,
         backgroundColor: "#eee",
         marginTop:5,
+    },
+    button:{
+        paddingHorizontal: SCREENSIZE.width * .05,
+        margin: 3
+    },
+    row:{
+        padding: 1
+    },
+    information: {
+        // flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .005,
+    },
+    divider:{
+        padding: 1,
+        margin: 2,
     },
 });
 

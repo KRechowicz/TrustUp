@@ -5,7 +5,7 @@ platform :ios, '10.0'
 
 
 target 'Wifi_TrustUp' do
-  config = use_native_modules!
+  config = use_native_modules!b
 
   use_react_native!(:path => config["reactNativePath"])
   permissions_path = '../node_modules/react-native-permissions/ios'
@@ -13,7 +13,6 @@ target 'Wifi_TrustUp' do
 
   pod 'RNRnLanScan', :path => '../node_modules/react-native-rn-lan-scan'
 
-  pod 'RNVectorIcons', :path => '../node_modules/react-native-vector-icons'
 
 
 

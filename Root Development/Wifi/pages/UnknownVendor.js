@@ -75,40 +75,6 @@ export default class App extends Component {
 
     render() {
         return (
-            /*
-            <View style={styles.container}>
-                <View style={styles.appBody}>
-                    <View style={styles.innerBody}>
-                        <View style={styles.contentBox}>
-                            <Text>Header</Text>
-                        </View>
-                        <View style={{ ...styles.contentBox, flex: .4 }}>
-                            <TextInput
-                                style={styles.boxes}
-                                value={"value"}
-                                />
-                            <TextInput
-                                style={styles.boxes}
-                                value={"value"}
-                            />
-                            <TextInput
-                                style={styles.boxes}
-                                value={"value"}
-                            />
-                    </View>
-                    <View style={styles.contentBox}>
-                        <Text>Some text here</Text>
-                    </View>
-                        <Button
-                            title="Go to Unknown Page"
-                            onPress={ () => this.props.navigation.navigate('UnknownVendorDisplayScreen', {userID:userID, vendor:vendor, docType: docType, url:url})}
-                        />
-                </View>
-            </View>
-        <View style={styles.appFooter}>
-        </View>
-    </View >
-     */
             <PaperProvider theme={theme}>
                 <>
                     <View style={styles.innerBody}>
@@ -134,16 +100,6 @@ export default class App extends Component {
         )
     }
 }
-
-/*
-    <TextInput
-        style={styles.input}
-        mode="outlined"
-        label="Product Name"
-        placeholder="Example: iPhone 12 Pro"
-        onChangeText={(text) => {this.productName = text}}
-    />
- */
 
 const styles = StyleSheet.create({
     innerBody: {

@@ -177,10 +177,9 @@ class Login extends Component {
                 <View style = { styles.container }>
                     <Image source={Logo} style={styles.image}  />
                     <Title style = { styles.header }> Welcome to our App! </Title>
-                    <Paragraph style={styles.text}> Apple Login </Paragraph>
                     <Button mode="contained" style={styles.button} icon='apple'
                             onPress = { () => this.webAuth('apple')}>
-                        Sign in with Google
+                        Sign in with Apple
                     </Button>
                     <Button mode="contained" style={styles.button} icon='google'
                             onPress = { () => this.webAuth('google-oauth2')}>

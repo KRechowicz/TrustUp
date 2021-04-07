@@ -13,7 +13,7 @@ import {
     StyleSheet,
     // Text
     View,
-    Image, Dimensions
+    Image, Dimensions, Text
 } from 'react-native';
 import Auth0 from 'react-native-auth0';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -25,6 +25,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 const SCREENSIZE = Dimensions.get('screen');
 
 import { Logo } from '../Images';
+import {Icon} from "react-native-elements";
 
 var credentials = require('../configs/auth0-configuration');
 const auth0 = new Auth0(credentials);
@@ -151,9 +152,6 @@ class Login extends Component {
                  */
                 checkUsers(userID);
 
-
-
-
                 this.setState({ accessToken: credentials.accessToken});
             })
             .catch(error => console.log(error));
@@ -179,11 +177,14 @@ class Login extends Component {
                 <View style = { styles.container }>
                     <Image source={Logo} style={styles.image}  />
                     <Title style = { styles.header }> Welcome to our App! </Title>
-                    <Paragraph style={styles.text}> Apple Login </Paragraph>
                     <Button mode="contained" style={styles.button} icon='google'
                             onPress = { () => this.webAuth('google-oauth2')}>
                         Sign in with Google
                     </Button>
+                    <View style={styles.information}>
+                        <Icon name="information-outline" type="material-community" size={24} />
+                        <Text>TrustUp identifies devices on your network and tells you what data they collect </Text>
+                    </View>
                 </View>
             </PaperProvider>
         );
@@ -229,7 +230,7 @@ const styles = StyleSheet.create({
         paddingVertical: 14,
     },
     image: {
-        width: 100,
+        width: 200,
         height: 100,
         marginBottom: 12,
         marginLeft: SCREENSIZE.width * .020,
@@ -253,7 +254,15 @@ const styles = StyleSheet.create({
     },
     text:{
         fontSize: 20
-    }
+    },
+    information: {
+        // flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .005,
+        paddingHorizontal: SCREENSIZE.width * .1
+    },
+
 });
 
 

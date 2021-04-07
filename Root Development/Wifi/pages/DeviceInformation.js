@@ -1,6 +1,7 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet, Dimensions, FlatList, ListView} from "react-native";
-import {DefaultTheme, Provider as PaperProvider, Button, Subheading, List, DataTable} from "react-native-paper";
+import {Image, View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView, ScrollView} from "react-native";
+import {DefaultTheme, Provider as PaperProvider, Button, Subheading, List, DataTable, Divider} from "react-native-paper";
+import { Icon } from 'react-native-elements'
 import HomeScreen from '../pages/Home'
 import ScanResults from "../Objects/ScanResult";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -77,7 +78,7 @@ const DeviceModal = ({ navigation, route}) => {
     const renderItems = ({item}) => {
         return (
             <Text theme={styles.theme} style={styles.text}>
-                - {item.title.toString()}
+                {item.title.toString()}
             </Text>
         )
     }
@@ -85,40 +86,62 @@ const DeviceModal = ({ navigation, route}) => {
     console.log(index);
     return (
         <PaperProvider theme={theme}>
-            <>
-                <View style={styles.innerBody}>
-                    <Subheading style={styles.paddingStyle}>
-                        Company Name - { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
-                    </Subheading>
+            <SafeAreaView>
+                <ScrollView>
+                    <>
+                        <View style={styles.innerBody}>
+                            <View style={styles.information}>
+                                <Icon name="information-outline" type="material-community" size={24} />
+                                <Text style={styles.row}>Company - The creator of your device </Text>
+                                <Text style={styles.row}>IP - Number that uniquely identifies your device </Text>
+                                <Text style={styles.row}>Mac address - Number that uniquely identifies each device on your network </Text>
+                                <View style={styles.grades}>
+                                    <Text style={styles.row}>Grades: </Text>
+                                    <Text style={styles.row}>A - They treat you fairly and will not abuse your data. </Text>
+                                    <Text style={styles.row}>B - They are fair towards the user but they could be improved. </Text>
+                                    <Text style={styles.row}>C - They are okay but some issues need your attention. </Text>
+                                    <Text style={styles.row}>D - There are some important issues that need your attention. </Text>
+                                    <Text style={styles.row}>E - They raise very serious concerns. </Text>
+                                </View>
 
-                    <Subheading style={styles.paddingStyle}>
-                        IP - {item.ip}
-                    </Subheading>
+                            </View>
 
-                    <Subheading style={styles.paddingStyle}>
-                        MAC - {item.mac}
-                    </Subheading>
+                            <Divider style={styles.divider}/>
 
-                    <Subheading style={styles.paddingStyle}>
-                        Grade - { isGrade ? item.grade: 'Unknown'}
-                    </Subheading>
+                            <Subheading style={styles.paddingStyle}>
+                                Company Name - { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
+                            </Subheading>
 
-                    <Subheading style={styles.paddingStyle}>
-                        Reviews:
-                    </Subheading>
+                            <Subheading style={styles.paddingStyle}>
+                                IP - {item.ip}
+                            </Subheading>
 
-                    <View style={styles.listContainer}>
-                            <FlatList
-                            data={item.reviews}
-                            renderItem={renderItems}
-                            />
-                    </View>
+                            <Subheading style={styles.paddingStyle}>
+                                MAC - {item.mac}
+                            </Subheading>
 
-                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
-                        { isIndex ? 'Remove from List' : 'Add to List' }
-                    </Button>
-                </View>
-            </>
+                            <Subheading style={styles.paddingStyle}>
+                                Grade - { isGrade ? item.grade: 'Unknown'}
+                            </Subheading>
+
+                            <Subheading style={styles.paddingStyle}>
+                                Reviews:
+                            </Subheading>
+
+                            <View style={styles.listContainer}>
+                                <FlatList
+                                    data={item.reviews}
+                                    renderItem={renderItems}
+                                />
+                            </View>
+
+                            <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
+                                { isIndex ? 'Remove from List' : 'Add to List' }
+                            </Button>
+                        </View>
+                    </>
+                </ScrollView>
+            </SafeAreaView>
         </PaperProvider>
 
     );
@@ -129,7 +152,7 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         //position: 'absolute',
         flex: 0.4,
-        paddingVertical: SCREENSIZE.height * .02,
+        //paddingVertical: SCREENSIZE.height * .02,
         paddingHorizontal: SCREENSIZE.width * .05,
     },
     paddingStyle:{
@@ -140,8 +163,21 @@ const styles = StyleSheet.create({
     button:{
         margin: 10,
     },
+    row:{
+        padding: 1
+    },
+    information: {
+        // alignContent: 'flex-start',
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .01,
+        paddingHorizontal: SCREENSIZE.width * .01
+    },
+    divider:{
+        padding: 1,
+        margin: 2,
+    },
     listContainer: {
-        height:SCREENSIZE.height * 0.45,
+        height:SCREENSIZE.height * 0.35,
         flexGrow: 1,
         padding: 10,
         backgroundColor: '#ffffff',
@@ -149,6 +185,10 @@ const styles = StyleSheet.create({
     text:{
         padding: 1,
         margin: 1
+    },
+    grades:{
+        //padding: 4,
+        marginTop: 15
     }
 })
 

@@ -16,7 +16,7 @@ export default class App extends Component{
     constructor() {
         super();
         this.state ={
-            isSignedIn: true,
+            isSignedIn: false,
         }
         this.setSignedIn = this.setSignedIn.bind(this)
     }

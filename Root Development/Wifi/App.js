@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text } from 'react-native';
+import { View, Text , Button} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import ScanScreen from './Objects/Scan.js';
@@ -8,17 +8,25 @@ import UnknownVendorScreen from './pages/UnknownVendor';
 import UnknownVendorDisplayScreen from './pages/UnknownVendorDisplay';
 import Home from "./pages/Home";
 import {Component} from "react";
-import DeviceModal from "./pages/DeviceInformation"
+import DeviceModal from "./pages/DeviceInformation";
+import { FAB, DefaultTheme, Provider as PaperProvider, List } from 'react-native-paper';
 
 const Stack = createStackNavigator();
 
 export default class App extends Component{
+    login = new LoginScreen();
     constructor() {
         super();
         this.state ={
-            isSignedIn: true,
+            isSignedIn: false,
         }
         this.setSignedIn = this.setSignedIn.bind(this)
+    }
+
+    setSignedOut() {
+        this.setState({
+            isSignedIn:false,
+        })
     }
 
     setSignedIn() {
@@ -33,7 +41,15 @@ export default class App extends Component{
             this.state.isSignedIn ? (
                     <NavigationContainer>
                         <Stack.Navigator>
-                            <Stack.Screen name="HomeScreen" component={Home} options={{ title: 'Home' }} />
+                            <Stack.Screen name="HomeScreen" component={Home} options={{
+                                headerTitle: "Home",
+                                headerRight: () => (
+                                    <Button
+                                        onPress={() => this.setSignedOut()}
+                                        title="Logout"
+                                    />
+                                ),
+                            }}/>
                             <Stack.Screen name="ScanningScreen" component={ScanScreen} options={{ title: 'Loading' }} />
                             <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} options={{ title: 'Unknown Vendor' }} />
                             <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} options={{ title: 'Unknown Vendor' }} />

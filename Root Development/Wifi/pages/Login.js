@@ -183,7 +183,7 @@ class Login extends Component {
                     </Button>
                     <View style={styles.information}>
                         <Icon name="information-outline" type="material-community" size={24} />
-                        <Text>TrustUp identifies devices on your network and tells you what data they collect </Text>
+                        <Text>TrustUp tells discovers and explains Privacy issues and Security Risks associated with devices on your network</Text>
                     </View>
                 </View>
             </PaperProvider>

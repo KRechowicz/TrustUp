@@ -92,16 +92,17 @@ const DeviceModal = ({ navigation, route}) => {
                         <View style={styles.innerBody}>
                             <View style={styles.information}>
                                 <Icon name="information-outline" type="material-community" size={24} />
-                                <Text style={styles.row}>Company - The creator of your device </Text>
-                                <Text style={styles.row}>IP - Number that uniquely identifies your device </Text>
-                                <Text style={styles.row}>Mac address - Number that uniquely identifies each device on your network </Text>
+                                <Text style={styles.row}>Company - This is the name of the company that either made or manages your device or its software.</Text>
+                                <Text style={styles.row}>IP - This is an address assigned by your network for this device. Please note that this may change and can be different from the address seen from outside of your network.</Text>
+                                <Text style={styles.row}>Mac address - Each device has a unique identifier which is different from any other device. This helps guarantee devices cannot pretend to be something else.</Text>
                                 <View style={styles.grades}>
                                     <Text style={styles.row}>Grades: </Text>
-                                    <Text style={styles.row}>A - They treat you fairly and will not abuse your data. </Text>
-                                    <Text style={styles.row}>B - They are fair towards the user but they could be improved. </Text>
-                                    <Text style={styles.row}>C - They are okay but some issues need your attention. </Text>
-                                    <Text style={styles.row}>D - There are some important issues that need your attention. </Text>
-                                    <Text style={styles.row}>E - They raise very serious concerns. </Text>
+                                    <Text style={styles.row}>A - The best terms of services: they treat the user fairly, respect their rights, and will not abuse their data.</Text>
+                                    <Text style={styles.row}>B - The terms of services are fair towards the user but they could be improved.</Text>
+                                    <Text style={styles.row}>C - The terms of service are okay but some issues need your consideration.</Text>
+                                    <Text style={styles.row}>D - The terms of service are very uneven or some important issues need the user's attention.</Text>
+                                    <Text style={styles.row}>E - The terms of service raise very serious concerns.</Text>
+                                    <Text style={styles.row}>No Grade - The terms have not been completely graded yet.</Text>
                                 </View>
 
                             </View>

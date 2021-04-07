@@ -731,7 +731,7 @@ class HomeScreen extends Component{
                             {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
                             <View style={styles.information}>
                                 <Icon name="information-outline" type="material-community" size={24} />
-                                <Text style={styles.row}>Scan your network to identify connected devices </Text>
+                                <Text style={styles.row}>Scan your network to identify connected devices and view their associated Trust levels </Text>
                             </View>
 
                             <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>

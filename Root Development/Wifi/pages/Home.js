@@ -726,40 +726,40 @@ class HomeScreen extends Component{
     render(){
         return(
             <PaperProvider theme={theme}>
-                        <View style={styles.container}>
-                            {/*<TextInput placeholder="Search" style={{padding:5}}*/}
-                            {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
-                            <View style={styles.information}>
-                                <Icon name="information-outline" type="material-community" size={24} />
-                                <Text style={styles.row}>Scan your network to identify connected devices and view their associated Trust levels </Text>
-                            </View>
+                <View style={styles.container}>
+                    {/*<TextInput placeholder="Search" style={{padding:5}}*/}
+                    {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
+                    <View style={styles.information}>
+                        <Icon name="information-outline" type="material-community" size={24} />
+                        <Text style={styles.row}>Scan your network to identify connected devices and view their associated Trust levels </Text>
+                    </View>
 
-                            <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
-                                Grade Unknown Company
-                            </Button>
+                    <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
+                        Grade Unknown Company
+                    </Button>
 
-                            <View style={styles.information}>
-                                <Icon name="information-outline" type="material-community" size={24} />
-                                <Text style={styles.row}>Each company is a device on your network, tap on a device for more information  </Text>
-                            </View>
+                    <View style={styles.information}>
+                        <Icon name="information-outline" type="material-community" size={24} />
+                        <Text style={styles.row}>Each company is a device on your network, tap on a device for more information  </Text>
+                    </View>
 
-                            <View style={styles.listContainer}>
-                                <DataTable.Header>
-                                    <DataTable.Title style={styles.name}>Company</DataTable.Title>
-                                    <DataTable.Title>Grade</DataTable.Title>
-                                </DataTable.Header>
-                                <FlatList
-                                    data={this.state.deviceList}
-                                    keyExtractor= {(item, index) => index.toString()}
-                                    renderItem={this.renderItem}
-                                />
-                            </View>
+                    <View style={styles.listContainer}>
+                        <DataTable.Header>
+                            <DataTable.Title style={styles.name}>Company</DataTable.Title>
+                            <DataTable.Title>Grade</DataTable.Title>
+                        </DataTable.Header>
+                        <FlatList
+                            data={this.state.deviceList}
+                            keyExtractor= {(item, index) => index.toString()}
+                            renderItem={this.renderItem}
+                        />
+                    </View>
 
-                            <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
-                                Scan for my Devices
-                            </Button>
+                    <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
+                        Scan for my Devices
+                    </Button>
 
-                        </View>
+                </View>
             </PaperProvider>
 /*
             <SafeAreaView style={styles.container}>

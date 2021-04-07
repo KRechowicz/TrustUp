@@ -1,6 +1,13 @@
 import * as React from 'react';
 import {Image, View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView, ScrollView} from "react-native";
-import {DefaultTheme, Provider as PaperProvider, Button, Subheading, List, DataTable, Divider} from "react-native-paper";
+import {
+    DefaultTheme,
+    Provider as PaperProvider,
+    Button,
+    Subheading,
+    IconButton,
+    List
+} from "react-native-paper";
 import { Icon } from 'react-native-elements'
 import HomeScreen from '../pages/Home'
 import ScanResults from "../Objects/ScanResult";
@@ -35,11 +42,7 @@ const deleteDevice = async (ip, index, navigation) => {
     //console.log(response.json());
 }
 
-const renderItem = (rowData) => {
-    return (<Text>{rowData.title}</Text>);
-}
-
-const DeviceModal = ({ navigation, route}) => {
+const DeviceModal = ({ navigation, route }) => {
     let isIndex = true;
     let isGrade = true;
     let isManuallyAdded = false;
@@ -76,73 +79,102 @@ const DeviceModal = ({ navigation, route}) => {
      */
 
     const renderItems = ({item}) => {
+        let isReviews = true;
+        if(!item.title){
+            isReviews = false;
+        }
         return (
-            <Text theme={styles.theme} style={styles.text}>
-                {item.title.toString()}
-            </Text>
+            <List.Item style={{ margin: 0, padding: 0 }}
+                       description={isReviews ? item.title.toString(): "No Reviews"}
+                       theme={styles.theme}
+
+            />
         )
     }
+
+
+
+    /*
+    const renderDialog = () => {
+        setVisible(true)
+        return(
+            <Portal>
+                <Dialog visible={visible} onDismiss={setVisible(false)}>
+                    <Dialog.title>
+                        Additional Information
+                    </Dialog.title>
+                    <Dialog.Content>
+                        <View style={styles.information}>
+                            <Text style={styles.row}>Company - This is the name of the company that either made or manages your device or its software.</Text>
+                            <Text style={styles.row}>IP - This is an address assigned by your network for this device. Please note that this may change and can be different from the address seen from outside of your network.</Text>
+                            <Text style={styles.row}>Mac address - Each device has a unique identifier which is different from any other device. This helps guarantee devices cannot pretend to be something else.</Text>
+                            <View style={styles.grades}>
+                                <Text style={styles.row}>Grades: </Text>
+                                <Text style={styles.row}>A - The best terms of services: they treat the user fairly, respect their rights, and will not abuse their data.</Text>
+                                <Text style={styles.row}>B - The terms of services are fair towards the user but they could be improved.</Text>
+                                <Text style={styles.row}>C - The terms of service are okay but some issues need your consideration.</Text>
+                                <Text style={styles.row}>D - The terms of service are very uneven or some important issues need the user's attention.</Text>
+                                <Text style={styles.row}>E - The terms of service raise very serious concerns.</Text>
+                                <Text style={styles.row}>No Grade - The terms have not been completely graded yet.</Text>
+                            </View>
+                        </View>
+                    </Dialog.Content>
+                    <Dialog.Actions>
+                        <Button onPress={() => setVisible(false)}>Ok</Button>
+                    </Dialog.Actions>
+                </Dialog>
+            </Portal>
+        )
+    }
+     */
 
     console.log(index);
     return (
         <PaperProvider theme={theme}>
-            <SafeAreaView>
-                <ScrollView>
-                    <>
-                        <View style={styles.innerBody}>
-                            <View style={styles.information}>
-                                <Icon name="information-outline" type="material-community" size={24} />
-                                <Text style={styles.row}>Company - This is the name of the company that either made or manages your device or its software.</Text>
-                                <Text style={styles.row}>IP - This is an address assigned by your network for this device. Please note that this may change and can be different from the address seen from outside of your network.</Text>
-                                <Text style={styles.row}>Mac address - Each device has a unique identifier which is different from any other device. This helps guarantee devices cannot pretend to be something else.</Text>
-                                <View style={styles.grades}>
-                                    <Text style={styles.row}>Grades: </Text>
-                                    <Text style={styles.row}>A - The best terms of services: they treat the user fairly, respect their rights, and will not abuse their data.</Text>
-                                    <Text style={styles.row}>B - The terms of services are fair towards the user but they could be improved.</Text>
-                                    <Text style={styles.row}>C - The terms of service are okay but some issues need your consideration.</Text>
-                                    <Text style={styles.row}>D - The terms of service are very uneven or some important issues need the user's attention.</Text>
-                                    <Text style={styles.row}>E - The terms of service raise very serious concerns.</Text>
-                                    <Text style={styles.row}>No Grade - The terms have not been completely graded yet.</Text>
-                                </View>
+            <>
+                <View style={styles.innerBody}>
+                    <View style={styles.iconButton}>
+                        <IconButton
+                            icon="camera"
+                            style={styles.IconButton}
+                            size={30}
+                            onPress={() => navigation.navigate('About')}
+                        />
+                    </View>
 
-                            </View>
+                    <Subheading style={styles.paddingStyle}>
+                        Company Name - { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
+                    </Subheading>
 
-                            <Divider style={styles.divider}/>
+                    <Subheading style={styles.paddingStyle}>
+                        IP - {item.ip}
+                    </Subheading>
 
-                            <Subheading style={styles.paddingStyle}>
-                                Company Name - { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
-                            </Subheading>
+                    <Subheading style={styles.paddingStyle}>
+                        MAC - {item.mac}
+                    </Subheading>
 
-                            <Subheading style={styles.paddingStyle}>
-                                IP - {item.ip}
-                            </Subheading>
+                    <Subheading style={styles.paddingStyle}>
+                        Grade - { isGrade ? item.grade: 'Unknown'}
+                    </Subheading>
 
-                            <Subheading style={styles.paddingStyle}>
-                                MAC - {item.mac}
-                            </Subheading>
+                    <Subheading style={styles.paddingStyle}>
+                        Reviews:
+                    </Subheading>
 
-                            <Subheading style={styles.paddingStyle}>
-                                Grade - { isGrade ? item.grade: 'Unknown'}
-                            </Subheading>
+                    <View style={styles.listContainer}>
+                        <FlatList
+                            data={item.reviews}
+                            keyExtractor= {(item, index) => index.toString()}
+                            renderItem={renderItems}
+                        />
+                    </View>
 
-                            <Subheading style={styles.paddingStyle}>
-                                Reviews:
-                            </Subheading>
-
-                            <View style={styles.listContainer}>
-                                <FlatList
-                                    data={item.reviews}
-                                    renderItem={renderItems}
-                                />
-                            </View>
-
-                            <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
-                                { isIndex ? 'Remove from List' : 'Add to List' }
-                            </Button>
-                        </View>
-                    </>
-                </ScrollView>
-            </SafeAreaView>
+                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
+                        { isIndex ? 'Remove from List' : 'Add to List' }
+                    </Button>
+                </View>
+            </>
         </PaperProvider>
 
     );
@@ -168,7 +200,7 @@ const styles = StyleSheet.create({
         padding: 1
     },
     information: {
-        // alignContent: 'flex-start',
+        alignContent: 'flex-start',
         justifyContent: 'space-between',
         paddingVertical: SCREENSIZE.height * .01,
         paddingHorizontal: SCREENSIZE.width * .01
@@ -178,7 +210,7 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     listContainer: {
-        height:SCREENSIZE.height * 0.35,
+        height:SCREENSIZE.height * 0.4,
         flexGrow: 1,
         padding: 10,
         backgroundColor: '#ffffff',
@@ -190,6 +222,9 @@ const styles = StyleSheet.create({
     grades:{
         //padding: 4,
         marginTop: 15
+    },
+    iconButton:{
+        alignItems: "center"
     }
 })
 

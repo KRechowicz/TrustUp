@@ -8,13 +8,9 @@ import UnknownVendorScreen from './pages/UnknownVendor';
 import UnknownVendorDisplayScreen from './pages/UnknownVendorDisplay';
 import Home from "./pages/Home";
 import {Component} from "react";
-<<<<<<< Updated upstream
-import DeviceModal from "./pages/DeviceInformation";
 import { FAB, DefaultTheme, Provider as PaperProvider, List } from 'react-native-paper';
-=======
 import DeviceModal from "./pages/DeviceInformation"
 import About from "./pages/About";
->>>>>>> Stashed changes
 
 const Stack = createStackNavigator();
 

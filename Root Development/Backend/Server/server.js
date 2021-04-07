@@ -43,11 +43,17 @@ const cognitiveServiceCredentials = new CognitiveServicesCredentials(
 );
 
 
+//assuming app is express Object.
+app.get('/PrivacyPolicy',function(req,res) {
+    res.sendFile('/Users/bgeldhau/GitHub/CoVA_CCI/Root Development/Backend/Server/privacypolicy.html');
+});
+
 
 
 
 app.get('/users/:userId', function (req, res) {
     AWS.config.update(config.aws_remote_config);
+    console.log(req.params.userId);
     const docClient = new AWS.DynamoDB.DocumentClient();
     const params = {
         TableName: config.aws_table_name,
@@ -90,7 +96,7 @@ app.post('/users', (req, res) => {
                   console.log(error);
                  //res.status(400).json({ error: 'Could not create user' });
                 }
-            res.json({userID});
+            res.json({userId});
           });
 
 

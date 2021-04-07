@@ -7,7 +7,7 @@ import {
     TextInput,
     NativeEventEmitter,
     Button,
-    TouchableOpacity
+    TouchableOpacity, Alert
 } from 'react-native';
 import {RNLanScanEvent, RNRnLanScan} from 'react-native-rn-lan-scan';
 import ScanResults from './ScanResult';
@@ -19,6 +19,7 @@ import HomeButton from "../UI/components/HomeButton.js";
 import SearchBar from "../UI/components/SearchBar";
 import ModalButton from "../UI/components/ModalButton";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {ActivityIndicator, DefaultTheme, Subheading} from "react-native-paper";
 
 const config = require('../config');
 
@@ -71,6 +72,30 @@ export default class Scan extends Component {
         this.userIDFromHome = getID;
 
 
+
+        this.props.navigation.addListener('beforeRemove', (e) => {
+            if (this.state.scanComplete) {
+                // If we don't have unsaved changes, then we don't need to do anything
+                return;
+            }
+            console.log(this.state.scanComplete);
+
+            e.preventDefault();
+
+            Alert.alert(
+                'Leave Scan?',
+                'If you leave now, your scan will not complete. Are you sure you want to leave the screen?',
+                [
+                    { text: "Don't leave", style: 'cancel', onPress: () => {} },
+                    {
+                        text: 'Leave',
+                        // If the user confirmed, then we dispatch the action we blocked earlier
+                        // This will continue the action that had triggered the removal of the screen
+                      onPress: () => this.props.navigation.dispatch(e.data.action),
+                    },
+                ]
+            );
+        })
 
 
         this.eventStuff.addListener("EventReminder", (data) => {
@@ -393,18 +418,29 @@ export default class Scan extends Component {
 
         return (
 
-            <View style = { styles.container }>
-
-                <Text style = { styles.header }> Scan </Text>
-                <Text>
-                    Currently Loading ... One moment...</Text>
-
-            </View >
+            <View style={styles.container}>
+                <ActivityIndicator size="large" theme = {theme}/>
+                <Subheading>
+                    Scanning your network to identify connected devices. This may take a moment.
+                </Subheading>
+            </View>
 
 
 
         );
     }
+}
+
+const theme = {
+    ...DefaultTheme,
+    roundness: 2,
+    fontSize:90,
+    colors: {
+        ...DefaultTheme.colors,
+        primary: '#0060a9',
+        accent: '#f3cd1f',
+
+    },
 }
 
 const styles = StyleSheet.create({

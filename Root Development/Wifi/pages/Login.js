@@ -58,7 +58,7 @@ class Login extends Component {
     }
 
     checkUsers = async(userIDToCheck) =>{
-
+        console.log(userIDToCheck);
         const response = await fetch(config.backend_endpoint + '/users/' + userIDToCheck);
         const json = await response.json();
         if(!json.userID){
@@ -177,6 +177,11 @@ class Login extends Component {
                 <View style = { styles.container }>
                     <Image source={Logo} style={styles.image}  />
                     <Title style = { styles.header }> Welcome to our App! </Title>
+                    <Paragraph style={styles.text}> Apple Login </Paragraph>
+                    <Button mode="contained" style={styles.button} icon='apple'
+                            onPress = { () => this.webAuth('apple')}>
+                        Sign in with Google
+                    </Button>
                     <Button mode="contained" style={styles.button} icon='google'
                             onPress = { () => this.webAuth('google-oauth2')}>
                         Sign in with Google

@@ -92,13 +92,13 @@ class HomeScreen extends Component{
         if(this.state.userID){
             const response = await fetch(config.backend_endpoint + "/users/" + this.state.userID + "/scan");
             const json = await response.json();
-            try{
+            if(json){
                 for(const items of json){
                     list.push(items);
                 }
             }
-            catch{
-                if(!json.error){
+            else{
+                if(json.error){
                     console.log("No devices currently in database");
                 }
 
@@ -106,7 +106,7 @@ class HomeScreen extends Component{
 
             this.setState({deviceList:list});
 
-            //console.log(this.deviceList);
+            console.log(this.state.deviceList);
         }
 
 
@@ -116,12 +116,12 @@ class HomeScreen extends Component{
             if(this.state.userID){
                 const response = await fetch(config.backend_endpoint + "/users/" + this.state.userID + "/scan");
                 const json = await response.json();
-                try{
+                if(json){
                     for(const items of json){
                         list.push(items);
                     }
                 }
-                catch{
+                else{
                     if(!json.error){
                         console.log("No devices currently in database");
                     }
@@ -131,6 +131,7 @@ class HomeScreen extends Component{
                 this.setState({deviceList:list});
             }
 
+            console.log(this.state.deviceList);
 
         })
 

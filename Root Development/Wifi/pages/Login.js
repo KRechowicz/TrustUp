@@ -47,14 +47,33 @@ const storeData = async (value) => {
 
 
 
+
 class Login extends Component {
     nickname: '';
+    listToStore = [];
     constructor(props) {
         super(props);
         this.state = {
             accessToken: null,
             userID: null,
         };
+    }
+
+    storeToDB = async (userID) => {
+
+        fetch(config.backend_endpoint + '/users/' + userID + '/scan', {
+            method: 'POST',
+            headers: {
+                Accept: 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(this.listToStore)
+        }).then(r =>  {
+            console.log("Stored to Database")
+            this.setState({scanComplete:true})
+        });
+
+
     }
 
     checkUsers = async(userIDToCheck) =>{
@@ -72,6 +91,7 @@ class Login extends Component {
                 userId: userIDToCheck
             })
         });
+            const createPath = await this.storeToDB(userIDToCheck);
 
         }
 

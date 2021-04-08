@@ -15,6 +15,7 @@ export default class App extends Component {
     companyName: ""
     url: null
     displayURL: null
+    SearchList = ['Sony','paypal','spotify','pure','netflix','apple','microsoft','vk','yahoo','icloud','ask','hulu','signal','pocket','nvidia','bitdefender','sync','medium','brave','huawei','xiaomi','facebook','adobe','Element','amazon','Cisco','google','Rumble','slack','bitdefender','tosdr_vendor','symantec','service','sprint','virgin','cnet','bing','quake','multiple','lorea','onlive','king','cox','rac','enjin','none','uber','ello','mega','wix','looki','toggle','vero','identica','fitbit','taco','centurylink','jawbone','nokia','npr','flow','tmobile','path','revolut','Current','restream','canary','verizon','vive','bethesda','razer','drop','comcast','Reuters','bit','nsa','visions','chip','genius','emp','nrc','dudle','alza','shadow','baidu','inspire','target','nintendo','aol','vox','notion','garmin','waterfall','chase','honey','myspace','forbes','niche','gmx','hq','ixl','finn','leo','nexon','leet','minds','brilliant','gab','Trakt','yr','parsec','yase','icann','anki','grab','geco','akamai','chegg','bose','deepl','alpha','wired','dra','sophos','overleaf','byte','ebird','intercom','August Home','etsy','Nebula','xing','sony','visible','discovery','[spamtobedeleted]','adafruit','loom','xero','mla','whirlpool','matrix','pandora','oculus','yandex','ebay','mimo','samsung','petco','wire','adk','Logitech','Briar','Lenovo','Asus','Netgear','Sony','Motorola','Linksys','Belkin','TomTom','LYKA','Sweet','ADT','Ring LLC','Vice','Dash','Unity','Affirm','LogMeIn','amazon'];
     // productName: "";
 
     constructor(props) {
@@ -30,6 +31,7 @@ export default class App extends Component {
         };
     }
 
+
     async searchForResults() {
         const query = this.companyName + " " + "Privacy Policy";
 
@@ -42,56 +44,31 @@ export default class App extends Component {
         console.log(data) */
     }
 
-    getSearchResult = (query) => {
-        fetch(config.backend_endpoint + '/getSearch', {
-            method: 'POST',
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify({
-                query: query,
-            })
-        }).then(res => {
-            res.json().then((data) => {
-                // this.props.navigation.navigate('UnknownVendorDisplayScreen', {vendor:query, docType: docType, url:data.url})
-                // console.log(data)
-                // this.state.setState({vendor:{ url: data.url, displayURL: data.displayURL}})
-
-                console.log(data)
-                this.displayURL = data.displayURL;
-                this.url = data.url;
-
-                console.log(this.url);
-                console.log(this.displayURL)
-
-                this.props.navigation.navigate('UnknownVendorDisplayScreen',
-                    {companyName: this.companyName, url: this.url, displayURL: this.displayURL})
-            })
-        }).catch(function(error){
-            console.log('request failed', error)
-        })
-    }
-
     render() {
         return (
             <PaperProvider theme={theme}>
                 <>
                     <View style={styles.innerBody}>
                         <Subheading>
-                            Add a company that wasn't listed. Fill in the field below and hit submit to process it.
+                            Add a company to your list. Fill in the field below and tap submit to process the companies privacy information.
                         </Subheading>
 
                         <TextInput
                             style={styles.input}
                             mode="outlined"
-                            label="Company Name"
                             placeholder="Example: Apple"
                             // onChangeText={(text) => {this.setState({companyName: text})}}
                             onChangeText={(text) => {this.companyName = text}}
+                            accessible={true}
+                            accessibilityLabel="Enter company name."
+                            screenReaderEnable={true}
                         />
 
-                        <Button style={styles.button} mode="contained" onPress={ () => this.searchForResults()}>
+                        <Button style={styles.button} mode="contained" onPress={ () => this.props.navigation.navigate('UnknownVendorDisplayScreen',
+                            {companyName: this.companyName})}
+                                accessible={true}
+                                accessibilityLabel="Submit to process your company's privacy information."
+                                screenReaderEnable={true}>
                             submit
                         </Button>
                     </View>

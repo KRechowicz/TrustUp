@@ -31,9 +31,15 @@ export default class myClass {
         this.lastScanned = date + '/' + time;
     }
 
-    getVendor(){
-        var vendor = oui(this.mac);
-        if(vendor == null){
+    getVendor(vendorRecieved){
+        if(this.mac !== 'Manually Added'){
+            var vendor = oui(this.mac);
+        }
+        else{
+            var vendor = vendorRecieved;
+        }
+
+        if(vendor == null || !vendor){
             this.wifi_vendor = "Unknown Vendor";
         }
         else{
@@ -51,9 +57,14 @@ export default class myClass {
             this.reviews = reviews;
         }
         else{
-            this.reviews = "No Reviews";
+            this.reviews = [];
         }
 
+    }
+
+    addDocInfo(docType, url){
+        this.docType = docType;
+        this.docURL = url;
     }
 
 

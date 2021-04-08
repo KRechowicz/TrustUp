@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import { FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List } from 'react-native-paper';
+import {FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, Subheading} from 'react-native-paper';
 import {SearchBar, ListItem, Icon} from "react-native-elements";
 
 const config = require('../config');
@@ -76,523 +76,7 @@ class HomeScreen extends Component{
             selectedId: -1,
             data: [],
             filteredData: [],
-            deviceList:[
-
-                {
-
-                    "grade": "E",
-
-                    "ip": "192.168.0.6",
-
-                    "lastScanned": "2021-4-5/13:38",
-
-                    "mac": "B0:2A:43:69:AC:A8",
-
-                    "reviews": [
-
-                        {
-
-                            "case": "This service uses your personal information for many different purposes",
-
-                            "id": 12829,
-
-                            "point": "bad",
-
-                            "score": 40,
-
-                            "title": "This service uses your personal information for many different purposes",
-
-                            "tldr": "List (summarized):\r\n\"We use the information we collect from all our services for the following purposes: Provide our services[...] Maintain &amp. improve our services[...] Develop new services[...] Provide personalized services, including content and ads[...] Communicate with you[...]\""
-
-                        },
-
-                        {
-
-                            "case": "There is a date of the last update of the agreements",
-
-                            "id": 856,
-
-                            "point": "neutral",
-
-                            "score": 50,
-
-                            "title": "There is a date of the last update of the terms",
-
-                            "tldr": ""
-
-                        },
-
-                        {
-
-                            "case": "Private messages can be read",
-
-                            "id": 13935,
-
-                            "point": "bad",
-
-                            "score": 70,
-
-                            "title": "The service can read your private emails",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "The service provides details about what kinds of personal information they collect",
-
-                            "id": 13934,
-
-                            "point": "good",
-
-                            "score": 30,
-
-                            "title": "The service provides details about what kinds of personal information they collect",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "The service reviews its privacy policy on a regular basis",
-
-                            "id": 13938,
-
-                            "point": "good",
-
-                            "score": 30,
-
-                            "title": "The service reviews its privacy policy on a regular basis",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "A complaint mechanism is provided for the handling of personal data",
-
-                            "id": 13940,
-
-                            "point": "good",
-
-                            "score": 30,
-
-                            "title": "The service provides a complaint mechanism for the handling of personal data",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "You have the right to leave this service at any time",
-
-                            "id": 13956,
-
-                            "point": "good",
-
-                            "score": 15,
-
-                            "title": "You have the right to leave this service at any time",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "This service provides archives of their Terms of Service so that changes can be viewed over time",
-
-                            "id": 950,
-
-                            "point": "good",
-
-                            "score": 50,
-
-                            "title": "Partial archives of their terms are available",
-
-                            "tldr": "At http://www.google.com/intl/en/policies/terms/archive/ you can see at least one previous versions of Google's terms"
-
-                        }
-
-                    ],
-
-                    "tosdr_vendor": "google",
-
-                    "wifi_vendor": "Google Inc."
-
-                },
-
-                {
-
-                    "grade": "E",
-
-                    "ip": "192.168.0.199",
-
-                    "lastScanned": "2021-4-5/13:38",
-
-                    "mac": "1C:F2:9A:47:14:96",
-
-                    "reviews": [
-
-                        {
-
-                            "case": "This service uses your personal information for many different purposes",
-
-                            "id": 12829,
-
-                            "point": "bad",
-
-                            "score": 40,
-
-                            "title": "This service uses your personal information for many different purposes",
-
-                            "tldr": "List (summarized):\r\n\"We use the information we collect from all our services for the following purposes: Provide our services[...] Maintain &amp. improve our services[...] Develop new services[...] Provide personalized services, including content and ads[...] Communicate with you[...]\""
-
-                        },
-
-                        {
-
-                            "case": "There is a date of the last update of the agreements",
-
-                            "id": 856,
-
-                            "point": "neutral",
-
-                            "score": 50,
-
-                            "title": "There is a date of the last update of the terms",
-
-                            "tldr": ""
-
-                        },
-
-                        {
-
-                            "case": "Private messages can be read",
-
-                            "id": 13935,
-
-                            "point": "bad",
-
-                            "score": 70,
-
-                            "title": "The service can read your private emails",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "The service provides details about what kinds of personal information they collect",
-
-                            "id": 13934,
-
-                            "point": "good",
-
-                            "score": 30,
-
-                            "title": "The service provides details about what kinds of personal information they collect",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "The service reviews its privacy policy on a regular basis",
-
-                            "id": 13938,
-
-                            "point": "good",
-
-                            "score": 30,
-
-                            "title": "The service reviews its privacy policy on a regular basis",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "A complaint mechanism is provided for the handling of personal data",
-
-                            "id": 13940,
-
-                            "point": "good",
-
-                            "score": 30,
-
-                            "title": "The service provides a complaint mechanism for the handling of personal data",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "You have the right to leave this service at any time",
-
-                            "id": 13956,
-
-                            "point": "good",
-
-                            "score": 15,
-
-                            "title": "You have the right to leave this service at any time",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "This service provides archives of their Terms of Service so that changes can be viewed over time",
-
-                            "id": 950,
-
-                            "point": "good",
-
-                            "score": 50,
-
-                            "title": "Partial archives of their terms are available",
-
-                            "tldr": "At http://www.google.com/intl/en/policies/terms/archive/ you can see at least one previous versions of Google's terms"
-
-                        }
-
-                    ],
-
-                    "tosdr_vendor": "google",
-
-                    "wifi_vendor": "Google Inc."
-
-                },
-
-                {
-
-                    "grade": "E",
-
-                    "ip": "192.168.0.160",
-
-                    "lastScanned": "2021-4-5/13:38",
-
-                    "mac": "88:E9:FE:3C:9C:9C",
-
-                    "reviews": [
-
-                        {
-
-                            "case": "This service keeps a license on user-generated content even after users close their accounts.",
-
-                            "id": 16636,
-
-                            "point": "bad",
-
-                            "score": 50,
-
-                            "title": "This service keeps a license on user-generated content even after users close their accounts.",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "You can opt out of targeted advertising",
-
-                            "id": 2094,
-
-                            "point": "good",
-
-                            "score": 25,
-
-                            "title": "Apple provides an opt-out method for Apple targeted advertising",
-
-                            "tldr": "Apple provides an opt-out method for Apple targeted advertising"
-
-                        },
-
-                        {
-
-                            "case": "Your data may be processed and stored anywhere in the world",
-
-                            "id": 11299,
-
-                            "point": "bad",
-
-                            "score": 25,
-
-                            "title": "Your data may be processed and stored anywhere in the world",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "The service may change its terms at any time, but the user will receive notification of the changes.",
-
-                            "id": 10287,
-
-                            "point": "neutral",
-
-                            "score": 0,
-
-                            "title": "The service may change its terms at any time, but the user will receive notification of the changes.",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "Blocking first party cookies may limit your ability to use the service",
-
-                            "id": 11300,
-
-                            "point": "neutral",
-
-                            "score": 50,
-
-                            "title": "Blocking first party cookies may limit your ability to use the service",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "This service may use your personal information for marketing purposes",
-
-                            "id": 11298,
-
-                            "point": "bad",
-
-                            "score": 50,
-
-                            "title": "This service may use your personal information for marketing purposes",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "This service shares your personal data with third parties that are not involved in its operation",
-
-                            "id": 11717,
-
-                            "point": "bad",
-
-                            "score": 70,
-
-                            "title": "This service can share your personal information to third parties ",
-
-                            "tldr": "Generated through the annotate view"
-
-                        },
-
-                        {
-
-                            "case": "The service can delete specific content without reason and may do it without prior notice",
-
-                            "id": 11301,
-
-                            "point": "blocker",
-
-                            "score": 50,
-
-                            "title": "The service can delete specific content without reason and may do it without prior notice",
-
-                            "tldr": "Generated through the annotate view"
-
-                        }
-
-                    ],
-
-                    "tosdr_vendor": "apple",
-
-                    "wifi_vendor": "Apple"
-
-                },
-
-                {
-
-                    "ip": "192.168.0.1",
-
-                    "lastScanned": "2021-4-5/13:38",
-
-                    "mac": "70:03:7E:F0:32:02",
-
-                    "tosdr_vendor": "Not in Database",
-
-                    "wifi_vendor": "Technicolor CH USA Inc."
-
-                },
-
-                {
-
-                    "ip": "192.168.0.63",
-
-                    "lastScanned": "2021-4-5/13:38",
-
-                    "mac": "1A:44:6B:FD:76:1E",
-
-                    "tosdr_vendor": "Not in Database",
-
-                    "wifi_vendor": "Unknown Vendor"
-
-                },
-
-                {
-
-                    "ip": "192.168.0.151",
-
-                    "lastScanned": "2021-4-5/13:38",
-
-                    "mac": "02:CB:00:F2:B4:42",
-
-                    "tosdr_vendor": "Not in Database",
-
-                    "wifi_vendor": "Unknown Vendor"
-
-                },
-
-                {
-
-                    "ip": "192.168.0.157",
-
-                    "lastScanned": "2021-4-5/13:38",
-
-                    "mac": "F4:30:B9:BD:61:10",
-
-                    "tosdr_vendor": "Not in Database",
-
-                    "wifi_vendor": "Hewlett-Packard Company"
-
-                },
-
-                {
-
-                    "ip": "192.168.0.189",
-
-                    "lastScanned": "2021-4-5/13:39",
-
-                    "mac": "D4:9E:3B:7B:77:78",
-
-                    "tosdr_vendor": "Not in Database",
-
-                    "wifi_vendor": "Guangzhou Shiyuan Electronic Technology Company Limited"
-
-                }
-
-            ],
+            deviceList:[],
         }
 
     }
@@ -670,6 +154,15 @@ class HomeScreen extends Component{
         this.setState({filteredData: filteredData});
     };
 
+    renderEmptyContainer = () =>{
+        return(
+            <Subheading style={styles.paddingStyle}>
+                No Companies in your List.
+            </Subheading>
+        );
+
+    }
+
 
     renderItem = ({ item, index }) => {
         let isGrade = true;
@@ -683,15 +176,21 @@ class HomeScreen extends Component{
             isManuallyAdded = true;
         }
         return(
-            <DataTable.Row onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})}>
-                <DataTable.Cell>
-                    { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
+
+        <View accessible={true}
+              screenReaderEnable={true}>
+            <DataTable.Row onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})} accessible={false}>
+                <DataTable.Cell accessible={false}>
+                    { item.wifi_vendor}
                 </DataTable.Cell>
 
-                <DataTable.Cell>
+                <DataTable.Cell accessible={false}>
                     {isGrade? item.grade : "Unknown"}
                 </DataTable.Cell>
             </DataTable.Row>
+
+        </View>
+
         );
     }
 
@@ -727,37 +226,49 @@ class HomeScreen extends Component{
         return(
             <PaperProvider theme={theme}>
                 <View style={styles.container}>
-                    {/*<TextInput placeholder="Search" style={{padding:5}}*/}
-                    {/*           onChangeText={(name_address) => this.setState({name_address})}/>*/}
-                    <View style={styles.information}>
+
+                    <View style={styles.information} accessible={true}
+                          accessibilityLabel="Tap the Add Company Button to add a company to your list.  "
+                          screenReaderEnable={true}>
                         <Icon name="information-outline" type="material-community" size={24} />
-                        <Text style={styles.row}>Scan your network to identify connected devices and view their associated Trust levels </Text>
+                        <Text style={styles.row}>Tap the Add Company Button to add a Company to your list.  </Text>
                     </View>
 
-                    <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}>
-                        Grade Unknown Company
-                    </Button>
+                    <View style={styles.paddingStyle}>
+                        <Button mode="contained"
+                                onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
+                                accessible={true}
+                                accessibilityLabel="Add Company."
+                                accessibilityHint="Navigates to Add Company Screen."
+                                screenReaderEnable={true}
+                        >
+                            Add Company
+                        </Button>
+                    </View>
 
-                    <View style={styles.information}>
+                    <View style={styles.information} accessible={true}
+                          accessibilityLabel="Each item on the list is a company, tap on a company for more information  "
+                          screenReaderEnable={true}>
                         <Icon name="information-outline" type="material-community" size={24} />
                         <Text style={styles.row}>Each company is a device on your network, tap on a device for more information  </Text>
                     </View>
 
                     <View style={styles.listContainer}>
-                        <DataTable.Header>
-                            <DataTable.Title style={styles.name}>Company</DataTable.Title>
-                            <DataTable.Title>Grade</DataTable.Title>
+                        <DataTable.Header accessible={true}
+                                          accessibilityLabel="List of your Devices with Company name and Privacy Grade"
+                                          accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
+                                          screenReaderEnable={true}>
+                            <DataTable.Title style={styles.name} accessible={false}>Company</DataTable.Title>
+                            <DataTable.Title accessible={false}>Grade</DataTable.Title>
                         </DataTable.Header>
                         <FlatList
                             data={this.state.deviceList}
                             keyExtractor= {(item, index) => index.toString()}
                             renderItem={this.renderItem}
+                            ListEmptyComponent={this.renderEmptyContainer}
                         />
                     </View>
 
-                    <Button style={styles.button} mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}>
-                        Scan for my Devices
-                    </Button>
 
                 </View>
             </PaperProvider>

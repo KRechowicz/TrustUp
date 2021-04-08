@@ -48,13 +48,16 @@ export default class App extends Component{
                                     <Button
                                         onPress={() => this.setSignedOut()}
                                         title="Logout"
+                                        accessible={true}
+                                        accessibilityLabel="Logout "
+                                        screenReaderEnable={true}
                                     />
                                 ),
                             }}/>
                             <Stack.Screen name="ScanningScreen" component={ScanScreen} options={{ title: 'Loading' }} />
-                            <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} options={{ title: 'Unknown Vendor' }} />
-                            <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} options={{ title: 'Unknown Vendor' }} />
-                            <Stack.Screen name="DeviceModal" component={DeviceModal} options={{ title: 'Device Information' }}/>
+                            <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} options={{ title: 'Add Company' }} />
+                            <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} options={{ title: 'Adding Company' }} />
+                            <Stack.Screen name="DeviceModal" component={DeviceModal} options={{ title: 'Company Information' }}/>
                             <Stack.Screen name="About" component={About} options={{ title: 'Additional Information' }}/>
                         </Stack.Navigator>
                     </NavigationContainer>

@@ -72,7 +72,8 @@ const DeviceModal = ({ navigation, route }) => {
                     <Text style={styles.row}>Company - This is the name of the company that either made or manages your device or its software.</Text>
                     <Text style={styles.row}>IP - This is an address assigned by your network for this device. Please note that this may change and can be different from the address seen from outside of your network.</Text>
                     <Text style={styles.row}>Mac address - Each device has a unique identifier which is different from any other device. This helps guarantee devices cannot pretend to be something else.</Text>
-                    <View style={styles.grades}>
+                    <View style={styles.grades} accessible={true}
+                          screenReaderEnable={true}>
                         <Text style={styles.row}>Grades: </Text>
                         <Text style={styles.row}>A - The best terms of services: they treat the user fairly, respect their rights, and will not abuse their data.</Text>
                         <Text style={styles.row}>B - The terms of services are fair towards the user but they could be improved.</Text>

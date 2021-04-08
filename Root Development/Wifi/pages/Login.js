@@ -175,19 +175,26 @@ class Login extends Component {
         return (
             <PaperProvider>
                 <View style = { styles.container }>
-                    <Image source={Logo} style={styles.image}  />
                     <Title style = { styles.header }> Welcome to our App! </Title>
                     <Button mode="contained" style={styles.button} icon='apple'
-                            onPress = { () => this.webAuth('apple')}>
+                            onPress = { () => this.webAuth('apple')} accessible={true}
+                            accessibilityLabel="Sign in with Apple."
+                            accessibilityHint="Use this button to sign in with Apple."
+                            screenReaderEnable={true}>
                         Sign in with Apple
                     </Button>
                     <Button mode="contained" style={styles.button} icon='google'
-                            onPress = { () => this.webAuth('google-oauth2')}>
+                            onPress = { () => this.webAuth('google-oauth2')} accessible={true}
+                            accessibilityLabel="Sign in with Google."
+                            accessibilityHint="Use this button to sign in with Google."
+                            screenReaderEnable={true}>
                         Sign in with Google
                     </Button>
-                    <View style={styles.information}>
+                    <View style={styles.information} accessible={true}
+                          accessibilityLabel="TrustUp tells discovers and explains Privacy issues and Security Risks associated with devices on your network"
+                          screenReaderEnable={true}>
                         <Icon name="information-outline" type="material-community" size={24} />
-                        <Text>TrustUp tells discovers and explains Privacy issues and Security Risks associated with devices on your network</Text>
+                        <Text>TrustUp discovers and explains Privacy issues and Security Risks associated with devices</Text>
                     </View>
                 </View>
             </PaperProvider>

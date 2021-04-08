@@ -60,6 +60,14 @@ const DeviceModal = ({ navigation, route }) => {
         isManuallyAdded = true;
     }
 
+    console.log(item.reviews);
+
+    let isReviews = true;
+    if(!item.reviews){
+        item.reviews = [];
+        console.log(item.reviews);
+    }
+
     /*
     <Text>
         {item.reviews[0].title}
@@ -78,6 +86,15 @@ const DeviceModal = ({ navigation, route }) => {
     }
      */
 
+    const renderEmptyContainer = () =>{
+        return(
+            <Subheading style={styles.paddingStyle}>
+                No Reviews for this Company
+            </Subheading>
+        );
+
+    }
+
     const renderItems = ({item}) => {
         let isReviews = true;
         if(!item.title){
@@ -85,65 +102,23 @@ const DeviceModal = ({ navigation, route }) => {
         }
         return (
             <List.Item style={{ margin: 0, padding: 0 }}
-                       description={isReviews ? item.title.toString(): "No Reviews"}
+                       description={item.title.toString()}
                        theme={styles.theme}
+                       accessible={true}
 
             />
         )
     }
 
 
-
-    /*
-    const renderDialog = () => {
-        setVisible(true)
-        return(
-            <Portal>
-                <Dialog visible={visible} onDismiss={setVisible(false)}>
-                    <Dialog.title>
-                        Additional Information
-                    </Dialog.title>
-                    <Dialog.Content>
-                        <View style={styles.information}>
-                            <Text style={styles.row}>Company - This is the name of the company that either made or manages your device or its software.</Text>
-                            <Text style={styles.row}>IP - This is an address assigned by your network for this device. Please note that this may change and can be different from the address seen from outside of your network.</Text>
-                            <Text style={styles.row}>Mac address - Each device has a unique identifier which is different from any other device. This helps guarantee devices cannot pretend to be something else.</Text>
-                            <View style={styles.grades}>
-                                <Text style={styles.row}>Grades: </Text>
-                                <Text style={styles.row}>A - The best terms of services: they treat the user fairly, respect their rights, and will not abuse their data.</Text>
-                                <Text style={styles.row}>B - The terms of services are fair towards the user but they could be improved.</Text>
-                                <Text style={styles.row}>C - The terms of service are okay but some issues need your consideration.</Text>
-                                <Text style={styles.row}>D - The terms of service are very uneven or some important issues need the user's attention.</Text>
-                                <Text style={styles.row}>E - The terms of service raise very serious concerns.</Text>
-                                <Text style={styles.row}>No Grade - The terms have not been completely graded yet.</Text>
-                            </View>
-                        </View>
-                    </Dialog.Content>
-                    <Dialog.Actions>
-                        <Button onPress={() => setVisible(false)}>Ok</Button>
-                    </Dialog.Actions>
-                </Dialog>
-            </Portal>
-        )
-    }
-     */
-
     console.log(index);
     return (
         <PaperProvider theme={theme}>
             <>
                 <View style={styles.innerBody}>
-                    <View style={styles.iconButton}>
-                        <IconButton
-                            icon="camera"
-                            style={styles.IconButton}
-                            size={30}
-                            onPress={() => navigation.navigate('About')}
-                        />
-                    </View>
 
                     <Subheading style={styles.paddingStyle}>
-                        Company Name - { isManuallyAdded ? item.tosdr_vendor: item.wifi_vendor}
+                        Company Name - { item.wifi_vendor}
                     </Subheading>
 
                     <Subheading style={styles.paddingStyle}>
@@ -158,7 +133,9 @@ const DeviceModal = ({ navigation, route }) => {
                         Grade - { isGrade ? item.grade: 'Unknown'}
                     </Subheading>
 
-                    <Subheading style={styles.paddingStyle}>
+                    <Subheading style={styles.paddingStyle} accessible={true}
+                                accessibilityLabel="This is the companies list of reviews."
+                                screenReaderEnable={true}>
                         Reviews:
                     </Subheading>
 
@@ -167,12 +144,29 @@ const DeviceModal = ({ navigation, route }) => {
                             data={item.reviews}
                             keyExtractor= {(item, index) => index.toString()}
                             renderItem={renderItems}
+                            ListEmptyComponent={renderEmptyContainer}
                         />
                     </View>
 
-                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)}>
+                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true}
+                            accessibilityLabel="Tap to remove this company from your list."
+                            accessibilityHint="This will navigate you to the home page."
+                            screenReaderEnable={true}>
                         { isIndex ? 'Remove from List' : 'Add to List' }
                     </Button>
+
+                    <View>
+                        <Button
+                            accessible={true}
+                            accessibilityLabel="Tap for more details about the information on this page."
+                            screenReaderEnable={true}
+                            icon="information"
+                            style={styles.IconButton}
+                            size={30}
+                            onPress={() => navigation.navigate('About')}
+
+                        />
+                    </View>
                 </View>
             </>
         </PaperProvider>

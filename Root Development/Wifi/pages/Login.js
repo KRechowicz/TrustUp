@@ -24,7 +24,6 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 
 const SCREENSIZE = Dimensions.get('screen');
 
-import { Logo } from '../Images';
 import {Icon} from "react-native-elements";
 
 var credentials = require('../configs/auth0-configuration');

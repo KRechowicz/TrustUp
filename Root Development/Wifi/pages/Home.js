@@ -17,6 +17,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import {FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, Subheading, Paragraph, Divider} from 'react-native-paper';
 import {SearchBar, ListItem, Icon} from "react-native-elements";
+import {Linking} from "react-native";
 
 const config = require('../config');
 
@@ -37,7 +38,6 @@ const getData = async () => {
 }
 
 const deleteDevice = async (userID, ip, index) => {
-    console.log("WHAT the fuck", userID);
     const response = await fetch(config.backend_endpoint + "/users/" + userID + "/scan/deleteDevice", {
         method: 'POST',
         headers: {
@@ -196,34 +196,6 @@ class HomeScreen extends Component{
         );
     }
 
-    /*
-                <FlatList
-                data={this.state.deviceList}
-                keyExtractor= {(item, index) => index.toString()}
-                renderItem={this.renderItem}
-                />
-
-                 <List.Item
-                    title={ isManuallyAdded ? "Vendor Name: " + item.tosdr_vendor: "Vendor Name: " + item.wifi_vendor}
-                    description={isGrade? "Grade : "+ item.grade : "Grade : Unknown"}
-                    theme={styles.theme}
-                />
-
-                        <DataTable>
-                            <DataTable.Header>
-                                <DataTable.Title>Company</DataTable.Title>
-                                <DataTable.Title>Grade</DataTable.Title>
-                            </DataTable.Header>
-                        </DataTable>
-
-                        <IconButton
-                           icon="wifi-plus"
-                           color={DefaultTheme.primaryColor}
-                           size={20}
-                           onPress={() => console.log('Pressed')}
-                       />
-     */
-//ItemSeparatorComponent={Divider}
     render(){
         return(
             <PaperProvider theme={theme}>
@@ -235,11 +207,23 @@ class HomeScreen extends Component{
                         <Icon style={styles.row} name="information-outline" type="material-community" size={24} />
                         <Text style={styles.row}>Tap the Add Company Button to add a Company to your list.  </Text>
                     </View>
+                    <View style={styles.paddingStyle}>
+                        <Button mode="contained"
+                                onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
+                                accessible={true}
+                                accessibilityLabel="Add Company."
+                                accessibilityHint="Navigates to Add Company Screen."
+                                screenReaderEnable={true}
+                        >
+                            Add Company
+                        </Button>
+                    </View>
+
                     <View style={styles.information} accessible={true}
                           accessibilityLabel="Each item on the list is a company, tap on a company for more information  "
                           screenReaderEnable={true}>
                         <Icon name="information-outline" type="material-community" size={24} />
-                        <Text style={styles.row}>Each company is a device on your network, tap on a device for more information  </Text>
+                        <Text style={styles.row}>Each item on the list is a company, tap on a company for more information  </Text>
                     </View>
 
                     <View style={styles.listContainer}>
@@ -263,125 +247,29 @@ class HomeScreen extends Component{
                     </View>
 
                     <View style={styles.paddingStyle}>
-                        <Button mode="contained"
-                                onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
-                                accessible={true}
-                                accessibilityLabel="Add Company."
-                                accessibilityHint="Navigates to Add Company Screen."
-                                screenReaderEnable={true}
-                        >
-                            Add Company
-                        </Button>
-                    </View>
-
-                    <View>
                         <Button
                             mode="contained"
                             accessible={true}
                             accessibilityLabel="Tap for more details about the information on this page."
                             screenReaderEnable={true}
-                            style={styles.InfoButton}
-                            size={30}
                             onPress={() => this.props.navigation.navigate('About')}
 
                         >Information</Button>
                     </View>
 
+                    <View style={styles.paddingStyle}>
+                        <Button
+                            mode="contained"
+                            accessible={true}
+                            accessibilityLabel="Tap for more details about the information on this page."
+                            screenReaderEnable={true}
+                            onPress={ ()=>{ Linking.openURL('https://github.com/vmasc-odu/CoVA_CCI/wiki')}}
+
+                        >About</Button>
+                    </View>
+
                 </View>
             </PaperProvider>
-/*
-            <SafeAreaView style={styles.container}>
-                <FlatList
-                    data={this.state.deviceList}
-                    renderItem={this.renderItem}
-                    keyExtractor={(item, index) => index.toString()}
-
-                />
-            </SafeAreaView>
-
-
-
- */
-
-            // <PaperProvider theme={theme}>
-            //     <SafeAreaView style={styles.container}>
-            //         <FlatList data={this.state.deviceList} renderItem={this.renderItem}
-            //         />
-            //
-            //         <View style={styles.search}>
-            //             <SearchBar
-            //                 round={true}
-            //                 lightTheme={true}
-            //                 placeholder="Search for Devices..."
-            //                 autoCapitalize='none'
-            //                 autoCorrect={false}
-            //                 onChangeText={this.search}
-            //                 value={this.state.searchText}
-            //                 style={styles.searchInput}
-            //             />
-            //             <FlatList
-            //                 data={this.state.filteredData && this.state.filteredData.length > 0 ? this.state.filteredData : this.state.data}
-            //                 keyExtractor={(item) => `item-${item}`}
-            //                 renderItem={({item}) => <searchList
-            //                     id={item}
-            //
-            //                 />}
-            //                 ItemSeparatorComponent={() => <View style={styles.separator}/>}
-            //             />
-            //         </View>
-            //
-            //         <Button mode="contained" onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}
-            //                 style = {styles.scanButton}
-            //                 icon = 'camera'>
-            //             <Text style = {styles.scanText}>
-            //                 Scan for my Devices
-            //             </Text>
-            //         </Button>
-            //         <Text style = {styles.homeText}>
-            //             Your Devices:
-            //         </Text>
-            //
-            //         <FlatList data={this.state.deviceList} renderItem={this.renderItem}
-            //                   />
-            //
-            //         {/*{*/}
-            //         {/*    this.state.deviceList.map((item, index) => (*/}
-            //
-            //         {/*        <Button*/}
-            //         {/*            accessible={true}*/}
-            //         {/*            accessibilityLabel="Go to device information screen"*/}
-            //         {/*            accessibilityHint="Navigates to device information screen"*/}
-            //         {/*            mode="contained"*/}
-            //         {/*            key = {item.wifi_vendor}*/}
-            //         {/*            //style = {styles.container}*/}
-            //         {/*            onPress={() => this.props.navigation.navigate('DeviceModal')}*/}
-            //         {/*            style = {styles.modalButton}>*/}
-            //         {/*            <Text style = {styles.buttonText}>*/}
-            //         {/*                {item.wifi_vendor}*/}
-            //         {/*            </Text>*/}
-            //         {/*        </Button>*/}
-            //         {/*    ))*/}
-            //         {/*}*/}
-            //         <Button mode="contained" onPress={() => this.props.navigation.navigate('UnknownVendorScreen')} style = {styles.scanButton}>
-            //             <Text style = {styles.scanText}>
-            //                 Go to Unknown Page
-            //             </Text>
-            //         </Button>
-            //     </SafeAreaView>
-            // </PaperProvider>
-            //
-            // //     <Button
-            // //         title="Go to Scanning Screen"
-            // //         onPress={() => this.props.navigation.navigate('ScanningScreen',{userID:this.userID})}
-            // //     />
-            // //
-            // //     <Button
-            // //         title = "Go to Unknown Page"
-            // //         onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
-            // //     />
-            // // </View>
-
-
 
 
         );
@@ -408,6 +296,8 @@ const styles = StyleSheet.create({
     listContainer: {
         height:SCREENSIZE.height * 0.55,
         paddingHorizontal: SCREENSIZE.width * .05,
+        paddingVertical: SCREENSIZE.height * .01,
+        paddingBottom: SCREENSIZE.height * .08,
         //flexGrow: 1,
         //padding: 5,
         margin: 5,

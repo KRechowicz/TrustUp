@@ -19,7 +19,7 @@ export default class App extends Component{
     constructor() {
         super();
         this.state ={
-            isSignedIn: false,
+            isSignedIn: true,
         }
         this.setSignedIn = this.setSignedIn.bind(this)
     }

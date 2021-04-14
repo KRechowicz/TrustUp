@@ -190,17 +190,30 @@ export default class UnknownVendorDisplay extends Component{
 
 
     startCheck = async (company) => {
-        const result = this.searchFilterFunction(company);
+        const searchResult = this.searchFilterFunction(company);
         let deviceResult;
-        if(result[0]){
-            deviceResult = await fetchTOSDRInfo(result[0]);
+        if(searchResult[0]){
+            const result = await fetchTOSDRInfo(searchResult[0]);
+            if(!result.grade){
+                const nlpResult = await this.sendInfoToNLP(result.docURL);
+                result.addGradeReviews(nlpResult, null);
+
+            }
+            result.getVendor(company);
+
+            deviceResult = result;
+
         }
         else{
-            deviceResult = await this.getSearchResult(company);
-        }
-        deviceResult.getVendor(company);
-        if(!deviceResult.grade){
-            deviceResult = await this.sendInfoToNLP(deviceResult);
+            const device = new ScanResults(null, null);
+            const result = await this.getSearchResult(company);
+            device.addDocInfo("Privacy Policy", result.url);
+            const nlpResult =  await this.sendInfoToNLP(result.url);
+            console.log(nlpResult)
+            device.addGradeReviews(nlpResult, null);
+            device.getVendor(company);
+
+            deviceResult = device;
         }
 
         const addedResponse = await addDevice(deviceResult);
@@ -252,10 +265,11 @@ export default class UnknownVendorDisplay extends Component{
         })
         const json = await response.json();
         console.log(json);
+        return json;
     }
 
 
-    sendInfoToNLP = async(device) => {
+    sendInfoToNLP = async(url) => {
         console.log("Sending info to NLP...Waiting For grade...");
         const response = await fetch(config.backend_endpoint + '/sendToNLP', {
             method: 'POST',
@@ -264,13 +278,12 @@ export default class UnknownVendorDisplay extends Component{
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify({
-                url: device.docURL,
+                url: url,
                 docType: "Privacy Policy"
             })
         })
         const data = await response.json();
-        device.addGradeReviews(data.grade, null);
-        return device;
+        return data.grade;
     }
 
 

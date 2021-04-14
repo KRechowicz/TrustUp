@@ -19,7 +19,7 @@ export default class myClass {
         }
         else{
             this.ip = "Manually Added";
-            this.mac = "Manually Added"
+            this.mac = "Manually Added";
         }
         this.getScannedTime();
     }

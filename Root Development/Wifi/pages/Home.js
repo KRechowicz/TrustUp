@@ -15,7 +15,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
-import {FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, Subheading} from 'react-native-paper';
+import {FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, Subheading, Paragraph, Divider} from 'react-native-paper';
 import {SearchBar, ListItem, Icon} from "react-native-elements";
 
 const config = require('../config');
@@ -181,7 +181,7 @@ class HomeScreen extends Component{
 
         <View accessible={true}
               screenReaderEnable={true}>
-            <DataTable.Row onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})} accessible={false}>
+            <DataTable.Row style={styles.border} onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})} accessible={false}>
                 <DataTable.Cell accessible={false}>
                     { item.wifi_vendor}
                 </DataTable.Cell>
@@ -223,7 +223,7 @@ class HomeScreen extends Component{
                            onPress={() => console.log('Pressed')}
                        />
      */
-
+//ItemSeparatorComponent={Divider}
     render(){
         return(
             <PaperProvider theme={theme}>
@@ -232,8 +232,34 @@ class HomeScreen extends Component{
                     <View style={styles.information} accessible={true}
                           accessibilityLabel="Tap the Add Company Button to add a company to your list.  "
                           screenReaderEnable={true}>
-                        <Icon name="information-outline" type="material-community" size={24} />
+                        <Icon style={styles.row} name="information-outline" type="material-community" size={24} />
                         <Text style={styles.row}>Tap the Add Company Button to add a Company to your list.  </Text>
+                    </View>
+                    <View style={styles.information} accessible={true}
+                          accessibilityLabel="Each item on the list is a company, tap on a company for more information  "
+                          screenReaderEnable={true}>
+                        <Icon name="information-outline" type="material-community" size={24} />
+                        <Text style={styles.row}>Each company is a device on your network, tap on a device for more information  </Text>
+                    </View>
+
+                    <View style={styles.listContainer}>
+                        <DataTable>
+                            <DataTable.Header style={styles.border}
+                                              accessible={true}
+                                              accessibilityLabel="List of your Devices with Company name and Privacy Grade"
+                                              accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
+                                              screenReaderEnable={true}>
+                                <DataTable.Title accessible={false}><Paragraph>Company</Paragraph></DataTable.Title>
+                                <DataTable.Title accessible={false}><Paragraph>Grade</Paragraph></DataTable.Title>
+                            </DataTable.Header>
+
+                            <FlatList
+                                data={this.state.deviceList}
+                                keyExtractor= {(item, index) => index.toString()}
+                                renderItem={this.renderItem}
+                                ListEmptyComponent={this.renderEmptyContainer}
+                            />
+                        </DataTable>
                     </View>
 
                     <View style={styles.paddingStyle}>
@@ -248,29 +274,6 @@ class HomeScreen extends Component{
                         </Button>
                     </View>
 
-                    <View style={styles.information} accessible={true}
-                          accessibilityLabel="Each item on the list is a company, tap on a company for more information  "
-                          screenReaderEnable={true}>
-                        <Icon name="information-outline" type="material-community" size={24} />
-                        <Text style={styles.row}>Each company is a device on your network, tap on a device for more information  </Text>
-                    </View>
-
-                    <View style={styles.listContainer}>
-                        <DataTable.Header accessible={true}
-                                          accessibilityLabel="List of your Devices with Company name and Privacy Grade"
-                                          accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
-                                          screenReaderEnable={true}>
-                            <DataTable.Title style={styles.name} accessible={false}>Company</DataTable.Title>
-                            <DataTable.Title accessible={false}>Grade</DataTable.Title>
-                        </DataTable.Header>
-                        <FlatList
-                            data={this.state.deviceList}
-                            keyExtractor= {(item, index) => index.toString()}
-                            renderItem={this.renderItem}
-                            ListEmptyComponent={this.renderEmptyContainer}
-                        />
-                    </View>
-
                     <View>
                         <Button
                             mode="contained"
@@ -283,7 +286,6 @@ class HomeScreen extends Component{
 
                         >Information</Button>
                     </View>
-
 
                 </View>
             </PaperProvider>
@@ -476,20 +478,26 @@ const styles = StyleSheet.create({
         margin: 3
     },
     row:{
-        padding: 1
+        paddingHorizontal: 3,
     },
     information: {
         // flex: 1,
         flexDirection: 'row',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingVertical: SCREENSIZE.height * .005,
+        paddingHorizontal: SCREENSIZE.width * .0075
     },
     divider:{
-        padding: 1,
-        margin: 2,
+        padding: 0.5,
+        margin: 1,
+        backgroundColor: '#000000'
     },
-    iconButton:{
-        alignItems: "center"
+    border:{
+        borderBottomColor: '#000000',
+        borderStartColor: '#000000',
+        borderEndColor: '#000000',
+        borderStyle: 'solid',
+        borderBottomWidth: 1
     }
 });
 
@@ -497,12 +505,17 @@ const theme = {
     ...DefaultTheme,
     roundness: 2,
     fontSize:90,
+    grey: '#000000',
+
     colors: {
         ...DefaultTheme.colors,
         primary: '#0060a9',
         accent: '#f3cd1f',
-
     },
+    fonts:{
+        fontSize: 'regular',
+        fontColor: '#000000'
+    }
 }
 
 export default HomeScreen;

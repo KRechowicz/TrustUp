@@ -65,6 +65,7 @@ const addDevice = async (userID, device) => {
 
 class HomeScreen extends Component{
     SearchList = ['Sony','paypal','spotify','pure','netflix','apple','microsoft','vk','yahoo','icloud','ask','hulu','signal','pocket','nvidia','bitdefender','sync','medium','brave','huawei','xiaomi','facebook','adobe','Element','amazon','Cisco','google','Rumble','slack','bitdefender','tosdr_vendor','symantec','service','sprint','virgin','cnet','bing','quake','multiple','lorea','onlive','king','cox','rac','enjin','none','uber','ello','mega','wix','looki','toggle','vero','identica','fitbit','taco','centurylink','jawbone','nokia','npr','flow','tmobile','path','revolut','Current','restream','canary','verizon','vive','bethesda','razer','drop','comcast','Reuters','bit','nsa','visions','chip','genius','emp','nrc','dudle','alza','shadow','baidu','inspire','target','nintendo','aol','vox','notion','garmin','waterfall','chase','honey','myspace','forbes','niche','gmx','hq','ixl','finn','leo','nexon','leet','minds','brilliant','gab','Trakt','yr','parsec','yase','icann','anki','grab','geco','akamai','chegg','bose','deepl','alpha','wired','dra','sophos','overleaf','byte','ebird','intercom','August Home','etsy','Nebula','xing','sony','visible','discovery','[spamtobedeleted]','adafruit','loom','xero','mla','whirlpool','matrix','pandora','oculus','yandex','ebay','mimo','samsung','petco','wire','adk','Logitech','Briar','Lenovo','Asus','Netgear','Sony','Motorola','Linksys','Belkin','TomTom','LYKA','Sweet','ADT','Ring LLC','Vice','Dash','Unity','Affirm','LogMeIn','amazon'];
+
     //deviceList:[];
 
 
@@ -270,6 +271,19 @@ class HomeScreen extends Component{
                         />
                     </View>
 
+                    <View>
+                        <Button
+                            mode="contained"
+                            accessible={true}
+                            accessibilityLabel="Tap for more details about the information on this page."
+                            screenReaderEnable={true}
+                            style={styles.InfoButton}
+                            size={30}
+                            onPress={() => this.props.navigation.navigate('About')}
+
+                        >Information</Button>
+                    </View>
+
 
                 </View>
             </PaperProvider>
@@ -384,6 +398,11 @@ const styles = StyleSheet.create({
     paddingStyle:{
         padding: 5
     },
+    InfoButton:{
+        margin: 10,
+        marginTop:30,
+        padding: 5
+    },
     listContainer: {
         height:SCREENSIZE.height * 0.55,
         paddingHorizontal: SCREENSIZE.width * .05,
@@ -469,6 +488,9 @@ const styles = StyleSheet.create({
         padding: 1,
         margin: 2,
     },
+    iconButton:{
+        alignItems: "center"
+    }
 });
 
 const theme = {

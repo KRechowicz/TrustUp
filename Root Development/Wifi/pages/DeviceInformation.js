@@ -43,6 +43,12 @@ const deleteDevice = async (ip, index, navigation) => {
 }
 
 const DeviceModal = ({ navigation, route }) => {
+    const GradeList =  {'A': 'The best terms of services; they treat the user fairly, respect their rights, and will not abuse their data.'
+            , 'B': 'The terms of services are fair towards the user but they could be improved.'
+            , 'C': 'The terms of service are okay but some issues need your consideration.'
+            , 'D': 'The terms of service are very uneven or some important issues need the user\'s attention.'
+            , 'E': 'The terms of service raise very serious concerns.'
+            , 'No Grade': 'The terms have not been completely graded yet.'}
     let isIndex = true;
     let isGrade = true;
     let isManuallyAdded = false;
@@ -103,6 +109,7 @@ const DeviceModal = ({ navigation, route }) => {
         return (
             <List.Item style={{ margin: 0, padding: 0 }}
                        description={item.title.toString()}
+                       descriptionStyle={styles.TextInfo}
                        theme={styles.theme}
                        accessible={true}
 
@@ -117,20 +124,33 @@ const DeviceModal = ({ navigation, route }) => {
             <>
                 <View style={styles.innerBody}>
 
-                    <Subheading style={styles.paddingStyle}>
-                        Company Name - { item.wifi_vendor}
+                    <Subheading style={styles.paddingStyle}
+                                accessible={true}
+                                screenReaderEnable={true}>
+                        Company Name -
+                    <Text style={styles.TextInfo} accessible={false}>{ " "+item.wifi_vendor}</Text>
                     </Subheading>
 
-                    <Subheading style={styles.paddingStyle}>
-                        IP - {item.ip}
+                    {/*<Subheading style={styles.paddingStyle}>*/}
+                    {/*    IP - {item.ip}*/}
+                    {/*</Subheading>*/}
+
+                    {/*<Subheading style={styles.paddingStyle}>*/}
+                    {/*    MAC - {item.mac}*/}
+                    {/*</Subheading>*/}
+
+                    <Subheading style={styles.paddingStyle}
+                                accessible={true}
+                                screenReaderEnable={true}>
+                        Grade -
+                        <Text style={styles.TextInfo} accessible={false}>{" " + isGrade ? item.grade: 'Unknown'}</Text>
                     </Subheading>
 
-                    <Subheading style={styles.paddingStyle}>
-                        MAC - {item.mac}
-                    </Subheading>
-
-                    <Subheading style={styles.paddingStyle}>
-                        Grade - { isGrade ? item.grade: 'Unknown'}
+                    <Subheading style={styles.paddingStyle}
+                                accessible={true}
+                                screenReaderEnable={true}>
+                        Grade Meaning -
+                        <Text style={styles.TextInfo} accessible={false}> {" "+GradeList[item.grade]}</Text>
                     </Subheading>
 
                     <Subheading style={styles.paddingStyle} accessible={true}
@@ -155,18 +175,18 @@ const DeviceModal = ({ navigation, route }) => {
                         { isIndex ? 'Remove from List' : 'Add to List' }
                     </Button>
 
-                    <View>
-                        <Button
-                            accessible={true}
-                            accessibilityLabel="Tap for more details about the information on this page."
-                            screenReaderEnable={true}
-                            icon="information"
-                            style={styles.IconButton}
-                            size={30}
-                            onPress={() => navigation.navigate('About')}
+                    {/*<View>*/}
+                    {/*    <Button*/}
+                    {/*        accessible={true}*/}
+                    {/*        accessibilityLabel="Tap for more details about the information on this page."*/}
+                    {/*        screenReaderEnable={true}*/}
+                    {/*        icon="information"*/}
+                    {/*        style={styles.IconButton}*/}
+                    {/*        size={30}*/}
+                    {/*        onPress={() => navigation.navigate('About')}*/}
 
-                        />
-                    </View>
+                    {/*    />*/}
+                    {/*</View>*/}
                 </View>
             </>
         </PaperProvider>
@@ -179,16 +199,19 @@ const styles = StyleSheet.create({
         //alignItems: 'center',
         //position: 'absolute',
         flex: 0.4,
+        paddingTop:30,
         //paddingVertical: SCREENSIZE.height * .02,
         paddingHorizontal: SCREENSIZE.width * .05,
     },
     paddingStyle:{
-        padding: 4,
-        margin: 4,
+        padding: 10,
+        margin: 1,
         fontWeight: "bold"
     },
     button:{
         margin: 10,
+        marginTop:30,
+        padding: 5
     },
     row:{
         padding: 1
@@ -219,7 +242,10 @@ const styles = StyleSheet.create({
     },
     iconButton:{
         alignItems: "center"
-    }
+    },
+    TextInfo:{fontWeight:'normal',
+    color:'#000000'},
+
 })
 
 const theme = {

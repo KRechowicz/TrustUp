@@ -184,11 +184,11 @@ class HomeScreen extends Component{
               screenReaderEnable={true}
               accessibilityLabel={item.wifi_vendor + 'with a grade of ' + item.grade}>
             <DataTable.Row style={styles.border} onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})} accessible={false}>
-                <DataTable.Cell accessible={false}>
+                <DataTable.Cell accessible={false} style={styles.title2}>
                     { item.wifi_vendor}
                 </DataTable.Cell>
 
-                <DataTable.Cell accessible={false}>
+                <DataTable.Cell accessible={false} style={styles.title}>
                     {isGrade? item.grade : "Unknown"}
                 </DataTable.Cell>
             </DataTable.Row>
@@ -235,8 +235,8 @@ class HomeScreen extends Component{
                                               accessibilityLabel="List of your Devices with Company name and Privacy Grade"
                                               accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
                                               screenReaderEnable={true}>
-                                <DataTable.Title accessible={false}><Paragraph>Company</Paragraph></DataTable.Title>
-                                <DataTable.Title accessible={false}><Paragraph>Grade</Paragraph></DataTable.Title>
+                                <DataTable.Title accessible={false} style={styles.title2}><Paragraph>Company</Paragraph></DataTable.Title>
+                                <DataTable.Title accessible={false} style={styles.title}><Paragraph>Grade</Paragraph></DataTable.Title>
                             </DataTable.Header>
 
                             <FlatList
@@ -267,7 +267,7 @@ class HomeScreen extends Component{
                             screenReaderEnable={true}
                             onPress={ ()=>{ Linking.openURL('https://github.com/vmasc-odu/About_TrustUP/wiki/Home')}}
 
-                        >About</Button>
+                        >About this app</Button>
                     </View>
 
                 </View>
@@ -282,13 +282,21 @@ class HomeScreen extends Component{
 
 const styles = StyleSheet.create({
     container: {
-        flex: 0.2,
+        flex: 0.5,
         justifyContent: 'space-between',
         paddingVertical: SCREENSIZE.height * .01,
-        paddingHorizontal: SCREENSIZE.width * .05
+        paddingHorizontal: SCREENSIZE.width * .05,
+        bottom: SCREENSIZE.height * .2,
+        top: SCREENSIZE.height * .01
     },
     paddingStyle:{
         padding: 5
+    },
+    title:{
+        marginLeft:SCREENSIZE.width * .22
+    },
+    title2:{
+        marginLeft:SCREENSIZE.width * (-.041)
     },
     InfoButton:{
         margin: 10,
@@ -296,8 +304,10 @@ const styles = StyleSheet.create({
         padding: 5
     },
     listContainer: {
-        height:SCREENSIZE.height * 0.55,
-        paddingHorizontal: SCREENSIZE.width * .05,
+        minHeight:SCREENSIZE.height * 0.4,
+        maxHeight:SCREENSIZE.height * 0.55,
+        //height:SCREENSIZE.height * 0.55,
+        paddingHorizontal: SCREENSIZE.width * .06,
         paddingVertical: SCREENSIZE.height * .01,
         paddingBottom: SCREENSIZE.height * .08,
         //flexGrow: 1,

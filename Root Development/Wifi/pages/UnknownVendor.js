@@ -35,13 +35,9 @@ export default class App extends Component {
     async searchForResults() {
         const query = this.companyName + " " + "Privacy Policy";
 
-        // const querySecond = this.companyName + " " + this.productName + " " + "Terms of Service";
 
         this.getSearchResult(query) //TOS: this.getSearchResult(querySecond) } } )
 
-        /* const data = await this.getSearchResult(query)
-
-        console.log(data) */
     }
 
     render() {
@@ -105,39 +101,3 @@ const theme = {
     },
 };
 
-/*
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#ffa9aa',
-    },
-    appBody: {
-        flex: .78,
-    },
-    innerBody: {
-        alignItems: 'center',
-        flex: 1,
-        paddingVertical: SCREENSIZE.height * .08,
-        paddingHorizontal: SCREENSIZE.width * .2,
-        justifyContent: 'space-between'
-    },
-    appFooter: {
-        flex: .22,
-        backgroundColor: 'white'
-    },
-    contentBox: {
-        backgroundColor: 'white',
-        width: SCREENSIZE.width * .8,
-        flex: .2,
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    boxes: {
-        width: SCREENSIZE.width * .4,
-        height: 40,
-        borderColor: 'gray',
-        borderWidth:1,
-        alignContent: 'center',
-    },
-})
-*/

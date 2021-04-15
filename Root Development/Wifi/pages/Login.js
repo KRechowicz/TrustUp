@@ -220,27 +220,6 @@ class Login extends Component {
         );
     }
 }
-//title = { loggedIn ? 'Log Out' : 'Log In' }
-
-/*
-<Text> You are currently{ loggedIn ? ' ' : ' not ' }logged in . </Text>
- */
-
-/*
-const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
-        backgroundColor: '#F5FCFF'
-    },
-    header: {
-        fontSize: 20,
-        textAlign: 'center',
-        margin: 10
-    }
-});
-*/
 
 const theme = {
     ...DefaultTheme,

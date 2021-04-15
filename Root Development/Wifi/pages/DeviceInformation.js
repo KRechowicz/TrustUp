@@ -57,11 +57,6 @@ const deleteDevice = async (ip, index, navigation) => {
     );
 
 
-
-
-    //console.log(response.json());
-
-
 }
 
 const DeviceModal = ({ navigation, route }) => {
@@ -102,24 +97,6 @@ const DeviceModal = ({ navigation, route }) => {
         console.log(item.reviews);
     }
 
-    /*
-    <Text>
-        {item.reviews[0].title}
-    </Text>
-
-    <FlatList
-        data={item.reviews}
-        keyExtractor= {(reviews, index) => index.toString()}
-        renderItem={renderItems}
-    />
-
-    {
-        item.reviews.map(function(reviews, index){
-            return <Text key={index}>{reviews.title}</Text>
-        })
-    }
-     */
-
     const renderEmptyContainer = () =>{
         return(
             <Subheading style={styles.paddingStyle}>
@@ -135,9 +112,11 @@ const DeviceModal = ({ navigation, route }) => {
             isReviews = false;
         }
         return (
-            <List.Item style={{ margin: 0, padding: 0 }}
+            <List.Item style={{ margin: 0 }}
                        description={item.title.toString()}
                        descriptionStyle={styles.TextInfo}
+                       descriptionNumberOfLines={5}
+                       titleNumberOfLines={0}
                        theme={styles.theme}
                        accessible={true}
 
@@ -171,26 +150,16 @@ const DeviceModal = ({ navigation, route }) => {
                     <View style={styles.paddingCompanyGrade} accessible={true}
                           screenReaderEnable={true}
                           accessibilityLabel={item.wifi_vendor + " has a grade of " + item.grade}>
-                        <Subheading style={styles.company} accessible={true}
+                        <Subheading style={{fontWeight:'bold'}} accessible={true}
                                     screenReaderEnable={true} >
                             {item.wifi_vendor}
                         </Subheading>
-                        <Subheading style={styles.grade}
+                        <Subheading style={{fontWeight:'bold'}}
                                     accessible={true}
                                     screenReaderEnable={true}>
                             {isGrade ? item.grade: 'Unknown'}
                         </Subheading>
                     </View>
-
-
-                    {/*<Subheading style={styles.paddingStyle}>*/}
-                    {/*    IP - {item.ip}*/}
-                    {/*</Subheading>*/}
-
-                    {/*<Subheading style={styles.paddingStyle}>*/}
-                    {/*    MAC - {item.mac}*/}
-                    {/*</Subheading>*/}
-
 
 
                     <Subheading style={styles.paddingStyle}
@@ -204,15 +173,13 @@ const DeviceModal = ({ navigation, route }) => {
 
                     <Subheading style={styles.reviews} accessible={true}
                                 accessibilityLabel="This is the companies list of reviews."
-                                screenReaderEnable={true}>
-                        Reviews from TOS;DR:
+                                screenReaderEnable={true}>Reviews from TOS;DR:
                     </Subheading>
 
                     <Subheading style={styles.link} accessible={true}
                                 accessibilityLabel="This is a link to Terms of service didn't read website."
                                 screenReaderEnable={true}
-                                onPress={ ()=>{ Linking.openURL('https://tosdr.org')}}>
-                        TOS;DR Link
+                                onPress={ ()=>{ Linking.openURL('https://tosdr.org')}}>TOS;DR Link
 
                     </Subheading>
                     </View>
@@ -233,25 +200,13 @@ const DeviceModal = ({ navigation, route }) => {
                         View { item.docType } Document
                     </Button>
 
-                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true}
+                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true} color={'#8d0404'}
                             accessibilityLabel="Tap to remove this company from your list."
                             accessibilityHint="This will navigate you to the home page."
                             screenReaderEnable={true}>
                         { isIndex ? 'Remove from List' : 'Add to List' }
                     </Button>
 
-                    {/*<View>*/}
-                    {/*    <Button*/}
-                    {/*        accessible={true}*/}
-                    {/*        accessibilityLabel="Tap for more details about the information on this page."*/}
-                    {/*        screenReaderEnable={true}*/}
-                    {/*        icon="information"*/}
-                    {/*        style={styles.IconButton}*/}
-                    {/*        size={30}*/}
-                    {/*        onPress={() => navigation.navigate('About')}*/}
-
-                    {/*    />*/}
-                    {/*</View>*/}
                 </View>
             </>
         </PaperProvider>
@@ -265,17 +220,20 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: SCREENSIZE.height * .01,
         paddingHorizontal: SCREENSIZE.width * .05,
-        bottom: 15
+        bottom: SCREENSIZE.height * .2,
+        top: SCREENSIZE.height * .01,
+        minHeight: SCREENSIZE.height * 0.8,
+        maxHeight: SCREENSIZE.height * 0.9,
     },
     paddingStyle:{
-        padding: 5,
-        margin: 1,
+        padding: 0.5,
         fontWeight: "bold"
     },
     paddingCompanyGrade:{
         margin: 1,
         fontWeight: "bold",
         flexDirection: 'column',
+        alignItems: 'center'
     },
     button:{
         margin: 5,
@@ -296,12 +254,15 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     listContainer: {
-        flexGrow: 1,
-        padding: 10,
-        backgroundColor: '#ffffff',
-        height:SCREENSIZE.height * 0.35,
-        paddingHorizontal: SCREENSIZE.width * .05,
+        flex:1,
+        //flexBasis:-1,
+        //minHeight:'20%',
+        //height:SCREENSIZE.height * 5,
+        paddingHorizontal: SCREENSIZE.width * .01,
         paddingVertical: SCREENSIZE.height * .01,
+        paddingBottom: SCREENSIZE.height * .01,
+        //padding: 5,
+        backgroundColor: '#ffffff',
     },
     text:{
         padding: 1,
@@ -314,44 +275,24 @@ const styles = StyleSheet.create({
     iconButton:{
         alignItems: "center"
     },
-    TextInfo:{fontWeight:'normal',
-    color:'#000000'},
-    grade: {
-        flex: 1,
-        //padding: 20,
-        //width: '100%',
-        //maxWidth: 340,
-        alignSelf: 'center',
-        alignItems: 'center',
-        fontSize: 30,
-        fontWeight: 'bold',
-        paddingVertical: 17,
-    },
-    company: {
-        flex: 0.5,
-        //padding: 20,
-        //width: '100%',
-        //maxWidth: 340,
-        alignSelf: 'center',
-        alignItems: 'center',
-        fontSize: 15,
-        fontWeight: 'bold',
-        paddingVertical: 20,
-        marginTop:0
+    TextInfo:{
+        flexDirection:'row',
+        fontWeight:'normal',
+        color:'#000000',
+        flexWrap: 'wrap'
     },
     reviews: {
-        margin: 1,
         fontWeight: "bold",
     },
     link: {
-        margin: 1,
         fontWeight: "bold",
         alignSelf: 'flex-end',
         color: '#0060a9',
-        paddingLeft: SCREENSIZE.width * 0.13
     },
     rowContainer: {
-        flexDirection: 'row'
+        flexDirection: 'row',
+        flexWrap:'wrap',
+        justifyContent:'space-between'
     }
 
 

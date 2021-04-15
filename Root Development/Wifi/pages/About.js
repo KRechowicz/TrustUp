@@ -124,19 +124,31 @@ const DeviceModal = ({ navigation, route }) => {
 
                     </View>
 
+                    <View style={styles.grades} accessible={true}
+                          screenReaderEnable={true}>
+
 
                     <Subheading style={styles.paddingStyle}
                                 accessible={true}
                                 screenReaderEnable={true}>
                         Grade Calculation:
                     </Subheading>
+                    <Text style={styles.row}>
 
-                    <Text style={styles.row}>Terms of Service (ToS) and Privacy Policy (PP) documents are usually provided by the product’s company to explain the legal rights and responsibilities of the user and the product provider.</Text>
+                    <Text style={{fontStyle: "italic"}}>Terms of Service </Text>
 
+                        <Text style={styles.row}>(ToS) and </Text>
+
+                        <Text style={{fontStyle: "italic"}}>Privacy Policy  </Text>
+
+                        <Text >(PP) documents are usually provided by the product’s company to explain the legal rights and responsibilities of the user and the product provider.</Text>
+
+                        </Text>
                         <Text style={styles.row}>For each product, we check to see if there is a score for that ToS on Terms of Service: Didn’t Read website (ToS:DR). If the company’s policy documents are not available on ToS:DR, we use machine learning to find similar graded documents and calculate a new score for the product.</Text>
 
-                            <Text style={styles.row}> Terms of Service Didn’t Read is a community project which aims to analyze and grade the ToS and PPs of major Internet sites and services. Each aspect of a ToS or PP is assessed as positive, negative, or neutral and contributes to the overall grade reported by the website.</Text>
+                            <Text style={styles.row}>Terms of Service Didn’t Read is a community project which aims to analyze and grade the ToS and PPs of major Internet sites and services. Each aspect of a ToS or PP is assessed as positive, negative, or neutral and contributes to the overall grade reported by the website.</Text>
 
+                    </View>
                 </View>
             </>
             </ScrollView>

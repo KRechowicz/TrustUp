@@ -130,6 +130,7 @@ const fetchTOSDRInfo = async(vendor) => {
             var docType;
             if(vendor === 'amazon'){
                 url = 'https://www.amazon.com/gp/help/customer/display.html/ref=sxts_snpl_4_1_0dcbd4ef-f1c1-45ec-9038-c0e812b07c72?pf_rd_p=0dcbd4ef-f1c1-45ec-9038-c0e812b07c72&pf_rd_r=5HJQ212GH7YH67D4CQ0G&pd_rd_wg=EVQvB&pd_rd_w=m1GXk&nodeId=468496&qid=1617245401&pd_rd_r=3c63f541-91d1-4b15-938e-8e1a4d140684';
+                docType = "Privacy Policy"
 
             }
             if (data.links) {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView, ScrollView} from "react-native";
+import {Image, View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView, ScrollView, Linking} from "react-native";
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -12,6 +12,8 @@ import { Icon } from 'react-native-elements'
 import HomeScreen from '../pages/Home'
 import ScanResults from "../Objects/ScanResult";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import {useEffect} from "react";
+import {Alert} from "react-native";
 
 const config = require('../config');
 const SCREENSIZE = Dimensions.get('screen');
@@ -29,17 +31,37 @@ const getData = async () => {
 
 const deleteDevice = async (ip, index, navigation) => {
     const getID = await getData();
-    const response = await fetch(config.backend_endpoint + "/users/" + getID + "/scan/deleteDevice", {
-        method: 'POST',
-        headers: {
-            Accept: 'application/json',
-            'Content-Type': 'application/json'
-        },
-        body: JSON.stringify({ip: ip, index:index})
-    });
 
-    navigation.navigate('HomeScreen');
+    Alert.alert(
+        "Remove from your list?",
+        "This will not remove the device from your network, only tracking in this app!",
+        [
+            {
+                text: "Delete Entry",
+                onPress: async () => {
+                    const response = await fetch(config.backend_endpoint + "/users/" + getID + "/scan/deleteDevice", {
+                        method: 'POST',
+                        headers: {
+                            Accept: 'application/json',
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ip: ip, index: index})
+                    });
+
+                    navigation.navigate('HomeScreen');
+                },
+                style: "cancel"
+            },
+            { text: "Keep Entry in List", onPress: () => console.log("OK Pressed") }
+        ]
+    );
+
+
+
+
     //console.log(response.json());
+
+
 }
 
 const DeviceModal = ({ navigation, route }) => {
@@ -48,11 +70,17 @@ const DeviceModal = ({ navigation, route }) => {
             , 'C': 'The terms of service are okay but some issues need your consideration.'
             , 'D': 'The terms of service are very uneven or some important issues need the user\'s attention.'
             , 'E': 'The terms of service raise very serious concerns.'
-            , 'No Grade': 'The terms have not been completely graded yet.'}
+            , 'undefined': 'The terms have not been completely graded yet.'}
     let isIndex = true;
     let isGrade = true;
     let isManuallyAdded = false;
     const {item, index} = route.params;
+
+    useEffect(() => {
+        // Update the document title using the browser API
+        navigation.setOptions({ title: item.wifi_vendor });
+    });
+
 
     if(!index && index !== 0){
         isIndex = false;
@@ -127,9 +155,33 @@ const DeviceModal = ({ navigation, route }) => {
                     <Subheading style={styles.paddingStyle}
                                 accessible={true}
                                 screenReaderEnable={true}>
-                        Company Name -
-                    <Text style={styles.TextInfo} accessible={false}>{ " "+item.wifi_vendor}</Text>
+                        Document Type:
+                        <Text style={styles.TextInfo} accessible={false}>{ " "+item.docType}</Text>
                     </Subheading>
+
+                    <Subheading style={styles.paddingStyle}
+                                accessible={true}
+                                screenReaderEnable={true}
+                                accessibilityLabel={"This item was added to your list at " + item.lastScanned}>
+                        Added:
+                    <Text style={styles.TextInfo} accessible={false}>{ " "+item.lastScanned}</Text>
+                    </Subheading>
+
+
+                    <View style={styles.paddingCompanyGrade} accessible={true}
+                          screenReaderEnable={true}
+                          accessibilityLabel={item.wifi_vendor + " has a grade of " + item.grade}>
+                        <Subheading style={styles.company} accessible={true}
+                                    screenReaderEnable={true} >
+                            {item.wifi_vendor}
+                        </Subheading>
+                        <Subheading style={styles.grade}
+                                    accessible={true}
+                                    screenReaderEnable={true}>
+                            {isGrade ? item.grade: 'Unknown'}
+                        </Subheading>
+                    </View>
+
 
                     {/*<Subheading style={styles.paddingStyle}>*/}
                     {/*    IP - {item.ip}*/}
@@ -139,25 +191,31 @@ const DeviceModal = ({ navigation, route }) => {
                     {/*    MAC - {item.mac}*/}
                     {/*</Subheading>*/}
 
-                    <Subheading style={styles.paddingStyle}
-                                accessible={true}
-                                screenReaderEnable={true}>
-                        Grade -
-                        <Text style={styles.TextInfo} accessible={false}>{" " + isGrade ? item.grade: 'Unknown'}</Text>
-                    </Subheading>
+
 
                     <Subheading style={styles.paddingStyle}
                                 accessible={true}
                                 screenReaderEnable={true}>
-                        Grade Meaning -
+                        Why?
                         <Text style={styles.TextInfo} accessible={false}> {" "+GradeList[item.grade]}</Text>
                     </Subheading>
 
-                    <Subheading style={styles.paddingStyle} accessible={true}
+                    <View style={styles.rowContainer}>
+
+                    <Subheading style={styles.reviews} accessible={true}
                                 accessibilityLabel="This is the companies list of reviews."
                                 screenReaderEnable={true}>
-                        Reviews:
+                        Reviews from TOS;DR:
                     </Subheading>
+
+                    <Subheading style={styles.link} accessible={true}
+                                accessibilityLabel="This is a link to Terms of service didn't read website."
+                                screenReaderEnable={true}
+                                onPress={ ()=>{ Linking.openURL('https://tosdr.org')}}>
+                        TOS;DR Link
+
+                    </Subheading>
+                    </View>
 
                     <View style={styles.listContainer}>
                         <FlatList
@@ -167,6 +225,13 @@ const DeviceModal = ({ navigation, route }) => {
                             ListEmptyComponent={renderEmptyContainer}
                         />
                     </View>
+
+                    <Button style={styles.button} mode="contained" onPress={ ()=>{ Linking.openURL(item.docURL)}} accessible={true}
+                            accessibilityLabel={"Tap to view the companies " + item.docType + ". This will launch the webpage."}
+                            accessibilityHint="This will launch the webpage."
+                            screenReaderEnable={true}>
+                        View { item.docType } Document
+                    </Button>
 
                     <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true}
                             accessibilityLabel="Tap to remove this company from your list."
@@ -196,22 +261,26 @@ const DeviceModal = ({ navigation, route }) => {
 
 const styles = StyleSheet.create({
     innerBody: {
-        //alignItems: 'center',
-        //position: 'absolute',
-        flex: 0.4,
-        paddingTop:30,
-        //paddingVertical: SCREENSIZE.height * .02,
+        flex: 0.5,
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .01,
         paddingHorizontal: SCREENSIZE.width * .05,
+        bottom: 15
     },
     paddingStyle:{
-        padding: 10,
+        padding: 5,
         margin: 1,
         fontWeight: "bold"
     },
+    paddingCompanyGrade:{
+        margin: 1,
+        fontWeight: "bold",
+        flexDirection: 'column',
+    },
     button:{
-        margin: 10,
-        marginTop:30,
-        padding: 5
+        margin: 5,
+        marginTop:8,
+        padding: 2
     },
     row:{
         padding: 1
@@ -227,10 +296,12 @@ const styles = StyleSheet.create({
         margin: 2,
     },
     listContainer: {
-        height:SCREENSIZE.height * 0.4,
         flexGrow: 1,
         padding: 10,
         backgroundColor: '#ffffff',
+        height:SCREENSIZE.height * 0.35,
+        paddingHorizontal: SCREENSIZE.width * .05,
+        paddingVertical: SCREENSIZE.height * .01,
     },
     text:{
         padding: 1,
@@ -245,6 +316,44 @@ const styles = StyleSheet.create({
     },
     TextInfo:{fontWeight:'normal',
     color:'#000000'},
+    grade: {
+        flex: 1,
+        //padding: 20,
+        //width: '100%',
+        //maxWidth: 340,
+        alignSelf: 'center',
+        alignItems: 'center',
+        fontSize: 30,
+        fontWeight: 'bold',
+        paddingVertical: 17,
+    },
+    company: {
+        flex: 0.5,
+        //padding: 20,
+        //width: '100%',
+        //maxWidth: 340,
+        alignSelf: 'center',
+        alignItems: 'center',
+        fontSize: 15,
+        fontWeight: 'bold',
+        paddingVertical: 20,
+        marginTop:0
+    },
+    reviews: {
+        margin: 1,
+        fontWeight: "bold",
+    },
+    link: {
+        margin: 1,
+        fontWeight: "bold",
+        alignSelf: 'flex-end',
+        color: '#0060a9',
+        paddingLeft: SCREENSIZE.width * 0.13
+    },
+    rowContainer: {
+        flexDirection: 'row'
+    }
+
 
 })
 

@@ -19,7 +19,7 @@ export default class App extends Component{
     constructor() {
         super();
         this.state ={
-            isSignedIn: true,
+            isSignedIn: false,
         }
         this.setSignedIn = this.setSignedIn.bind(this)
     }
@@ -58,7 +58,7 @@ export default class App extends Component{
                             <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} options={{ title: 'Add Company', headerBackTitle: 'Back' }}/>
                             <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} options={{ title: 'Adding Company', headerBackTitle: 'Back' }}
                                           />
-                            <Stack.Screen name="DeviceModal" component={DeviceModal} options={{ title: 'Company Information', headerBackTitle: 'Back'  }}/>
+                            <Stack.Screen name="DeviceModal" component={DeviceModal} options={{ headerBackTitle: 'Back'  }}/>
                             <Stack.Screen name="About" component={About} options={{ title: 'Additional Information', headerBackTitle: 'Back' }}/>
                         </Stack.Navigator>
                     </NavigationContainer>

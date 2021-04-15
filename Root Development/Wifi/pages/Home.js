@@ -87,6 +87,7 @@ class HomeScreen extends Component{
         const getUser = await getData();
         this.setState({userID:getUser});
 
+
         // Need to call this twice because focus listener is not called on initial mount for some reason
         const list = [];
         console.log(this.state.userID);
@@ -180,7 +181,8 @@ class HomeScreen extends Component{
         return(
 
         <View accessible={true}
-              screenReaderEnable={true}>
+              screenReaderEnable={true}
+              accessibilityLabel={item.wifi_vendor + 'with a grade of ' + item.grade}>
             <DataTable.Row style={styles.border} onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})} accessible={false}>
                 <DataTable.Cell accessible={false}>
                     { item.wifi_vendor}
@@ -261,9 +263,9 @@ class HomeScreen extends Component{
                         <Button
                             mode="contained"
                             accessible={true}
-                            accessibilityLabel="Tap for more details about the information on this page."
+                            accessibilityLabel="Tap for more details on the creators of this application. This will take you to a website."
                             screenReaderEnable={true}
-                            onPress={ ()=>{ Linking.openURL('https://github.com/vmasc-odu/CoVA_CCI/wiki')}}
+                            onPress={ ()=>{ Linking.openURL('https://github.com/vmasc-odu/About_TrustUP/wiki/Home')}}
 
                         >About</Button>
                     </View>

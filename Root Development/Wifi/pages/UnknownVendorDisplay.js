@@ -61,6 +61,8 @@ const fetchTOSDRInfo = async(vendor) => {
     const data = await response.json();
     try {
         if (data.class) {
+            var url;
+            var docType;
             var points = data.points;
             console.log("It has a grade of " + data.class);
             try {
@@ -74,8 +76,41 @@ const fetchTOSDRInfo = async(vendor) => {
             } catch (TypeError) {
                 console.log("Oh well item no found");
             }
+            if(vendor === 'amazon'){
+                url = 'https://www.amazon.com/gp/help/customer/display.html/ref=sxts_snpl_4_1_0dcbd4ef-f1c1-45ec-9038-c0e812b07c72?pf_rd_p=0dcbd4ef-f1c1-45ec-9038-c0e812b07c72&pf_rd_r=5HJQ212GH7YH67D4CQ0G&pd_rd_wg=EVQvB&pd_rd_w=m1GXk&nodeId=468496&qid=1617245401&pd_rd_r=3c63f541-91d1-4b15-938e-8e1a4d140684';
+
+            }
+
+            if (data.links) {
+                for (var key in data.links) {
+                    if (key === 'Privacy Policy') {
+                        url = data.links[key].url;
+                        docType = key;
+                        console.log(data.links[key].url);
+                        break;
+                    } else if (key === 'Terms of Service') {
+                        url = data.links[key].url;
+                        docType = key;
+                        console.log(data.links[key].url);
+                        break;
+                    } else if (key === 'Terms of Use') {
+                        url = data.links[key].url;
+                        docType = key;
+                        console.log(data.links[key].url);
+                        break;
+                    }
+                    else if (key === 'Privacy Policy ') {
+                        url = data.links[key].url;
+                        docType = key;
+                        console.log(data.links[key].url);
+                        break;
+                    }
+                }
+
+            }
 
             device = new ScanResults(null, null);
+            device.addDocInfo(docType, url);
             device.addGradeReviews(data.class, reviews);
             device.addTOSDRVendor(vendor);
             return(
@@ -194,6 +229,7 @@ export default class UnknownVendorDisplay extends Component{
         let deviceResult;
         if(searchResult[0]){
             const result = await fetchTOSDRInfo(searchResult[0]);
+            console.log(result);
             if(!result.grade){
                 const nlpResult = await this.sendInfoToNLP(result.docURL);
                 result.addGradeReviews(nlpResult, null);

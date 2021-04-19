@@ -16,8 +16,8 @@
 * []() Dr. Krzysztof Rechowicz
 * []() John Shull
 * Alex Nielsen
-* Tobin Zhang
-* Brandon Felhaus
+* Tobin Zheng
+* Brandon Feldhaus
 * Russell Moore
 
 ## Version Control and Project Repository Structure

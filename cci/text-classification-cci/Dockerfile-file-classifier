@@ -1,0 +1,19 @@
+# starting with CentOS7, create a container for the bot: Keats.
+#
+#  Start by adding all the OS level libraries required.
+#
+#  Notice: this uses epel-release files!!
+#
+FROM rossgore/text-classification-cci:latest
+WORKDIR /home/app
+
+# if you want to check your work, run the container
+# start R, and source this file
+COPY ./ ./
+
+# last, run this script to install all of the R dependecies
+RUN chmod +x run_classifier_setup_and_startup.sh
+
+ENTRYPOINT ./run_classifier_setup_and_startup.sh
+
+EXPOSE 4000

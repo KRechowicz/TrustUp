@@ -111,3 +111,10 @@ venv.bak/
 .idea/modules.xml
 .idea/vcs.xml
 .idea/workspace.xml
+
+Wifi/.idea
+Wifi/node_modules
+Wifi/android/.gradle
+Wifi/android/.idea
+Wifi/.idea
+Wifi/android/local.properties

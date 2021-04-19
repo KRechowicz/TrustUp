@@ -35,5 +35,5 @@ _book
 book.pdf
 book.epub
 book.mobi
+*.xml
 .Rproj.user
-Root Development/Backend/Server/node_modules/

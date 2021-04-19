@@ -13,13 +13,17 @@ This project folder consists of the TrustUp Application along with the other ser
 Below is information about the folders and what they contain.
 
 * []() Wifi
-> * This is the root directory for the TrustUp Application   
+> * This directory contains all the code for the TrustUp Application   
 * []() Backend
-> * This is the root directory for our backend which consists of an Express server and Phython script that makes calls to our NLP.
+> * This directory contains everything for our backend which consists of an Express server and Phython script that makes calls to our NLP.
 * []() text-classification-cci
-> * This is the root directory for our NLP. This holds all the R code and the original copy of the python script for the backend.
-* []() Tobins Scraper/
-> * This is the root directory for our NLP. This holds all the R code and the original copy of the python script for the backend.
+> * This directory contains our NLP. This holds all the R code and the original copy of the python script for the backend.
+* []() Tobin_python/Tobin_og_scraper/Tobin_current_scraper
+> * This directory contains all of the versions of the web scraper created by Tobin.
+* []() Russel_og_work
+> * This directory contains all of the work Russell had created before the project began
+
+
 
 ## Large File Formats
 

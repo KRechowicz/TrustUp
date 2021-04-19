@@ -9,8 +9,8 @@
     <application
       android:name=".MainApplication"
       android:label="@string/app_name"
-      android:icon="@mipmap/ic_launcher"
-      android:roundIcon="@mipmap/ic_launcher_round"
+      android:icon="@mipmap/trustup_logo"
+      android:roundIcon="@mipmap/trustup_logo_round"
       android:allowBackup="false"
       android:theme="@style/AppTheme">
       <activity
@@ -23,6 +23,15 @@
             <action android:name="android.intent.action.MAIN" />
             <category android:name="android.intent.category.LAUNCHER" />
         </intent-filter>
+          <intent-filter>
+              <action android:name="android.intent.action.VIEW" />
+              <category android:name="android.intent.category.DEFAULT" />
+              <category android:name="android.intent.category.BROWSABLE" />
+              <data
+                      android:host="dev-awc6c4u1.us.auth0.com"
+                      android:pathPrefix="/android/${applicationId}/callback"
+                      android:scheme="${applicationId}" />
+          </intent-filter>
       </activity>
       <activity android:name="com.facebook.react.devsupport.DevSettingsActivity" />
     </application>

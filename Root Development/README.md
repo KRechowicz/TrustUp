@@ -1,18 +1,21 @@
 # Master Project Folder
 
-Setup for the core repository for VMASC Teams Support and/or Generic Projects
+This project folder consists of the TrustUp Application along with the other services needed for the application.
 
 ## Team Members
 
-* []()
-* []()
-* []()
-* []()
-* []()
+* []()Brandon Feldhaus
+* []()Russell Moore
+* []()Tobin Zheng
 
 ## Version Control and Project Repository Structure
 
-* Whatever we come up with
+Below is information about the folders and what they contain.
+
+* []() Wifi
+> * This is the root directory for the TrustUp Application   
+* []() 
+* []()
 
 ## Large File Formats
 

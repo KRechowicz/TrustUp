@@ -23,6 +23,22 @@ Below is information about the folders and what they contain.
 * []() Russel_og_work
 > * This directory contains all of the work Russell had created before the project began
 
+## Hosting and Deployment Information
+
+### Hosting
+The TrustUp application is connected to many serivices that need to me maintained for it to operate.
+
+Those services are as follows:
+* AWS Ec2 instance
+* AWS DynamoDB
+* Microsoft Azure Bing API
+* Auth0
+
+### Deployment
+
+First deployment of the TrustUp Application was on April 16, 2021 to Apples TestFlight program.
+
+This deployment will last 90 days on TestFlight and then need to be rebuilt and redeployed to use again.
 
 
 ## Large File Formats

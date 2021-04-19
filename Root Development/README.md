@@ -14,8 +14,12 @@ Below is information about the folders and what they contain.
 
 * []() Wifi
 > * This is the root directory for the TrustUp Application   
-* []() 
-* []()
+* []() Backend
+> * This is the root directory for our backend which consists of an Express server and Phython script that makes calls to our NLP.
+* []() text-classification-cci
+> * This is the root directory for our NLP. This holds all the R code and the original copy of the python script for the backend.
+* []() Tobins Scraper/
+> * This is the root directory for our NLP. This holds all the R code and the original copy of the python script for the backend.
 
 ## Large File Formats
 

@@ -5336,7 +5336,7 @@ lodash@^4.17.10, lodash@^4.17.14, lodash@^4.17.15, lodash@^4.17.19, lodash@^4.17
   resolved "https://registry.npmjs.org/lodash/-/lodash-4.17.20.tgz"
   integrity sha512-PlhdFcillOINfeV7Ni6oF1TAEayyZBoZ8bcshTHqOYJYlrqzRK5hagpagky5o4HfCzzd1TRkXPMFq6cKk9rGmA==
 
-lodash@^4.17.21, lodash@^4.17.4, lodash@^4.6.1:
+lodash@^4.17.11, lodash@^4.17.21, lodash@^4.17.4, lodash@^4.6.1:
   version "4.17.21"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -6572,6 +6572,11 @@ react-native-mime-types@^2.3.0:
   dependencies:
     mime-db "~1.37.0"
 
+react-native-orientation-listener@0.0.4:
+  version "0.0.4"
+  resolved "https://registry.yarnpkg.com/react-native-orientation-listener/-/react-native-orientation-listener-0.0.4.tgz#b50de51ab059a5846b5fa15bada29b6d0174c4b7"
+  integrity sha1-tQ3lGrBZpYRrX6FbraKbbQF0xLc=
+
 react-native-paper@^4.7.2:
   version "4.7.2"
   resolved "https://registry.yarnpkg.com/react-native-paper/-/react-native-paper-4.7.2.tgz#a40d1da87af5b030d45b525313cd703d490876ff"
@@ -6611,6 +6616,20 @@ react-native-reanimated@^2.0.0:
     fbjs "^3.0.0"
     mockdate "^3.0.2"
     string-hash-64 "^1.0.3"
+
+react-native-responsive-styles@^0.2.2:
+  version "0.2.2"
+  resolved "https://registry.yarnpkg.com/react-native-responsive-styles/-/react-native-responsive-styles-0.2.2.tgz#67efc5728199d1a9ed5528d1e335da2af5ad6a57"
+  integrity sha1-Z+/FcoGZ0antVSjR4zXaKvWtalc=
+  dependencies:
+    react-native-orientation-listener "0.0.4"
+
+react-native-responsive-ui@^2.1.1:
+  version "2.1.1"
+  resolved "https://registry.yarnpkg.com/react-native-responsive-ui/-/react-native-responsive-ui-2.1.1.tgz#d46557bae2e1974d5d768936091abd483587c63d"
+  integrity sha512-9NUHI4oPKHWQTg6Ls8QQhR38/dgWUFkixPeCtzvcNtcutDClMAbpI47WoOKXaet2rgxdyojPexsIRK67x18RYQ==
+  dependencies:
+    lodash "^4.17.11"
 
 react-native-rn-lan-scan@^1.0.27:
   version "1.0.27"

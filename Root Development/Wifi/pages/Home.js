@@ -78,6 +78,7 @@ class HomeScreen extends Component{
             data: [],
             filteredData: [],
             deviceList:[],
+            orientation: ''
         }
 
     }
@@ -138,6 +139,7 @@ class HomeScreen extends Component{
         })
 
         console.log(this.state.deviceList);
+        Dimensions.addEventListener('change', this.getOrientation);
     }
 
     componentWillUnmount() {
@@ -197,11 +199,17 @@ class HomeScreen extends Component{
 
         );
     }
+    getOrientation = () => {
+        if (Dimensions.get('window').width < Dimensions.get('window').height) {
+            this.setState({ orientation: 'portrait' });
+        } else { this.setState({ orientation: 'landscape' }); }
+    };
 
     render(){
         return(
             <PaperProvider theme={theme}>
                 <View style={styles.container}>
+                    <Text>{this.state.orientation}</Text>
 
                     <View style={styles.information} accessible={true}
                           accessibilityLabel="Tap the Add Company Button to add a company to your list.  "

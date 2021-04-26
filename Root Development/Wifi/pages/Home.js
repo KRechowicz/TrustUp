@@ -1,15 +1,15 @@
 import * as React from 'react';
 import {Component} from "react";
 import {
-    StyleSheet,
     View,
     Image,
+    ScrollView,
+    StyleSheet,
     Text,
     TouchableOpacity,
     ListView,
     FlatList,
     SafeAreaView,
-    ScrollView,
     TextInput,
     Dimensions
 } from 'react-native';
@@ -18,6 +18,8 @@ import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 import {FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, Subheading, Paragraph, Divider} from 'react-native-paper';
 import {SearchBar, ListItem, Icon} from "react-native-elements";
 import {Linking} from "react-native";
+import {ResponsiveStyleSheet} from "react-native-responsive-ui";
+
 
 const config = require('../config');
 
@@ -82,6 +84,7 @@ class HomeScreen extends Component{
 
     }
 
+
     async componentDidMount() {
 
         const getUser = await getData();
@@ -138,6 +141,7 @@ class HomeScreen extends Component{
         })
 
         console.log(this.state.deviceList);
+        Dimensions.addEventListener('change', this.getOrientation);
     }
 
     componentWillUnmount() {
@@ -198,80 +202,89 @@ class HomeScreen extends Component{
         );
     }
 
-    render(){
-        return(
-            <PaperProvider theme={theme}>
-                <View style={styles.container}>
+    render() {
 
-                    <View style={styles.information} accessible={true}
-                          accessibilityLabel="Tap the Add Company Button to add a company to your list.  "
-                          screenReaderEnable={true}>
-                        <Icon style={styles.row} name="information-outline" type="material-community" size={24} />
-                        <Text style={styles.row}>Tap the Add Company Button to add a Company to your list.  </Text>
-                    </View>
-                    <View style={styles.paddingStyle}>
-                        <Button mode="contained"
-                                onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
-                                accessible={true}
-                                accessibilityLabel="Add Company."
-                                accessibilityHint="Navigates to Add Company Screen."
-                                screenReaderEnable={true}
-                        >
-                            Add Company
-                        </Button>
-                    </View>
+        return (
+          <PaperProvider theme={theme}>
+              <ScrollView
+                alwaysBounceVertical={false}
+              >
+              <View style={styles.container}>
+                  <View style={styles.information} accessible={true}
+                        accessibilityLabel="Tap the Add Company Button to add a company to your list.  "
+                        screenReaderEnable={true}>
+                      <Icon style={styles.row} name="information-outline" type="material-community" size={24} />
+                      <Text style={styles.row}>Tap the Add Company Button to add a Company to your list. </Text>
+                  </View>
+                  <View style={styles.paddingStyle}>
+                      <Button mode="contained"
+                              onPress={() => this.props.navigation.navigate('UnknownVendorScreen')}
+                              accessible={true}
+                              accessibilityLabel="Add Company."
+                              accessibilityHint="Navigates to Add Company Screen."
+                              screenReaderEnable={true}
+                      >
+                          Add Company
+                      </Button>
+                  </View>
 
-                    <View style={styles.information} accessible={true}
-                          accessibilityLabel="Each item on the list is a company, tap on a company for more information  "
-                          screenReaderEnable={true}>
-                        <Icon name="information-outline" type="material-community" size={24} />
-                        <Text style={styles.row}>Each item on the list is a company, tap on a company for more information  </Text>
-                    </View>
+                  <View style={styles.information} accessible={true}
+                        accessibilityLabel="Each item on the list is a company, tap on a company for more information  "
+                        screenReaderEnable={true}>
+                      <Icon name="information-outline" type="material-community" size={24} />
+                      <Text style={styles.row}>Each item on the list is a company, tap on a company for more
+                          information </Text>
+                  </View>
 
-                    <View style={styles.listContainer}>
-                        <DataTable>
-                            <DataTable.Header style={styles.border}
-                                              accessible={true}
-                                              accessibilityLabel="List of your Devices with Company name and Privacy Grade"
-                                              accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
-                                              screenReaderEnable={true}>
-                                <DataTable.Title accessible={false} style={styles.title2}><Paragraph>Company</Paragraph></DataTable.Title>
-                                <DataTable.Title accessible={false} style={styles.title}><Paragraph>Grade</Paragraph></DataTable.Title>
-                            </DataTable.Header>
+                  <View style={styles.listContainer}>
+                      <DataTable>
+                          <DataTable.Header style={styles.border}
+                                            accessible={true}
+                                            accessibilityLabel="List of your Devices with Company name and Privacy Grade"
+                                            accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
+                                            screenReaderEnable={true}>
+                              <DataTable.Title accessible={false}
+                                               style={styles.title2}><Paragraph>Company</Paragraph></DataTable.Title>
+                              <DataTable.Title accessible={false}
+                                               style={styles.title}><Paragraph>Grade</Paragraph></DataTable.Title>
+                          </DataTable.Header>
 
-                            <FlatList
-                                data={this.state.deviceList}
-                                keyExtractor= {(item, index) => index.toString()}
-                                renderItem={this.renderItem}
-                                ListEmptyComponent={this.renderEmptyContainer}
-                            />
-                        </DataTable>
-                    </View>
+                          <FlatList
+                            data={this.state.deviceList}
+                            keyExtractor={(item, index) => index.toString()}
+                            renderItem={this.renderItem}
+                            ListEmptyComponent={this.renderEmptyContainer}
+                          />
+                      </DataTable>
+                  </View>
 
-                    <View style={styles.paddingStyle}>
-                        <Button
-                            mode="contained"
-                            accessible={true}
-                            accessibilityLabel="Tap for more details about the information on this page."
-                            screenReaderEnable={true}
-                            onPress={() => this.props.navigation.navigate('About')}
+                  <View style={styles.paddingStyle}>
+                      <Button
+                        mode="contained"
+                        accessible={true}
+                        accessibilityLabel="Tap for more details about the information on this page."
+                        screenReaderEnable={true}
+                        onPress={() => this.props.navigation.navigate('About')}
 
-                        >Information</Button>
-                    </View>
+                      >Information</Button>
+                  </View>
 
-                    <View style={styles.paddingStyle}>
-                        <Button
-                            mode="contained"
-                            accessible={true}
-                            accessibilityLabel="Tap for more details on the creators of this application. This will take you to a website."
-                            screenReaderEnable={true}
-                            onPress={ ()=>{ Linking.openURL('https://github.com/vmasc-odu/About_TrustUP/wiki/Home')}}
+                  <View style={styles.paddingStyle}>
+                      <Button
+                        mode="contained"
+                        accessible={true}
+                        accessibilityLabel="Tap for more details on the creators of this application. This will take you to a website."
+                        screenReaderEnable={true}
+                        onPress={() => {
+                            Linking.openURL('https://github.com/vmasc-odu/About_TrustUP/wiki/Home')
+                        }}
 
-                        >About this app</Button>
-                    </View>
+                      >About this app</Button>
+                  </View>
 
-                </View>
-            </PaperProvider>
+              </View>
+              </ScrollView>
+          </PaperProvider>
 
 
         );
@@ -288,6 +301,16 @@ const styles = StyleSheet.create({
         paddingHorizontal: SCREENSIZE.width * .05,
         bottom: SCREENSIZE.height * .2,
         top: SCREENSIZE.height * .01
+    },
+    innerBody: {
+        flex: 0.5,
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .01,
+        paddingHorizontal: SCREENSIZE.width * .05,
+        bottom: SCREENSIZE.height * .2,
+        top: SCREENSIZE.height * .01,
+        minHeight: SCREENSIZE.height * 0.8,
+        maxHeight: SCREENSIZE.height * 0.9,
     },
     paddingStyle:{
         padding: 5

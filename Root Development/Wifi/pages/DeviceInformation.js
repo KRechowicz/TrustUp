@@ -128,6 +128,9 @@ const DeviceModal = ({ navigation, route }) => {
     console.log(index);
     return (
         <PaperProvider theme={theme}>
+            <ScrollView
+              alwaysBounceVertical={false}
+            >
             <>
                 <View style={styles.innerBody}>
 
@@ -209,6 +212,7 @@ const DeviceModal = ({ navigation, route }) => {
 
                 </View>
             </>
+            </ScrollView>
         </PaperProvider>
 
     );
@@ -224,6 +228,8 @@ const styles = StyleSheet.create({
         top: SCREENSIZE.height * .01,
         minHeight: SCREENSIZE.height * 0.8,
         maxHeight: SCREENSIZE.height * 0.9,
+        marginHorizontal: SCREENSIZE.width * 0.04
+
     },
     paddingStyle:{
         padding: 0.5,
@@ -288,6 +294,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: 'flex-end',
         color: '#0060a9',
+
     },
     rowContainer: {
         flexDirection: 'row',

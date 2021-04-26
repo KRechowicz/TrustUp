@@ -31,6 +31,7 @@
     "react-native-paper": "^4.7.2",
     "react-native-permissions": "^3.0.0",
     "react-native-reanimated": "^2.0.0",
+    "react-native-responsive-screen": "^1.4.2",
     "react-native-responsive-styles": "^0.2.2",
     "react-native-responsive-ui": "^2.1.1",
     "react-native-rn-lan-scan": "^1.0.27",

@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
-import { StyleSheet, View, Dimensions, Text } from "react-native";
+import React, {Component, isValidElement} from 'react';
+import {StyleSheet, View, Dimensions, Text, Alert} from "react-native";
 import { Appbar, TextInput, Subheading, Button, RadioButton, DefaultTheme, Provider as PaperProvider } from 'react-native-paper'
+import {heightPercentageToDP as hp} from "react-native-responsive-screen";
+
 
 
 const SCREENSIZE = Dimensions.get('screen');
@@ -40,12 +42,42 @@ export default class App extends Component {
 
     }
 
+    alertMessage = () =>{
+        Alert.alert(
+            "Input Error",
+            "We were unable to retrieve the company name you entered. Please try again. ",
+            [
+                { text: "Ok", onPress: () => console.log("OK Pressed") }
+            ]
+        );
+    }
+
+
+    checkIsValid = () =>{
+
+        var regex = /^[A-Za-z0-9 & ]+$/
+        var isValid = regex.test(this.companyName);
+
+        if(this.companyName === ''|| !this.companyName){
+            this.alertMessage();
+        }
+        else if(!isValid){
+            this.alertMessage();
+        }
+        else{
+            this.props.navigation.navigate('UnknownVendorDisplayScreen',
+            {companyName: this.companyName});
+        }
+
+        //console.log(this.companyName);
+    }
+
     render() {
         return (
             <PaperProvider theme={theme}>
                 <>
                     <View style={styles.innerBody}>
-                        <Subheading>
+                        <Subheading style={styles.row}>
                             Add a company to your list. Fill in the field below and tap submit to process the companies privacy information.
                         </Subheading>
 
@@ -60,11 +92,12 @@ export default class App extends Component {
                             screenReaderEnable={true}
                         />
 
-                        <Button style={styles.button} mode="contained" onPress={ () => this.props.navigation.navigate('UnknownVendorDisplayScreen',
-                            {companyName: this.companyName})}
+                        <Button style={styles.button} mode="contained" onPress={ () => this.checkIsValid()}//this.props.navigation.navigate('UnknownVendorDisplayScreen',
+                            //{companyName: this.companyName})}
                                 accessible={true}
                                 accessibilityLabel="Submit to process your company's privacy information."
-                                screenReaderEnable={true}>
+                                screenReaderEnable={true}
+                                labelStyle={{fontSize: hp('1.7%')}}>
                             submit
                         </Button>
                     </View>
@@ -88,7 +121,11 @@ const styles = StyleSheet.create({
     },
     button:{
         margin: 4,
-    }
+    },
+    row:{
+        fontWeight: "normal",
+        fontSize: hp('1.7%')
+    },
 })
 
 const theme = {

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {View, Text, Button, Alert} from 'react-native';
+import {View, Text, Alert} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import ScanScreen from './Objects/Scan.js';
@@ -8,9 +8,15 @@ import UnknownVendorScreen from './pages/UnknownVendor';
 import UnknownVendorDisplayScreen from './pages/UnknownVendorDisplay';
 import Home from "./pages/Home";
 import {Component} from "react";
-import { FAB, DefaultTheme, Provider as PaperProvider, List } from 'react-native-paper';
+import { FAB, DefaultTheme, Provider as PaperProvider, List, Button } from 'react-native-paper';
 import DeviceModal from "./pages/DeviceInformation"
 import About from "./pages/About";
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+    listenOrientationChange as lor,
+    removeOrientationListener as rol
+} from 'react-native-responsive-screen';
 
 const Stack = createStackNavigator();
 
@@ -50,25 +56,33 @@ export default class App extends Component{
 
             this.state.isSignedIn ? (
                     <NavigationContainer>
-                        <Stack.Navigator>
+                        <Stack.Navigator
+                            screenOptions={{
+                            headerTitleStyle: {
+                                fontSize: hp('1.7%')
+                            },
+                        }}>
                             <Stack.Screen name="HomeScreen" component={Home} options={{
                                 headerTitle: "Home",
                                 headerRight: () => (
                                     <Button
                                         onPress={() => this.setSignedOut()}
-                                        title="Logout"
+                                        mode='text'
                                         accessible={true}
-                                        accessibilityLabel="Logout "
+                                        accessibilityLabel="Logout"
                                         screenReaderEnable={true}
-                                    />
+                                        labelStyle={{fontSize: hp('1.5%'), color:'#0060a9'}}
+                                    >
+                                        Logout
+                                    </Button>
                                 ),
                             }}/>
                             <Stack.Screen name="ScanningScreen" component={ScanScreen} options={{ title: 'Loading' }} />
-                            <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} options={{ title: 'Add Company', headerBackTitle: 'Back' }}/>
-                            <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} options={{ title: 'Adding Company', headerBackTitle: 'Back' }}
+                            <Stack.Screen name="UnknownVendorScreen" component={UnknownVendorScreen} options={{ title: 'Add Company', headerBackTitle: 'Back', fontSize: hp('1.7%') }}/>
+                            <Stack.Screen name="UnknownVendorDisplayScreen" component={UnknownVendorDisplayScreen} options={{ title: 'Adding Company', headerBackTitle: 'Back', fontSize: hp('1.7%') }}
                                           />
-                            <Stack.Screen name="DeviceModal" component={DeviceModal} options={{ headerBackTitle: 'Back'  }}/>
-                            <Stack.Screen name="About" component={About} options={{ title: 'Additional Information', headerBackTitle: 'Back' }}/>
+                            <Stack.Screen name="DeviceModal" component={DeviceModal} options={{ headerBackTitle: 'Back', fontSize: hp('1.7%')  }}/>
+                            <Stack.Screen name="About" component={About} options={{ title: 'Additional Information', headerBackTitle: 'Back', fontSize: hp('1.7%') }}/>
                         </Stack.Navigator>
                     </NavigationContainer>
 

@@ -36,6 +36,7 @@ if(Platform.OS === 'android'){
 const SCREENSIZE = Dimensions.get('screen');
 
 import {Icon} from "react-native-elements";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 var credentials = require('../configs/auth0-configuration');
 const auth0 = new Auth0(credentials);
@@ -226,35 +227,32 @@ class Login extends Component {
 
         if(Platform.OS === 'ios'){
             return (
-                <PaperProvider>
+                <PaperProvider theme={theme}>
                     <View style = { styles.container }>
                         <Title style = { styles.header }> Welcome to our App! </Title>
-                        <AppleButton
-                            buttonStyle={AppleButton.Style.BLACK}
-                            buttonType={AppleButton.Type.SIGN_IN}
-                            style={{
-                                width: 188, // You must specify a width
-                                height: 38, // You must specify a height
-                                marginBottom: 20,
-                                marginTop:20
-                            }}
-                            onPress={() => this.webAuth('apple')}
-                            accessibilityLabel="Sign in with Apple."
-                            accessibilityHint="Use this button to sign in with Apple."
-                        />
-                        <GoogleSigninButton
-                            style={{ width: 192, height: 48, marginBottom: 20,}}
-                            size={GoogleSigninButton.Size.Wide}
-                            color={GoogleSigninButton.Color.Dark}
-                            onPress={() => this.webAuth('google-oauth2')}
-                            accessibilityLabel="Sign in with Google."
-                            accessibilityHint="Use this button to sign in with Google."
-                        />
+                        <Button mode="contained" style={styles.button} icon='apple'
+                                onPress = { () => this.webAuth('apple')} accessible={true}
+                                accessibilityLabel="Sign in with Apple."
+                                accessibilityHint="Use this button to sign in with Apple."
+                                screenReaderEnable={true}
+                                labelStyle={{fontSize: hp('1.5%')}}>
+
+                            Sign in with Apple
+                        </Button>
+                        <Button mode="contained" style={styles.button} icon='google'
+                                onPress = { () => this.webAuth('google-oauth2')} accessible={true}
+                                accessibilityLabel="Sign in with Google."
+                                accessibilityHint="Use this button to sign in with Google."
+                                screenReaderEnable={true}
+                                labelStyle={{fontSize: hp('1.5%')}}>
+                            Sign in with Google
+                        </Button>
+
                         <View style={styles.information} accessible={true}
                               accessibilityLabel="TrustUp tells discovers and explains Privacy issues and Security Risks associated with devices on your network"
                               screenReaderEnable={true}>
                             <Icon name="information-outline" type="material-community" size={24} />
-                            <Text>TrustUp discovers and explains Privacy issues and Security Risks associated with devices</Text>
+                            <Text style={styles.text}>TrustUp discovers and explains Privacy issues and Security Risks associated with devices</Text>
                         </View>
                     </View>
                 </PaperProvider>
@@ -277,7 +275,7 @@ class Login extends Component {
                               accessibilityLabel="TrustUp tells discovers and explains Privacy issues and Security Risks associated with devices on your network"
                               screenReaderEnable={true}>
                             <Icon name="information-outline" type="material-community" size={24} />
-                            <Text>TrustUp discovers and explains Privacy issues and Security Risks associated with devices</Text>
+                            <Text style={styles.text}>TrustUp discovers and explains Privacy issues and Security Risks associated with devices</Text>
                         </View>
                     </View>
                 </PaperProvider>
@@ -300,7 +298,7 @@ const theme = {
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: 26,
+        fontSize: hp('3.6%'),
         color: theme.colors.primary,
         fontWeight: 'bold',
         paddingVertical: 14,
@@ -321,15 +319,18 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         alignItems: 'center',
         justifyContent: 'center',
-        margin:10
+        margin:10,
     },
     button:{
         marginVertical: 20,
         //fontColor: '#000000'
         //textColor: '#000000'
+        height: hp('4%'), // 70% of height device screen
+        width: wp('60'),
+        textAlign:'center'
     },
     text:{
-        fontSize: 20
+        fontSize: hp('2%')
     },
     information: {
         // flex: 1,

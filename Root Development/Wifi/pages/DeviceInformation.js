@@ -26,6 +26,13 @@ import ScanResults from "../Objects/ScanResult";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import {useEffect} from "react";
 import {Alert} from "react-native";
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+    listenOrientationChange as lor,
+    removeOrientationListener as rol
+} from 'react-native-responsive-screen';
+
 
 const config = require('../config');
 const SCREENSIZE = Dimensions.get('screen');
@@ -193,23 +200,23 @@ const DeviceModal = ({ navigation, route }) => {
                         <View style={styles.paddingCompanyGrade} accessible={true}
                               screenReaderEnable={true}
                               accessibilityLabel={item.wifi_vendor + " has a grade of " + item.grade}>
-                            <Subheading style={{fontWeight:'bold'}} accessible={true}
+                            <Subheading style={{fontWeight:'bold', fontSize: hp('1.7%')}} accessible={true}
                                         screenReaderEnable={true} >
                                 {item.wifi_vendor}
                             </Subheading>
                             <View
                                 style = {{
                                     borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
-                                    width: Dimensions.get('window').width * 0.2,
-                                    height: Dimensions.get('window').width * 0.2,
-                                    maxHeight: '45%',
-                                    maxWidth: '15%',
+                                    width: hp('8%'),
+                                    height: wp('10%'),
+                                    maxHeight: hp('5%'),
+                                    maxWidth: wp('10%'),
                                     backgroundColor:gradeColor,
                                     justifyContent: 'center',
                                     alignItems: 'center'
                                 }}
                             >
-                                <Headline style={{fontWeight:'bold', color:'#ffffff'}}
+                                <Headline style={{fontWeight:'bold', color:'#ffffff', fontSize: hp('2.2%')}}
                                          accessible={true}
                                          screenReaderEnable={true}>
                                 {isGrade ? item.grade: 'N/A'}
@@ -252,14 +259,16 @@ const DeviceModal = ({ navigation, route }) => {
                         <Button style={styles.button} mode="contained" onPress={ ()=>{ Linking.openURL(item.docURL)}} accessible={true}
                                 accessibilityLabel={"Tap to view the companies " + item.docType + ". This will launch the webpage."}
                                 accessibilityHint="This will launch the webpage."
-                                screenReaderEnable={true}>
+                                screenReaderEnable={true}
+                                labelStyle={{fontSize: hp('1.7%')}}>
                             View { item.docType }
                         </Button>
 
                         <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true} color={'#8d0404'}
                                 accessibilityLabel="Tap to remove this company from your list."
                                 accessibilityHint="This will navigate you to the home page."
-                                screenReaderEnable={true}>
+                                screenReaderEnable={true}
+                                labelStyle={{fontSize: hp('1.7%')}}>
                             { isIndex ? 'Remove from List' : 'Add to List' }
                         </Button>
 
@@ -299,7 +308,7 @@ const DeviceModal = ({ navigation, route }) => {
                         <View style={styles.paddingCompanyGrade} accessible={true}
                               screenReaderEnable={true}
                               accessibilityLabel={item.wifi_vendor + " has a grade of " + item.grade}>
-                            <Subheading style={{fontWeight:'bold'}} accessible={true}
+                            <Subheading style={{fontWeight:'bold', fontSize: hp('1.7%')}} accessible={true}
                                         screenReaderEnable={true} >
                                 {item.wifi_vendor}
                             </Subheading>
@@ -307,16 +316,16 @@ const DeviceModal = ({ navigation, route }) => {
                             <View
                                 style = {{
                                     borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
-                                    width: Dimensions.get('window').width * 0.2,
-                                    height: Dimensions.get('window').width * 0.2,
-                                    maxHeight: '45%',
-                                    maxWidth: '15%',
+                                    width: hp('8%'),
+                                    height: wp('10%'),
+                                    maxHeight: hp('5%'),
+                                    maxWidth: wp('10%'),
                                     backgroundColor:gradeColor,
                                     justifyContent: 'center',
                                     alignItems: 'center'
                                 }}
                             >
-                                <Headline style={{fontWeight:'bold', justifyContent:'center', color:'#ffffff'}}
+                                <Headline style={{fontWeight:'bold', justifyContent:'center', color:'#ffffff', fontSize: hp('2.9%')}}
                                           accessible={true}
                                           screenReaderEnable={true}>
                                     {isGrade ? item.grade: 'N/A'}
@@ -385,7 +394,8 @@ const styles = StyleSheet.create({
     },
     paddingStyle:{
         padding: 0.5,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: hp('1.7%')
     },
     paddingCompanyGrade:{
         margin: 0.5,
@@ -437,15 +447,18 @@ const styles = StyleSheet.create({
         flexDirection:'row',
         fontWeight:'normal',
         color:'#000000',
-        flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        fontSize: hp('1.7%')
     },
     reviews: {
         fontWeight: "bold",
+        fontSize: hp('1.7%')
     },
     link: {
         fontWeight: "bold",
         alignSelf: 'flex-end',
         color: '#0060a9',
+        fontSize: hp('1.7%')
 
     },
     rowContainer: {

@@ -19,6 +19,13 @@ import {FAB, DefaultTheme, Provider as PaperProvider, Button, DataTable, List, S
 import {SearchBar, ListItem, Icon} from "react-native-elements";
 import {Linking} from "react-native";
 import {ResponsiveStyleSheet} from "react-native-responsive-ui";
+import {
+    widthPercentageToDP as wp,
+    heightPercentageToDP as hp,
+    listenOrientationChange as lor,
+    removeOrientationListener as rol
+} from 'react-native-responsive-screen';
+
 
 
 const config = require('../config');
@@ -94,6 +101,8 @@ class HomeScreen extends Component{
             'VirtualizedLists should never be nested', // TODO: Remove when fixed
         ])
 
+        lor(this)
+
 
         // Need to call this twice because focus listener is not called on initial mount for some reason
         const list = [];
@@ -150,6 +159,7 @@ class HomeScreen extends Component{
 
     componentWillUnmount() {
         this.props.navigation.removeListener('focus');
+        rol();
         console.log('Removed');
     }
     alertItemName = (item) => {
@@ -193,11 +203,11 @@ class HomeScreen extends Component{
               accessibilityLabel={item.wifi_vendor + 'with a grade of ' + item.grade}>
             <DataTable.Row style={styles.border} onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})} accessible={false}>
                 <DataTable.Cell accessible={false} style={styles.title2}>
-                    { item.wifi_vendor}
+                    <Paragraph style={{fontSize: hp('1.7%')}}>{item.wifi_vendor}</Paragraph>
                 </DataTable.Cell>
 
                 <DataTable.Cell accessible={false} style={styles.title}>
-                    {isGrade? item.grade : "No Grade"}
+                    <Paragraph style={{fontSize: hp('1.7%')}}>{isGrade? item.grade : "No Grade"}</Paragraph>
                 </DataTable.Cell>
             </DataTable.Row>
 
@@ -208,13 +218,37 @@ class HomeScreen extends Component{
 
 
     render() {
+        const styleRendering = StyleSheet.create({
+            container: {
+                //flex: 0.5,
+                justifyContent: 'space-between',
+                paddingVertical: SCREENSIZE.height * .01,
+                paddingHorizontal: SCREENSIZE.width * .05,
+                // bottom: SCREENSIZE.height * .2,
+                // top: SCREENSIZE.height * .01,
+                height: hp('85%'), // 70% of height device screen
+                width: wp('98.5%')   // 80% of width device screen
+            },
+            listContainer: {
+                flex:1,
+                paddingHorizontal: SCREENSIZE.width * .06,
+                paddingVertical: SCREENSIZE.height * .01,
+                paddingBottom: SCREENSIZE.height * .08,
+                height: hp('50%'), // 70% of height device screen
+                margin: 5,
+                backgroundColor: '#ffffff',
+            },
+        });
+
+
+
 
         return (
           <PaperProvider theme={theme}>
               <ScrollView
                 alwaysBounceVertical={false}
               >
-              <View style={styles.container}>
+              <View style={styleRendering.container}>
                   <View style={styles.information} accessible={true}
                         accessibilityLabel="Tap the Add Company Button to add a company to your list.  "
                         screenReaderEnable={true}>
@@ -228,6 +262,7 @@ class HomeScreen extends Component{
                               accessibilityLabel="Add Company."
                               accessibilityHint="Navigates to Add Company Screen."
                               screenReaderEnable={true}
+                              labelStyle={{fontSize: hp('1.7%')}}
                       >
                           Add Company
                       </Button>
@@ -241,7 +276,7 @@ class HomeScreen extends Component{
                           information </Text>
                   </View>
 
-                  <View style={styles.listContainer}>
+                  <View style={styleRendering.listContainer}>
                       <DataTable>
                           <DataTable.Header style={styles.border}
                                             accessible={true}
@@ -249,9 +284,9 @@ class HomeScreen extends Component{
                                             accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
                                             screenReaderEnable={true}>
                               <DataTable.Title accessible={false}
-                                               style={styles.title2}><Paragraph>Company</Paragraph></DataTable.Title>
+                                               style={styles.title2}><Paragraph style={{fontSize: hp('1.7%')}}>Company</Paragraph></DataTable.Title>
                               <DataTable.Title accessible={false}
-                                               style={styles.title}><Paragraph>Grade</Paragraph></DataTable.Title>
+                                               style={styles.title}><Paragraph style={{fontSize: hp('1.7%')}}>Grade</Paragraph></DataTable.Title>
                           </DataTable.Header>
 
                           <FlatList
@@ -265,6 +300,7 @@ class HomeScreen extends Component{
 
                   <View style={styles.paddingStyle}>
                       <Button
+                        labelStyle={{fontSize: hp('1.7%')}}
                         mode="contained"
                         accessible={true}
                         accessibilityLabel="Tap for more details about the information on this page."
@@ -276,6 +312,7 @@ class HomeScreen extends Component{
 
                   <View style={styles.paddingStyle}>
                       <Button
+                          labelStyle={{fontSize: hp('1.7%')}}
                         mode="contained"
                         accessible={true}
                         accessibilityLabel="Tap for more details on the creators of this application. This will take you to a website."
@@ -305,17 +342,9 @@ const styles = StyleSheet.create({
         paddingVertical: SCREENSIZE.height * .01,
         paddingHorizontal: SCREENSIZE.width * .05,
         bottom: SCREENSIZE.height * .2,
-        top: SCREENSIZE.height * .01
-    },
-    innerBody: {
-        flex: 0.5,
-        justifyContent: 'space-between',
-        paddingVertical: SCREENSIZE.height * .01,
-        paddingHorizontal: SCREENSIZE.width * .05,
-        bottom: SCREENSIZE.height * .2,
         top: SCREENSIZE.height * .01,
-        minHeight: SCREENSIZE.height * 0.8,
-        maxHeight: SCREENSIZE.height * 0.9,
+        height: hp('85%'), // 70% of height device screen
+        width: wp('100%')   // 80% of width device screen
     },
     paddingStyle:{
         padding: 5
@@ -325,11 +354,6 @@ const styles = StyleSheet.create({
     },
     title2:{
         marginLeft:SCREENSIZE.width * (-.015)
-    },
-    InfoButton:{
-        margin: 10,
-        marginTop:30,
-        padding: 5
     },
     listContainer: {
         flex:1,
@@ -341,8 +365,10 @@ const styles = StyleSheet.create({
         paddingBottom: SCREENSIZE.height * .08,
         //padding: 5,
         // backgroundColor: '#ffffff',
-        minHeight:SCREENSIZE.height * 0.2,
-        maxHeight:SCREENSIZE.height * 0.55,
+        // minHeight:SCREENSIZE.height * 0.2,
+        // maxHeight:SCREENSIZE.height * 0.55,
+        height: hp('50%'), // 70% of height device screen
+        width: wp('87.5%') ,  // 80% of width device screen
         // //height:SCREENSIZE.height * 0.55,
         // paddingHorizontal: SCREENSIZE.width * .06,
         // paddingVertical: SCREENSIZE.height * .01,
@@ -373,27 +399,6 @@ const styles = StyleSheet.create({
         marginTop:20,
         padding:10,
     },
-    card: {
-        height:null,
-        paddingTop:10,
-        paddingBottom:10,
-        marginTop:5,
-        backgroundColor: '#FFFFFF',
-        flexDirection: 'column',
-        borderTopWidth:40,
-        marginBottom:20,
-    },
-    cardContent:{
-        flexDirection:'row',
-        marginLeft:10,
-    },
-    imageContent:{
-        marginTop:-40,
-    },
-    tagsContent:{
-        marginTop:10,
-        flexWrap:'wrap'
-    },
     image:{
         width:60,
         height:60,
@@ -418,6 +423,7 @@ const styles = StyleSheet.create({
     },
     row:{
         paddingHorizontal: 3,
+        fontSize: hp('1.7%')
     },
     information: {
         // flex: 1,

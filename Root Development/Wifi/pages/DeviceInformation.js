@@ -6,7 +6,8 @@ import {
     Button,
     Subheading,
     IconButton,
-    List
+    List,
+    Headline
 } from "react-native-paper";
 import { Icon } from 'react-native-elements'
 import HomeScreen from '../pages/Home'
@@ -69,13 +70,19 @@ const DeviceModal = ({ navigation, route }) => {
     let isIndex = true;
     let isGrade = true;
     let isManuallyAdded = false;
+    let isDocType = true;
     const {item, index} = route.params;
+    let gradeColor;
+
 
     useEffect(() => {
         // Update the document title using the browser API
         navigation.setOptions({ title: item.wifi_vendor });
     });
 
+    if(!item.docType){
+        isDocType = false;
+    }
 
     if(!index && index !== 0){
         isIndex = false;
@@ -83,6 +90,24 @@ const DeviceModal = ({ navigation, route }) => {
 
     if(!item.grade){
         isGrade = false
+        gradeColor = '#343a40'
+    }
+    else{
+        if(item.grade === 'A'){
+            gradeColor = '#28a745'
+        }
+        else if(item.grade === 'B'){
+            gradeColor = '#79b752'
+        }
+        else if(item.grade === 'C'){
+            gradeColor = '#ffc107'
+        }
+        else if(item.grade === 'D'){
+            gradeColor = '#d66f2c'
+        }
+        else if(item.grade === 'E'){
+            gradeColor = '#dc3545'
+        }
     }
 
     if(item.ip === "Manually Added"){
@@ -124,7 +149,7 @@ const DeviceModal = ({ navigation, route }) => {
         )
     }
 
-
+    if(isDocType){
     console.log(index);
     return (
         <PaperProvider theme={theme}>
@@ -134,88 +159,195 @@ const DeviceModal = ({ navigation, route }) => {
             <>
                 <View style={styles.innerBody}>
 
-                    <Subheading style={styles.paddingStyle}
-                                accessible={true}
-                                screenReaderEnable={true}>
-                        Document Type:
-                        <Text style={styles.TextInfo} accessible={false}>{ " "+item.docType}</Text>
-                    </Subheading>
-
-                    <Subheading style={styles.paddingStyle}
-                                accessible={true}
-                                screenReaderEnable={true}
-                                accessibilityLabel={"This item was added to your list at " + item.lastScanned}>
-                        Added:
-                    <Text style={styles.TextInfo} accessible={false}>{ " "+item.lastScanned}</Text>
-                    </Subheading>
-
-
-                    <View style={styles.paddingCompanyGrade} accessible={true}
-                          screenReaderEnable={true}
-                          accessibilityLabel={item.wifi_vendor + " has a grade of " + item.grade}>
-                        <Subheading style={{fontWeight:'bold'}} accessible={true}
-                                    screenReaderEnable={true} >
-                            {item.wifi_vendor}
-                        </Subheading>
-                        <Subheading style={{fontWeight:'bold'}}
+                        <Subheading style={styles.paddingStyle}
                                     accessible={true}
                                     screenReaderEnable={true}>
-                            {isGrade ? item.grade: 'Unknown'}
+                            Document Type:
+                            <Text style={styles.TextInfo} accessible={false}>{ " " + item.docType }</Text>
                         </Subheading>
-                    </View>
+
+                        <Subheading style={styles.paddingStyle}
+                                    accessible={true}
+                                    screenReaderEnable={true}
+                                    accessibilityLabel={"This item was added to your list at " + item.lastScanned}>
+                            Added:
+                            <Text style={styles.TextInfo} accessible={false}>{ " "+item.lastScanned}</Text>
+                        </Subheading>
 
 
-                    <Subheading style={styles.paddingStyle}
-                                accessible={true}
+                        <View style={styles.paddingCompanyGrade} accessible={true}
+                              screenReaderEnable={true}
+                              accessibilityLabel={item.wifi_vendor + " has a grade of " + item.grade}>
+                            <Subheading style={{fontWeight:'bold'}} accessible={true}
+                                        screenReaderEnable={true} >
+                                {item.wifi_vendor}
+                            </Subheading>
+                            <View
+                                style = {{
+                                    borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+                                    width: Dimensions.get('window').width * 0.2,
+                                    height: Dimensions.get('window').width * 0.2,
+                                    maxHeight: '45%',
+                                    maxWidth: '15%',
+                                    backgroundColor:gradeColor,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Headline style={{fontWeight:'bold', color:'#ffffff'}}
+                                         accessible={true}
+                                         screenReaderEnable={true}>
+                                {isGrade ? item.grade: 'N/A'}
+                            </Headline>
+                            </View>
+
+                        </View>
+
+
+                        <Subheading style={styles.paddingStyle}
+                                    accessible={true}
+                                    screenReaderEnable={true}>
+                            Why?
+                            <Text style={styles.TextInfo} accessible={false}> {" "+GradeList[item.grade]}</Text>
+                        </Subheading>
+
+                        <View style={styles.rowContainer}>
+
+                            <Subheading style={styles.reviews} accessible={true}
+                                        accessibilityLabel="This is the companies list of reviews."
+                                        screenReaderEnable={true}>Reviews from TOS;DR:
+                            </Subheading>
+
+                            <Subheading style={styles.link} accessible={true}
+                                        accessibilityLabel="This is a link to Terms of service didn't read website."
+                                        screenReaderEnable={true}
+                                        onPress={ ()=>{ Linking.openURL('https://tosdr.org')}}>TOS;DR Link
+                            </Subheading>
+                        </View>
+
+                        <View style={ styles.listContainer}>
+                            <FlatList
+                                data={item.reviews}
+                                keyExtractor= {(item, index) => index.toString()}
+                                renderItem={renderItems}
+                                ListEmptyComponent={renderEmptyContainer}
+                            />
+                        </View>
+
+                        <Button style={styles.button} mode="contained" onPress={ ()=>{ Linking.openURL(item.docURL)}} accessible={true}
+                                accessibilityLabel={"Tap to view the companies " + item.docType + ". This will launch the webpage."}
+                                accessibilityHint="This will launch the webpage."
                                 screenReaderEnable={true}>
-                        Why?
-                        <Text style={styles.TextInfo} accessible={false}> {" "+GradeList[item.grade]}</Text>
-                    </Subheading>
+                            View { item.docType }
+                        </Button>
 
-                    <View style={styles.rowContainer}>
+                        <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true} color={'#8d0404'}
+                                accessibilityLabel="Tap to remove this company from your list."
+                                accessibilityHint="This will navigate you to the home page."
+                                screenReaderEnable={true}>
+                            { isIndex ? 'Remove from List' : 'Add to List' }
+                        </Button>
 
-                    <Subheading style={styles.reviews} accessible={true}
-                                accessibilityLabel="This is the companies list of reviews."
-                                screenReaderEnable={true}>Reviews from TOS;DR:
-                    </Subheading>
-
-                    <Subheading style={styles.link} accessible={true}
-                                accessibilityLabel="This is a link to Terms of service didn't read website."
-                                screenReaderEnable={true}
-                                onPress={ ()=>{ Linking.openURL('https://tosdr.org')}}>TOS;DR Link
-
-                    </Subheading>
                     </View>
+                </>
+            </PaperProvider>
 
-                    <View style={styles.listContainer}>
-                        <FlatList
-                            data={item.reviews}
-                            keyExtractor= {(item, index) => index.toString()}
-                            renderItem={renderItems}
-                            ListEmptyComponent={renderEmptyContainer}
-                        />
-                    </View>
+        );
+    }
+    else{
+        return (
+            <PaperProvider theme={theme}>
+                <>
+                    <View style={styles.innerBody}>
 
-                    <Button style={styles.button} mode="contained" onPress={ ()=>{ Linking.openURL(item.docURL)}} accessible={true}
-                            accessibilityLabel={"Tap to view the companies " + item.docType + ". This will launch the webpage."}
-                            accessibilityHint="This will launch the webpage."
-                            screenReaderEnable={true}>
-                        View { item.docType } Document
-                    </Button>
+                        <Subheading style={styles.paddingStyle}
+                                    accessible={true}
+                                    screenReaderEnable={true}>
+                            Document Type:
+                            <Text style={styles.TextInfo} accessible={false}>{ ' No Document' }</Text>
+                        </Subheading>
 
-                    <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true} color={'#8d0404'}
-                            accessibilityLabel="Tap to remove this company from your list."
-                            accessibilityHint="This will navigate you to the home page."
-                            screenReaderEnable={true}>
-                        { isIndex ? 'Remove from List' : 'Add to List' }
-                    </Button>
+                        <Subheading style={styles.paddingStyle}
+                                    accessible={true}
+                                    screenReaderEnable={true}
+                                    accessibilityLabel={"This item was added to your list at " + item.lastScanned}>
+                            Added:
+                            <Text style={styles.TextInfo} accessible={false}>{ " "+item.lastScanned}</Text>
+                        </Subheading>
+
+
+                        <View style={styles.paddingCompanyGrade} accessible={true}
+                              screenReaderEnable={true}
+                              accessibilityLabel={item.wifi_vendor + " has a grade of " + item.grade}>
+                            <Subheading style={{fontWeight:'bold'}} accessible={true}
+                                        screenReaderEnable={true} >
+                                {item.wifi_vendor}
+                            </Subheading>
+
+                            <View
+                                style = {{
+                                    borderRadius: Math.round(Dimensions.get('window').width + Dimensions.get('window').height) / 2,
+                                    width: Dimensions.get('window').width * 0.2,
+                                    height: Dimensions.get('window').width * 0.2,
+                                    maxHeight: '45%',
+                                    maxWidth: '15%',
+                                    backgroundColor:gradeColor,
+                                    justifyContent: 'center',
+                                    alignItems: 'center'
+                                }}
+                            >
+                                <Headline style={{fontWeight:'bold', justifyContent:'center', color:'#ffffff'}}
+                                          accessible={true}
+                                          screenReaderEnable={true}>
+                                    {isGrade ? item.grade: 'N/A'}
+                                </Headline>
+                            </View>
+                        </View>
+                        <Subheading style={styles.paddingStyle}
+                                    accessible={true}
+                                    screenReaderEnable={true}>
+                            Why?
+                            <Text style={styles.TextInfo} accessible={false}> {" "+GradeList[item.grade]}</Text>
+                        </Subheading>
+
+                        <View style={styles.rowContainer}>
+
+                            <Subheading style={styles.reviews} accessible={true}
+                                        accessibilityLabel="This is the companies list of reviews."
+                                        screenReaderEnable={true}>Reviews from TOS;DR:
+                            </Subheading>
+
+                            <Subheading style={styles.link} accessible={true}
+                                        accessibilityLabel="This is a link to Terms of service didn't read website."
+                                        screenReaderEnable={true}
+                                        onPress={ ()=>{ Linking.openURL('https://tosdr.org')}}>TOS;DR Link
+
+                            </Subheading>
+                        </View>
+
+                        <View style={styles.listContainer}>
+                            <FlatList
+                                data={item.reviews}
+                                keyExtractor= {(item, index) => index.toString()}
+                                renderItem={renderItems}
+                                ListEmptyComponent={renderEmptyContainer}
+                            />
+                        </View>
+
+                        <Button style={styles.button} mode="contained" onPress={() => deleteDevice(null, index, navigation)} accessible={true} color={'#8d0404'}
+                                accessibilityLabel="Tap to remove this company from your list."
+                                accessibilityHint="This will navigate you to the home page."
+                                screenReaderEnable={true}>
+                            { isIndex ? 'Remove from List' : 'Add to List' }
+                        </Button>
 
                 </View>
             </>
             </ScrollView>
         </PaperProvider>
 
-    );
+        );
+    }
 }
 
 const styles = StyleSheet.create({
@@ -236,7 +368,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold"
     },
     paddingCompanyGrade:{
-        margin: 1,
+        margin: 0.5,
         fontWeight: "bold",
         flexDirection: 'column',
         alignItems: 'center'

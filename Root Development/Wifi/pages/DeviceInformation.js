@@ -1,5 +1,16 @@
 import * as React from 'react';
-import {Image, View, Text, StyleSheet, Dimensions, FlatList, SafeAreaView, ScrollView, Linking} from "react-native";
+import {
+    Image,
+    View,
+    Text,
+    StyleSheet,
+    Dimensions,
+    FlatList,
+    SafeAreaView,
+    ScrollView,
+    Linking,
+    LogBox
+} from "react-native";
 import {
     DefaultTheme,
     Provider as PaperProvider,
@@ -78,6 +89,10 @@ const DeviceModal = ({ navigation, route }) => {
     useEffect(() => {
         // Update the document title using the browser API
         navigation.setOptions({ title: item.wifi_vendor });
+
+        LogBox.ignoreLogs([
+            'VirtualizedLists should never be nested', // TODO: Remove when fixed
+        ])
     });
 
     if(!item.docType){
@@ -249,15 +264,20 @@ const DeviceModal = ({ navigation, route }) => {
                         </Button>
 
                     </View>
-                </>
-            </PaperProvider>
+            </>
+            </ScrollView>
+        </PaperProvider>
+
 
         );
     }
     else{
         return (
             <PaperProvider theme={theme}>
-                <>
+                <ScrollView
+                    alwaysBounceVertical={false}
+                >
+                    <>
                     <View style={styles.innerBody}>
 
                         <Subheading style={styles.paddingStyle}

@@ -11,7 +11,7 @@ import {
     FlatList,
     SafeAreaView,
     TextInput,
-    Dimensions
+    Dimensions, LogBox
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {get} from "react-native/Libraries/TurboModule/TurboModuleRegistry";
@@ -89,6 +89,10 @@ class HomeScreen extends Component{
 
         const getUser = await getData();
         this.setState({userID:getUser});
+
+        LogBox.ignoreLogs([
+            'VirtualizedLists should never be nested', // TODO: Remove when fixed
+        ])
 
 
         // Need to call this twice because focus listener is not called on initial mount for some reason

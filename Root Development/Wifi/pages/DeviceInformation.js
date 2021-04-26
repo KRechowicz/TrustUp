@@ -150,11 +150,14 @@ const DeviceModal = ({ navigation, route }) => {
     }
 
     if(isDocType){
-
-        return (
-            <PaperProvider theme={theme}>
-                <>
-                    <View style={styles.innerBody}>
+    console.log(index);
+    return (
+        <PaperProvider theme={theme}>
+            <ScrollView
+              alwaysBounceVertical={false}
+            >
+            <>
+                <View style={styles.innerBody}>
 
                         <Subheading style={styles.paddingStyle}
                                     accessible={true}
@@ -338,9 +341,10 @@ const DeviceModal = ({ navigation, route }) => {
                             { isIndex ? 'Remove from List' : 'Add to List' }
                         </Button>
 
-                    </View>
-                </>
-            </PaperProvider>
+                </View>
+            </>
+            </ScrollView>
+        </PaperProvider>
 
         );
     }
@@ -356,6 +360,8 @@ const styles = StyleSheet.create({
         top: SCREENSIZE.height * .01,
         minHeight: SCREENSIZE.height * 0.8,
         maxHeight: SCREENSIZE.height * 0.9,
+        marginHorizontal: SCREENSIZE.width * 0.04
+
     },
     paddingStyle:{
         padding: 0.5,
@@ -420,6 +426,7 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         alignSelf: 'flex-end',
         color: '#0060a9',
+
     },
     rowContainer: {
         flexDirection: 'row',

@@ -6,7 +6,6 @@ import { List, ListItem, Badge, Icon, Avatar, withBadge } from 'react-native-ele
 import NetInfo from '@react-native-community/netinfo'
 import AsyncStorage from '@react-native-community/async-storage'
 import ToggleSwitch from 'toggle-switch-react-native';
-import * as Progress from 'react-native-progress';
 
 import {RNLanScanEvent, RNRnLanScan} from 'react-native-rn-lan-scan';
 import ScanResults from './Objects/ScanResult';

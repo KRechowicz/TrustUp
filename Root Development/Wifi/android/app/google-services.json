@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "522533129784",
+    "project_id": "vmasc-cci",
+    "storage_bucket": "vmasc-cci.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:522533129784:android:5db1517ab4917c7c21a0cd",
+        "android_client_info": {
+          "package_name": "com.wifi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "522533129784-gk2ebrqh9ciallp62c552i6qi8340pcl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.wifi",
+            "certificate_hash": "5e8f16062ea3cd2c4a0d547876baa6f38cabf625"
+          }
+        },
+        {
+          "client_id": "522533129784-95u3bo39f8nm9iahjcgt056l9140cdk4.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCeBSXxXpWSzzHjUl-n_BGonBu_v2l4ELQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "522533129784-95u3bo39f8nm9iahjcgt056l9140cdk4.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

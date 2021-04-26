@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, Text , Button} from 'react-native';
+import {View, Text, Button, Alert} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator} from '@react-navigation/stack';
 import ScanScreen from './Objects/Scan.js';
@@ -22,6 +22,15 @@ export default class App extends Component{
             isSignedIn: false,
         }
         this.setSignedIn = this.setSignedIn.bind(this)
+    }
+
+    alert(title, message) {
+        Alert.alert(
+            title,
+            message,
+            [{ text: 'OK', onPress: () => console.log('OK Pressed') }],
+            { cancelable: false }
+        );
     }
 
     setSignedOut() {

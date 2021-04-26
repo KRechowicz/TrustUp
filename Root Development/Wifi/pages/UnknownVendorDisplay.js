@@ -21,6 +21,8 @@ const SCREENSIZE = Dimensions.get('screen');
 
 const config = require('../config');
 
+const tosdrlist = require('../Objects/tosdrlist.json');
+
 const getData = async () => {
     try {
         const value = await AsyncStorage.getItem(config.id_key)
@@ -78,7 +80,7 @@ const fetchTOSDRInfo = async(vendor) => {
             }
             if(vendor === 'amazon'){
                 url = 'https://www.amazon.com/gp/help/customer/display.html/ref=sxts_snpl_4_1_0dcbd4ef-f1c1-45ec-9038-c0e812b07c72?pf_rd_p=0dcbd4ef-f1c1-45ec-9038-c0e812b07c72&pf_rd_r=5HJQ212GH7YH67D4CQ0G&pd_rd_wg=EVQvB&pd_rd_w=m1GXk&nodeId=468496&qid=1617245401&pd_rd_r=3c63f541-91d1-4b15-938e-8e1a4d140684';
-
+                docType = "Privacy Policy"
             }
 
             if (data.links) {
@@ -133,6 +135,8 @@ const fetchTOSDRInfo = async(vendor) => {
                 docType = "Privacy Policy"
 
             }
+
+
             if (data.links) {
                 for (var key in data.links) {
                     if (key === 'Privacy Policy') {
@@ -218,6 +222,7 @@ export default class UnknownVendorDisplay extends Component{
 
 
         console.log(this.companyName);
+        //await this.getAllServices();
         this.startCheck(this.companyName);
     }
 
@@ -228,10 +233,11 @@ export default class UnknownVendorDisplay extends Component{
     startCheck = async (company) => {
         const searchResult = this.searchFilterFunction(company);
         let deviceResult;
+        console.log(searchResult[0]);
         if(searchResult[0]){
-            const result = await fetchTOSDRInfo(searchResult[0]);
+            const result = await fetchTOSDRInfo(searchResult[0].slug);
             console.log(result);
-            if(!result.grade){
+            if(!result.grade && result.docURL){
                 const nlpResult = await this.sendInfoToNLP(result.docURL);
                 result.addGradeReviews(nlpResult, null);
 
@@ -273,12 +279,33 @@ export default class UnknownVendorDisplay extends Component{
 
     }
 
+
+    getAllServices = async () => {
+        /*
+        const response = await fetch('https://api.tosdr.org/all-services/v1/')
+        const data = await response.json();
+        var list = [];
+        for(const item of data.parameters.services){
+            list.push({name: item.name, slug: item.slug})
+        }
+        console.log(list);
+
+
+         */
+
+        for(const items of tosdrlist){
+            console.log(items);
+        }
+        //console.log(tosdrlist);
+    }
+
+
     searchFilterFunction = (vendorToSearch) => {
         const vendorSearch = vendorToSearch.trim();
         // Check if searched text is not blank
         if (vendorSearch) {
-            const result = this.SearchList.filter((vendor) => {
-                const dataToCheck = vendor.toUpperCase();
+            const result = tosdrlist.filter((vendor) => {
+                const dataToCheck = vendor.name.toUpperCase();
                 const companyToCheck = vendorSearch.toUpperCase();
                 return dataToCheck.indexOf(companyToCheck) > -1;
             });

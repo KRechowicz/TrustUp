@@ -189,7 +189,7 @@ class HomeScreen extends Component{
                 </DataTable.Cell>
 
                 <DataTable.Cell accessible={false} style={styles.title}>
-                    {isGrade? item.grade : "Unknown"}
+                    {isGrade? item.grade : "No Grade"}
                 </DataTable.Cell>
             </DataTable.Row>
 
@@ -201,7 +201,7 @@ class HomeScreen extends Component{
     render(){
         return(
             <PaperProvider theme={theme}>
-                <View style={styles.container}>
+                <View style={styles.innerBody}>
 
                     <View style={styles.information} accessible={true}
                           accessibilityLabel="Tap the Add Company Button to add a company to your list.  "
@@ -289,6 +289,16 @@ const styles = StyleSheet.create({
         bottom: SCREENSIZE.height * .2,
         top: SCREENSIZE.height * .01
     },
+    innerBody: {
+        flex: 0.5,
+        justifyContent: 'space-between',
+        paddingVertical: SCREENSIZE.height * .01,
+        paddingHorizontal: SCREENSIZE.width * .05,
+        bottom: SCREENSIZE.height * .2,
+        top: SCREENSIZE.height * .01,
+        minHeight: SCREENSIZE.height * 0.8,
+        maxHeight: SCREENSIZE.height * 0.9,
+    },
     paddingStyle:{
         padding: 5
     },
@@ -296,7 +306,7 @@ const styles = StyleSheet.create({
         marginLeft:SCREENSIZE.width * .22
     },
     title2:{
-        marginLeft:SCREENSIZE.width * (-.041)
+        marginLeft:SCREENSIZE.width * (-.015)
     },
     InfoButton:{
         margin: 10,
@@ -304,12 +314,21 @@ const styles = StyleSheet.create({
         padding: 5
     },
     listContainer: {
-        minHeight:SCREENSIZE.height * 0.4,
-        maxHeight:SCREENSIZE.height * 0.55,
-        //height:SCREENSIZE.height * 0.55,
+        flex:1,
+        //flexBasis:-1,
+        //minHeight:'20%',
+        //height:SCREENSIZE.height * 5,
         paddingHorizontal: SCREENSIZE.width * .06,
         paddingVertical: SCREENSIZE.height * .01,
         paddingBottom: SCREENSIZE.height * .08,
+        //padding: 5,
+        // backgroundColor: '#ffffff',
+        minHeight:SCREENSIZE.height * 0.2,
+        maxHeight:SCREENSIZE.height * 0.55,
+        // //height:SCREENSIZE.height * 0.55,
+        // paddingHorizontal: SCREENSIZE.width * .06,
+        // paddingVertical: SCREENSIZE.height * .01,
+        // paddingBottom: SCREENSIZE.height * .08,
         //flexGrow: 1,
         //padding: 5,
         margin: 5,

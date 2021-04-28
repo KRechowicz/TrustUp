@@ -203,11 +203,11 @@ class HomeScreen extends Component{
               accessibilityLabel={item.wifi_vendor + 'with a grade of ' + item.grade}>
             <DataTable.Row style={styles.border} onPress={() => this.props.navigation.navigate('DeviceModal', {item: item, index: index})} accessible={false}>
                 <DataTable.Cell accessible={false} style={styles.title2}>
-                    <Paragraph style={{fontSize: hp('1.7%')}}>{item.wifi_vendor}</Paragraph>
+                    <Paragraph style={{fontSize: hp('1.5%')}}>{item.wifi_vendor}</Paragraph>
                 </DataTable.Cell>
 
                 <DataTable.Cell accessible={false} style={styles.title}>
-                    <Paragraph style={{fontSize: hp('1.7%')}}>{isGrade? item.grade : "No Grade"}</Paragraph>
+                    <Paragraph style={{fontSize: hp('1.5%')}}>{isGrade? item.grade : "No Grade"}</Paragraph>
                 </DataTable.Cell>
             </DataTable.Row>
 
@@ -284,9 +284,9 @@ class HomeScreen extends Component{
                                             accessibilityHint="This is a list of your devices. Press on a company to view its trust features."
                                             screenReaderEnable={true}>
                               <DataTable.Title accessible={false}
-                                               style={styles.title2}><Paragraph style={{fontSize: hp('1.7%')}}>Company</Paragraph></DataTable.Title>
+                                               style={styles.title2}><Paragraph style={{fontSize: hp('1.5%')}}>Company</Paragraph></DataTable.Title>
                               <DataTable.Title accessible={false}
-                                               style={styles.title}><Paragraph style={{fontSize: hp('1.7%')}}>Grade</Paragraph></DataTable.Title>
+                                               style={styles.title}><Paragraph style={{fontSize: hp('1.5%')}}>Grade</Paragraph></DataTable.Title>
                           </DataTable.Header>
 
                           <FlatList
@@ -318,7 +318,7 @@ class HomeScreen extends Component{
                         accessibilityLabel="Tap for more details on the creators of this application. This will take you to a website."
                         screenReaderEnable={true}
                         onPress={() => {
-                            Linking.openURL('https://github.com/vmasc-odu/About_TrustUP/wiki/Home')
+                            Linking.openURL('https://github.com/vmasc-odu/About_CCI_Application/wiki')
                         }}
 
                       >About this app</Button>
@@ -454,7 +454,7 @@ const theme = {
 
     colors: {
         ...DefaultTheme.colors,
-        primary: '#0060a9',
+        primary: '#00589b',
         accent: '#f3cd1f',
     },
     fonts:{

@@ -249,10 +249,10 @@ class Login extends Component {
                         </Button>
 
                         <View style={styles.information} accessible={true}
-                              accessibilityLabel="TrustUp tells discovers and explains Privacy issues and Security Risks associated with devices on your network"
+                              accessibilityLabel="This application tells, discovers, and explains Privacy issues and Security Risks associated with devices on your network"
                               screenReaderEnable={true}>
                             <Icon name="information-outline" type="material-community" size={24} />
-                            <Text style={styles.text}>TrustUp discovers and explains Privacy issues and Security Risks associated with devices</Text>
+                            <Text style={styles.text}>This application discovers and explains Privacy issues and Security Risks associated with devices</Text>
                         </View>
                     </View>
                 </PaperProvider>
@@ -263,19 +263,19 @@ class Login extends Component {
                 <PaperProvider>
                     <View style = { styles.container }>
                         <Title style = { styles.header }> Welcome to our App! </Title>
-                        <GoogleSigninButton
-                            style={{ width: 192, height: 48, marginBottom: 20,}}
-                            size={GoogleSigninButton.Size.Wide}
-                            color={GoogleSigninButton.Color.Dark}
-                            onPress={ this.webAuth('google-oauth2')}
-                            accessibilityLabel="Sign in with Google."
-                            accessibilityHint="Use this button to sign in with Google."
-                        />
+                        <Button mode="contained" style={styles.button} icon='google'
+                                onPress = { () => this.webAuth('google-oauth2')} accessible={true}
+                                accessibilityLabel="Sign in with Google."
+                                accessibilityHint="Use this button to sign in with Google."
+                                screenReaderEnable={true}
+                                labelStyle={{fontSize: hp('1.5%')}}>
+                            Sign in with Google
+                        </Button>
                         <View style={styles.information} accessible={true}
-                              accessibilityLabel="TrustUp tells discovers and explains Privacy issues and Security Risks associated with devices on your network"
+                              accessibilityLabel="This application tells, discovers, and explains Privacy issues and Security Risks associated with devices on your network"
                               screenReaderEnable={true}>
                             <Icon name="information-outline" type="material-community" size={24} />
-                            <Text style={styles.text}>TrustUp discovers and explains Privacy issues and Security Risks associated with devices</Text>
+                            <Text style={styles.text}>This application discovers and explains Privacy issues and Security Risks associated with devices</Text>
                         </View>
                     </View>
                 </PaperProvider>
@@ -291,7 +291,7 @@ const theme = {
     roundness: 2,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#0060a9',
+        primary: '#00589b',
         accent: '#f3cd1f',
     },
 };

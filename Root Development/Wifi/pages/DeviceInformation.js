@@ -115,20 +115,16 @@ const DeviceModal = ({ navigation, route }) => {
         gradeColor = '#343a40'
     }
     else{
-        if(item.grade === 'A'){
-            gradeColor = '#28a745'
-        }
-        else if(item.grade === 'B'){
-            gradeColor = '#79b752'
-        }
-        else if(item.grade === 'C'){
-            gradeColor = '#ffc107'
-        }
-        else if(item.grade === 'D'){
-            gradeColor = '#d66f2c'
-        }
-        else if(item.grade === 'E'){
-            gradeColor = '#dc3545'
+        if (item.grade === 'A') {
+            gradeColor = '#004100'
+        } else if (item.grade === 'B') {
+            gradeColor = '#006400'
+        } else if (item.grade === 'C') {
+            gradeColor = '#88451a'
+        } else if (item.grade === 'D') {
+            gradeColor = '#6a500f'
+        } else if (item.grade === 'E') {
+            gradeColor = '#800000'
         }
     }
 
@@ -457,7 +453,7 @@ const styles = StyleSheet.create({
     link: {
         fontWeight: "bold",
         alignSelf: 'flex-end',
-        color: '#0060a9',
+        color: '#00589b',
         fontSize: hp('1.7%')
 
     },

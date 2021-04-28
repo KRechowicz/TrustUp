@@ -34,14 +34,14 @@
 		008F07F21AC5B25A0029DE68 /* main.jsbundle */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
 		00E356F11AD99517003FC87E /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		00E356F21AD99517003FC87E /* Wifi_TrustUpTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Wifi_TrustUpTests.m; sourceTree = "<group>"; };
-		13B07F961A680F5B00A75B9A /* Wifi_TrustUp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Wifi_TrustUp.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		13B07F961A680F5B00A75B9A /* CCI_Application.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CCI_Application.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		13B07FAF1A68108700A75B9A /* AppDelegate.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AppDelegate.h; path = Wifi/AppDelegate.h; sourceTree = "<group>"; };
 		13B07FB01A68108700A75B9A /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AppDelegate.m; path = Wifi/AppDelegate.m; sourceTree = "<group>"; };
 		13B07FB51A68108700A75B9A /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Images.xcassets; path = Wifi/Images.xcassets; sourceTree = "<group>"; };
 		13B07FB61A68108700A75B9A /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Wifi/Info.plist; sourceTree = "<group>"; };
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = Wifi/main.m; sourceTree = "<group>"; };
-		2D02E47B1E0B4A5D006451C7 /* Wifi_TrustUp-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Wifi_TrustUp-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
-		2D02E4901E0B4A5D006451C7 /* Wifi_TrustUp-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "Wifi_TrustUp-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E47B1E0B4A5D006451C7 /* CCI_Application-tvOS.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "CCI_Application-tvOS.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D02E4901E0B4A5D006451C7 /* CCI_Application-tvOSTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "CCI_Application-tvOSTests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		44C6D86F939549D0E966FAE6 /* Pods-Wifi.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wifi.release.xcconfig"; path = "Target Support Files/Pods-Wifi/Pods-Wifi.release.xcconfig"; sourceTree = "<group>"; };
 		46EFFF6D56BFD05DD729CE44 /* Pods-Wifi_TrustUp.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wifi_TrustUp.release.xcconfig"; path = "Target Support Files/Pods-Wifi_TrustUp/Pods-Wifi_TrustUp.release.xcconfig"; sourceTree = "<group>"; };
 		4F28196473B8A73AA49403DC /* Pods-Wifi_TrustUp-Wifi_TrustUpTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Wifi_TrustUp-Wifi_TrustUpTests.release.xcconfig"; path = "Target Support Files/Pods-Wifi_TrustUp-Wifi_TrustUpTests/Pods-Wifi_TrustUp-Wifi_TrustUpTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -191,9 +191,9 @@
 		83CBBA001A601CBA00E9B192 /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				13B07F961A680F5B00A75B9A /* Wifi_TrustUp.app */,
-				2D02E47B1E0B4A5D006451C7 /* Wifi_TrustUp-tvOS.app */,
-				2D02E4901E0B4A5D006451C7 /* Wifi_TrustUp-tvOSTests.xctest */,
+				13B07F961A680F5B00A75B9A /* CCI_Application.app */,
+				2D02E47B1E0B4A5D006451C7 /* CCI_Application-tvOS.app */,
+				2D02E4901E0B4A5D006451C7 /* CCI_Application-tvOSTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -201,9 +201,9 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		13B07F861A680F5B00A75B9A /* Wifi_TrustUp */ = {
+		13B07F861A680F5B00A75B9A /* CCI_Application */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Wifi_TrustUp" */;
+			buildConfigurationList = 13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CCI_Application" */;
 			buildPhases = (
 				692E386B0F3AD0675012E5B9 /* [CP] Check Pods Manifest.lock */,
 				FD10A7F022414F080027D42C /* Start Packager */,
@@ -217,14 +217,14 @@
 			);
 			dependencies = (
 			);
-			name = Wifi_TrustUp;
+			name = CCI_Application;
 			productName = Wifi;
-			productReference = 13B07F961A680F5B00A75B9A /* Wifi_TrustUp.app */;
+			productReference = 13B07F961A680F5B00A75B9A /* CCI_Application.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E47A1E0B4A5D006451C7 /* Wifi_TrustUp-tvOS */ = {
+		2D02E47A1E0B4A5D006451C7 /* CCI_Application-tvOS */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Wifi_TrustUp-tvOS" */;
+			buildConfigurationList = 2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "CCI_Application-tvOS" */;
 			buildPhases = (
 				FD10A7F122414F3F0027D42C /* Start Packager */,
 				2D02E4771E0B4A5D006451C7 /* Sources */,
@@ -236,14 +236,14 @@
 			);
 			dependencies = (
 			);
-			name = "Wifi_TrustUp-tvOS";
+			name = "CCI_Application-tvOS";
 			productName = "Wifi-tvOS";
-			productReference = 2D02E47B1E0B4A5D006451C7 /* Wifi_TrustUp-tvOS.app */;
+			productReference = 2D02E47B1E0B4A5D006451C7 /* CCI_Application-tvOS.app */;
 			productType = "com.apple.product-type.application";
 		};
-		2D02E48F1E0B4A5D006451C7 /* Wifi_TrustUp-tvOSTests */ = {
+		2D02E48F1E0B4A5D006451C7 /* CCI_Application-tvOSTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Wifi_TrustUp-tvOSTests" */;
+			buildConfigurationList = 2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "CCI_Application-tvOSTests" */;
 			buildPhases = (
 				2D02E48C1E0B4A5D006451C7 /* Sources */,
 				2D02E48D1E0B4A5D006451C7 /* Frameworks */,
@@ -254,9 +254,9 @@
 			dependencies = (
 				2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */,
 			);
-			name = "Wifi_TrustUp-tvOSTests";
+			name = "CCI_Application-tvOSTests";
 			productName = "Wifi-tvOSTests";
-			productReference = 2D02E4901E0B4A5D006451C7 /* Wifi_TrustUp-tvOSTests.xctest */;
+			productReference = 2D02E4901E0B4A5D006451C7 /* CCI_Application-tvOSTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -282,7 +282,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Wifi_TrustUp" */;
+			buildConfigurationList = 83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CCI_Application" */;
 			compatibilityVersion = "Xcode 12.0";
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
@@ -295,9 +295,9 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				13B07F861A680F5B00A75B9A /* Wifi_TrustUp */,
-				2D02E47A1E0B4A5D006451C7 /* Wifi_TrustUp-tvOS */,
-				2D02E48F1E0B4A5D006451C7 /* Wifi_TrustUp-tvOSTests */,
+				13B07F861A680F5B00A75B9A /* CCI_Application */,
+				2D02E47A1E0B4A5D006451C7 /* CCI_Application-tvOS */,
+				2D02E48F1E0B4A5D006451C7 /* CCI_Application-tvOSTests */,
 			);
 		};
 /* End PBXProject section */
@@ -471,7 +471,7 @@
 /* Begin PBXTargetDependency section */
 		2D02E4921E0B4A5D006451C7 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
-			target = 2D02E47A1E0B4A5D006451C7 /* Wifi_TrustUp-tvOS */;
+			target = 2D02E47A1E0B4A5D006451C7 /* CCI_Application-tvOS */;
 			targetProxy = 2D02E4911E0B4A5D006451C7 /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
@@ -484,7 +484,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = Wifi_TrustUp/Wifi_TrustUpDebug.entitlements;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = W8P6NQ25C5;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = Wifi_TrustUp/Info.plist;
@@ -500,7 +500,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.VMASC.TrustUP;
-				PRODUCT_NAME = Wifi_TrustUp;
+				PRODUCT_NAME = CCI_Application;
 				SWIFT_OBJC_BRIDGING_HEADER = "Wifi_TrustUp-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
@@ -515,7 +515,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
-				CURRENT_PROJECT_VERSION = 8;
+				CURRENT_PROJECT_VERSION = 11;
 				DEVELOPMENT_TEAM = W8P6NQ25C5;
 				INFOPLIST_FILE = Wifi_TrustUp/Info.plist;
 				IPHONEOS_DEPLOYMENT_TARGET = 12.1;
@@ -530,7 +530,7 @@
 					"-lc++",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.VMASC.TrustUP;
-				PRODUCT_NAME = Wifi_TrustUp;
+				PRODUCT_NAME = CCI_Application;
 				SWIFT_OBJC_BRIDGING_HEADER = "Wifi_TrustUp-Bridging-Header.h";
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -623,7 +623,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Wifi-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Wifi_TrustUp-tvOS.app/Wifi_TrustUp-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CCI_Application-tvOS.app/CCI_Application-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Debug;
@@ -653,7 +653,7 @@
 				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.example.Wifi-tvOSTests";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = appletvos;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Wifi_TrustUp-tvOS.app/Wifi_TrustUp-tvOS";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/CCI_Application-tvOS.app/CCI_Application-tvOS";
 				TVOS_DEPLOYMENT_TARGET = 10.1;
 			};
 			name = Release;
@@ -780,7 +780,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "Wifi_TrustUp" */ = {
+		13B07F931A680F5B00A75B9A /* Build configuration list for PBXNativeTarget "CCI_Application" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				13B07F941A680F5B00A75B9A /* Debug */,
@@ -789,7 +789,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Wifi_TrustUp-tvOS" */ = {
+		2D02E4BA1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "CCI_Application-tvOS" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4971E0B4A5E006451C7 /* Debug */,
@@ -798,7 +798,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "Wifi_TrustUp-tvOSTests" */ = {
+		2D02E4BB1E0B4A5E006451C7 /* Build configuration list for PBXNativeTarget "CCI_Application-tvOSTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				2D02E4991E0B4A5E006451C7 /* Debug */,
@@ -807,7 +807,7 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "Wifi_TrustUp" */ = {
+		83CBB9FA1A601CBA00E9B192 /* Build configuration list for PBXProject "CCI_Application" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				83CBBA201A601CBA00E9B192 /* Debug */,

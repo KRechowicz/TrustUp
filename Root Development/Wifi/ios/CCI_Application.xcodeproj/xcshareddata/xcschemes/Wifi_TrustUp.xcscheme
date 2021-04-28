@@ -43,9 +43,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "Wifi_TrustUp.app"
-               BlueprintName = "Wifi_TrustUp"
-               ReferencedContainer = "container:Wifi_TrustUp.xcodeproj">
+               BuildableName = "CCI_Application.app"
+               BlueprintName = "CCI_Application"
+               ReferencedContainer = "container:CCI_Application.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -83,9 +83,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "Wifi_TrustUp.app"
-            BlueprintName = "Wifi_TrustUp"
-            ReferencedContainer = "container:Wifi_TrustUp.xcodeproj">
+            BuildableName = "CCI_Application.app"
+            BlueprintName = "CCI_Application"
+            ReferencedContainer = "container:CCI_Application.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
       <MacroExpansion>

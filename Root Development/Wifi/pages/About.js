@@ -7,6 +7,7 @@ import {
     Subheading,
     IconButton
 } from "react-native-paper";
+import {heightPercentageToDP as hp, widthPercentageToDP as wp} from "react-native-responsive-screen";
 
 
 const config = require('../config');
@@ -161,12 +162,14 @@ const styles = StyleSheet.create({
     paddingStyle:{
         padding: 4,
         margin: 4,
-        fontWeight: "bold"
+        fontWeight: "bold",
+        fontSize: hp('1.7%')
     },
     row:{
         padding: 4,
         margin:4,
-        fontWeight: "normal"
+        fontWeight: "normal",
+        fontSize: hp('1.7%')
     },
     information: {
         alignContent: 'flex-start',
@@ -185,7 +188,7 @@ const theme = {
     roundness: 2,
     colors: {
         ...DefaultTheme.colors,
-        primary: '#0060a9',
+        primary: '#00589b',
         accent: '#f3cd1f',
     },
 };

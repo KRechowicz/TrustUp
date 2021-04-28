@@ -71,7 +71,7 @@ export default class App extends Component{
                                         accessible={true}
                                         accessibilityLabel="Logout"
                                         screenReaderEnable={true}
-                                        labelStyle={{fontSize: hp('1.5%'), color:'#0060a9'}}
+                                        labelStyle={{fontSize: hp('1.5%'), color:'#00589b'}}
                                     >
                                         Logout
                                     </Button>

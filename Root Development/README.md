@@ -13,7 +13,7 @@ This project folder consists of the CCI Application along with the other service
 Below is information about the folders and what they contain.
 
 * []() Wifi
-> * This directory contains all the code for the TrustUp Application   
+> * This directory contains all the code for the CCI Application   
 * []() Backend
 > * This directory contains everything for our backend which consists of an Express server and Phython script that makes calls to our NLP.
 * []() text-classification-cci

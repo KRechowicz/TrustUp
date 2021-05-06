@@ -1,6 +1,6 @@
 # Master Project Folder
 
-This project folder consists of the TrustUp Application along with the other services needed for the application.
+This project folder consists of the CCI Application along with the other services needed for the application.
 
 ## Team Members
 
@@ -26,7 +26,7 @@ Below is information about the folders and what they contain.
 ## Hosting and Deployment Information
 
 ### Hosting
-The TrustUp application is connected to many serivices that need to me maintained for it to operate.
+The CCI application is connected to many serivices that need to me maintained for it to operate.
 
 Those services are as follows:
 * AWS Ec2 instance
@@ -36,7 +36,7 @@ Those services are as follows:
 
 ### Deployment
 
-First deployment of the TrustUp Application was on April 16, 2021 to Apples TestFlight program.
+First deployment of the CCI Application was on April 16, 2021 to Apples TestFlight program.
 
 This deployment will last 90 days on TestFlight and then need to be rebuilt and redeployed to use again.
 

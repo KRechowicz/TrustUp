@@ -17,6 +17,7 @@ import {
     listenOrientationChange as lor,
     removeOrientationListener as rol
 } from 'react-native-responsive-screen';
+import { LogBox } from 'react-native';
 
 const Stack = createStackNavigator();
 
@@ -52,6 +53,8 @@ export default class App extends Component{
     }
     render() {
         console.log(this.state.isSignedIn);
+        LogBox.ignoreLogs(['Warning: ...']); // Ignore log notification by message
+        LogBox.ignoreAllLogs();//Ignore all log notifications
         return (
 
             this.state.isSignedIn ? (

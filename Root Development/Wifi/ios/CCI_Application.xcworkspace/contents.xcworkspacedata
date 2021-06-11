@@ -2,7 +2,7 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:/Users/bgeldhau/GitHub/CoVA_CCI/Root Development/Wifi/ios/CCI_Application.xcodeproj">
+      location = "group:CCI_Application.xcodeproj">
    </FileRef>
    <FileRef
       location = "group:Pods/Pods.xcodeproj">

@@ -133,6 +133,7 @@ class Login extends Component {
         auth0.auth
             .userInfo({ token: credentials.accessToken })
             .then(async(profile)=> {
+                console.log(profile);
                 this.setState({nickname:profile.nickname});
                 const checkDB = await this.checkUsers(profile.nickname);
                 const response = await storeData(profile.nickname);

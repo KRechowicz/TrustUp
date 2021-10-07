@@ -37,7 +37,6 @@ To address these challenges, TRUSTup (1) detects and identifies connected IoT de
 ### Documentation related to project
 
 * See [Systems Design Document](/Documentation/Design/CCI_Trust_App_System_Description_v06.docx) for more information.
-* 
 
 ### Research
 

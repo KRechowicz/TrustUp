@@ -1,11 +1,9 @@
 # Project Description
+The TRUSTup is a software solution for creating cyber-trust in connected homes by implementing a cyber-trust framework that takes into account the 1) manufacturer, configuration and interoperability of devices in a home, 2) the experience, background and position on individuals occupying the space on a spectrum (hearing, vision, physical/motor, and autism) and 3) the content, type, and amount of data being collected, whether disclosed or undisclosed.
+TRUSTup comes from the realization modern Western homes are increasingly equipped with smart and connected devices. This multiplication of sensors brings into the home a multitude of multimodal interfaces (voice, web, tactile), hidden tracking, embedded automation, and adaptive learning. As a result, the home of the future is a massive data collection ecosystem that can be misused for economic and financial gain and is vulnerable to cyber-attacks. The homeowner is often unaware of the data being collected or the security risk they face by introducing a new device in their living space. As a result, there is a deficit of trust between smart and connected spaces and the people occupying the space.
+This deficit of trust has a critical impact. While a smart home's goal is to adapt to and support its occupants, current devices and algorithms are not trusted to adapt to the diversity of experience, background, preferences, and physical ranges routinely encountered in real life. As a result, people's experiences on a spectrum (hearing, vision, physical/motor, autism) are often not effectively accommodated. The solution is to increase trust between the people, connected objects, and the companies that make them.
+To address these challenges, TRUSTup (1) detects and identifies connected IoT devices in the user's home, (2) retrieves, processes, and analyzes associated Privacy Policies (PPs) and Terms of Service (ToS), (3) identifies security-related software flaws and misconfigurations by leveraging the U.S. government repository and social media, (4) presents cyber-trust-related insights to the user through an accessible and inclusive interface. 
 
-`TOOLTIP: This project includes a pre-fabricated Wiki which provides critical information about the project scope, resources, and plan of execution. You can visit the wiki from anywhere in the project using the link above and can view critical pages using the following links:`
-
-| [**Project Overview**](../../wiki) | [**Personnel & Project Allocation**](../../wiki/Personnel-and-project-allocation) | [**Development Plan & Resources**](../../wiki/Development-Plan-&-Resources) | [**Document Templates**](../../wiki/Document-Templates) | [**Release & Publications**](../../wiki/Release-&-Publications) | [**IRB, Licenses, & Agreements**](../../wiki/IRB,-Licenses,-&-Agreements) | [**UX & Human Subjects Information**](../../wiki/UX-&-Human-Subjects-Information) | [**Quality Assurance & Testing**](../../wiki/QA-&-Testing-Standards) |
-|:-:|:-:|:-:|:-:|:-:|:-:|:-:|:-:|
-| [![Project Overview](./GitHub%20Page/WikiAssets/Overview.png)](../../wiki) | [![Personnel & Project Allocation](./GitHub%20Page/WikiAssets/Personnel.png)](../../wiki/Personnel-and-project-allocation) | [![Development Plan and Resources](./GitHub%20Page/WikiAssets/Development.png)](../../wiki/Development-Plan-&-Resources) | [![Document Templates](./GitHub%20Page/WikiAssets/Templates.png)](../../wiki/Document-Templates) | [![Release & Publications](./GitHub%20Page/WikiAssets/Release.png)](../../wiki/Release-&-Publications) | [![IRB, Licenses, and Agreement](./GitHub%20Page/WikiAssets/Agreements.png)](../../wiki/IRB,-Licenses,-&-Agreements) | [![UX and Human Subjects Research](./GitHub%20Page/WikiAssets/HumanSubjects.png)](../../wiki/UX-&-Human-Subjects-Information) | [![Quality Assurance & Testing](./GitHub%20Page/WikiAssets/Testing.png)](../../wiki/QA-&-Testing-Standards) |
-| | Personnel Description Here | Development Description Here | Templates Description Here | Release Description Here | IRB Description Here | UX/Human Subjects Description Here | Testing Description Here |
 
 ***
 ## Team Members
@@ -38,7 +36,8 @@
 
 ### Documentation related to project
 
-* See [Documentation](/Documentation) for misc. documentation
+* See [Systems Design Document](/Documentation/Design/CCI_Trust_App_System_Description_v06.docx) for more information.
+* 
 
 ### Research
 

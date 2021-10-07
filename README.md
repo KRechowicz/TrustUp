@@ -1,4 +1,10 @@
-# Project Description
+<img src="/Documentation/Images/TRUSTup_logo.png" align="right" />
+
+# TRUSTup
+
+   TRUSTup is a software solution aimed at increasing cyber-trust between the people, connected objects, and the companies that make them. 
+
+## Executive Summary
 The TRUSTup is a software solution for creating cyber-trust in connected homes by implementing a cyber-trust framework that takes into account the 1) manufacturer, configuration and interoperability of devices in a home, 2) the experience, background and position on individuals occupying the space on a spectrum (hearing, vision, physical/motor, and autism) and 3) the content, type, and amount of data being collected, whether disclosed or undisclosed.
 TRUSTup comes from the realization modern Western homes are increasingly equipped with smart and connected devices. This multiplication of sensors brings into the home a multitude of multimodal interfaces (voice, web, tactile), hidden tracking, embedded automation, and adaptive learning. As a result, the home of the future is a massive data collection ecosystem that can be misused for economic and financial gain and is vulnerable to cyber-attacks. The homeowner is often unaware of the data being collected or the security risk they face by introducing a new device in their living space. As a result, there is a deficit of trust between smart and connected spaces and the people occupying the space.
 This deficit of trust has a critical impact. While a smart home's goal is to adapt to and support its occupants, current devices and algorithms are not trusted to adapt to the diversity of experience, background, preferences, and physical ranges routinely encountered in real life. As a result, people's experiences on a spectrum (hearing, vision, physical/motor, autism) are often not effectively accommodated. The solution is to increase trust between the people, connected objects, and the companies that make them.

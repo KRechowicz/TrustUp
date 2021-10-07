@@ -14,10 +14,10 @@ To address these challenges, TRUSTup (1) detects and identifies connected IoT de
 ***
 ## Team Members
 
+* []() Dr. Krzysztof Rechowicz
 * []() Dr. Stephanie Blackmon 
 * []() Dr. Dylan Wittkower
 * []() Dr. Saikou Diallo
-* []() Dr. Krzysztof Rechowicz
 * []() John Shull
 * Alex Nielsen
 * Tobin Zheng

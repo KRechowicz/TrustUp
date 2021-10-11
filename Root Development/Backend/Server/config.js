@@ -5,8 +5,8 @@ module.exports = {
         //Provide details for local configuration
     },
     aws_remote_config: {
-        accessKeyId: 'AKIA4HH3STHPI7FH7QKI',
-        secretAccessKey: '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',
-        region: 'us-east-1',
+        accessKeyId: '',
+        secretAccessKey: '',
+        region: '',
     }
 };

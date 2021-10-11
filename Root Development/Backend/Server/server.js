@@ -31,9 +31,9 @@ var pythonCall = 'python3';
 
 var webSearchEndPoint = 'https://api.bing.microsoft.com/v7.0/search'
 
-var subscriptionID = '391f8532-e7ae-4c04-9815-c9c9d467f0ff';
-var key1 = '74607f33e76746e697066b7f05f8f48a';
-var key2 = 'adf40e1992b54b8288ca3fcd10e5c1af';
+var subscriptionID = '';
+var key1 = '';
+var key2 = '';
 
 const { WebSearchClient } = require("@azure/cognitiveservices-websearch");
 const { CognitiveServicesCredentials } = require("@azure/ms-rest-azure-js");
